@@ -63,3 +63,14 @@ def compute_basic_stats(events):
         "min_magnitude": min_mag,
         "avg_magnitude": avg_mag,
     }
+
+def count_strong_earthquakes(events, threshold=5.0):
+    """
+    Belirli bir threshold'dan buyuk magnitude'lı event sayısını döndürür.
+    """
+    count = 0
+    for e in events:
+        mag = e.get("magnitude")
+        if isinstance(mag, (int, float)) and mag >= threshold:
+            count += 1
+    return count

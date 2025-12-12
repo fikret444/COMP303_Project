@@ -1,3 +1,43 @@
 2025-12-06T11:55:04.476815 [WARNING] Eksik alan: magnitude. Event kaydedilmedi: {'id': 3, 'event_type': 'earthquake', 'timestamp': '2025-12-05T12:10:00Z', 'location': 'Ankara'}
 2025-12-06T11:55:04.477275 [INFO] Temizlenen event sayısı: 2
 2025-12-06T11:55:04.477702 [INFO] 2 tane temiz event CSV'ye kaydedildi.
+2025-12-07T16:28:24.843922 [WARNING] Eksik alan: magnitude. Event kaydedilmedi: {'id': 3, 'event_type': 'earthquake', 'timestamp': '2025-12-05T12:10:00Z', 'location': 'Ankara'}
+2025-12-07T16:28:24.844920 [INFO] Temizlenen event sayısı: 2
+2025-12-07T16:28:24.845272 [INFO] 2 tane temiz event CSV'ye kaydedildi.
+2025-12-07T16:28:42.479826 [WARNING] Eksik alan: magnitude. Event kaydedilmedi: {'id': 3, 'event_type': 'earthquake', 'timestamp': '2025-12-05T12:10:00Z', 'location': 'Ankara'}
+2025-12-07T16:28:42.480166 [INFO] Temizlenen event sayısı: 2
+2025-12-07T16:28:42.480376 [INFO] 2 tane temiz event CSV'ye kaydedildi.
+2025-12-07T16:30:06.181143 [WARNING] Eksik alan: magnitude. Event kaydedilmedi: {'id': 3, 'event_type': 'earthquake', 'timestamp': '2025-12-05T12:10:00Z', 'location': 'Ankara'}
+2025-12-07T16:30:06.182385 [INFO] Temizlenen event sayısı: 2
+2025-12-07T16:30:06.183202 [INFO] 2 tane temiz event CSV'ye kaydedildi.
+2025-12-07T16:33:10.019232 [WARNING] Eksik alan: magnitude. Event kaydedilmedi: {'id': 3, 'event_type': 'earthquake', 'timestamp': '2025-12-05T12:10:00Z', 'location': 'Ankara'}
+2025-12-07T16:33:10.020007 [INFO] Temizlenen event sayısı: 2
+2025-12-07T16:33:10.020296 [INFO] 2 tane temiz event CSV'ye kaydedildi.
+2025-12-07T16:33:10.020411 [INFO] Analitik özet: {'total_events': 2, 'max_magnitude': 7.8, 'min_magnitude': 6.9, 'avg_magnitude': 7.35}
+2025-12-07T19:37:31.449853 [WARNING] Eksik alan: magnitude. Event kaydedilmedi: {'id': 3, 'event_type': 'earthquake', 'timestamp': '2025-12-05T12:10:00Z', 'location': 'Ankara'}
+2025-12-07T19:37:31.450156 [INFO] Temizlenen event sayısı: 2
+2025-12-07T19:37:31.450434 [INFO] 2 tane temiz event CSV'ye kaydedildi.
+2025-12-07T20:15:50.770927+03:00 [WARNING] Eksik alan: magnitude. Event kaydedilmedi: {'id': 3, 'event_type': 'earthquake', 'timestamp': '2025-12-05T12:10:00Z', 'location': 'Ankara'}
+2025-12-07T20:15:50.771741+03:00 [INFO] Temizlenen event sayısı: 2
+2025-12-07T20:15:50.772224+03:00 [INFO] 2 tane temiz event CSV'ye kaydedildi.
+2025-12-07T23:40:48.807799+03:00 [WARNING] Eksik alan: magnitude. Event kaydedilmedi: {'id': 3, 'event_type': 'earthquake', 'timestamp': '2025-12-05T12:10:00Z', 'location': 'Ankara'}
+2025-12-07T23:40:48.808591+03:00 [INFO] Temizlenen event sayısı: 2
+2025-12-07T23:40:48.809045+03:00 [INFO] 2 tane temiz event CSV'ye kaydedildi.
+2025-12-07T23:46:06.897070+03:00 [WARNING] Eksik alan: magnitude. Event kaydedilmedi: {'id': 3, 'event_type': 'earthquake', 'timestamp': '2025-12-05T12:10:00Z', 'location': 'Ankara'}
+2025-12-07T23:46:06.897424+03:00 [INFO] Temizlenen event sayısı: 3
+2025-12-07T23:46:06.897640+03:00 [INFO] 3 tane temiz event CSV'ye kaydedildi.
+2025-12-08T00:07:17.791312+03:00 [WARNING] Eksik alan: magnitude. Event kaydedilmedi: {'id': 3, 'event_type': 'earthquake', 'timestamp': '2025-12-05T12:10:00Z', 'location': 'Ankara'}
+2025-12-08T00:07:17.792081+03:00 [INFO] Temizlenen event sayısı: 3
+2025-12-08T00:07:17.792467+03:00 [INFO] 3 tane temiz event CSV'ye kaydedildi.
+2025-12-08T00:07:17.792570+03:00 [INFO] Analitik özet: {'total_events': 3, 'max_magnitude': 7.8, 'min_magnitude': 6.9, 'avg_magnitude': 7.5}
+2025-12-08T00:07:17.792609+03:00 [INFO] 5.0 ve üzeri deprem var: 3
+2025-12-08T00:09:12.790835+03:00 [WARNING] Eksik alan: magnitude. Event kaydedilmedi: {'id': 3, 'event_type': 'earthquake', 'timestamp': '2025-12-05T12:10:00Z', 'location': 'Ankara'}
+2025-12-08T00:09:12.791174+03:00 [INFO] Temizlenen event sayısı: 4
+2025-12-08T00:09:12.791405+03:00 [INFO] 4 tane temiz event CSV'ye kaydedildi.
+2025-12-08T00:09:12.791563+03:00 [INFO] Analitik özet: {'total_events': 4, 'max_magnitude': 7.8, 'min_magnitude': 4.7, 'avg_magnitude': 6.8}
+2025-12-08T00:09:12.791624+03:00 [INFO] 5.0 ve üzeri deprem var: 3
+2025-12-12T17:54:38.605917+03:00 [WARNING] Eksik alan: magnitude. Event kaydedilmedi: {'id': 3, 'event_type': 'earthquake', 'timestamp': '2025-12-05T12:10:00Z', 'location': 'Ankara'}
+2025-12-12T17:54:38.606573+03:00 [INFO] Temizlenen event sayısı: 4
+2025-12-12T17:54:38.607121+03:00 [INFO] 4 tane temiz event CSV'ye kaydedildi.
+2025-12-12T17:54:38.607234+03:00 [INFO] Analitik özet: {'total_events': 4, 'max_magnitude': 7.8, 'min_magnitude': 4.7, 'avg_magnitude': 6.8}
+2025-12-12T17:54:38.607282+03:00 [INFO] 5.0 ve üzeri deprem var: 3
