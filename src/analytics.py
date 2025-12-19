@@ -1,36 +1,69 @@
 import csv
+import json
 from pathlib import Path
 
-#Folder Path (project root'ta "data" klasörü)
-DATA_DIR = Path("data")
+# Proje kök klasörü (SDEWS)
+ROOT_DIR = Path(__file__).resolve().parent.parent
+DATA_DIR = ROOT_DIR / "data"
+
 
 def load_events_from_csv(filename="earthquakes.csv"):
     """
-    data/ klasöründeki CSV dosyasını okur,
-    her satırı dict olarak listeye ekler.
+    Eski CSV pipeline'ı için; USGS hattında şu an kullanılmıyor.
     """
     file_path = DATA_DIR / filename
     events = []
 
     if not file_path.exists():
-        # Dosya yoksa boş liste döndür
         return events
 
     with file_path.open("r", newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
-            # id'yi mümkünse int'e, magnitude'ü float'a çevir
             try:
-                row["id"] = int(row["id"])
-            except (ValueError, KeyError):
+                if "id" in row:
+                    row["id"] = int(row["id"])
+            except (ValueError, TypeError):
                 pass
 
             try:
-                row["magnitude"] = float(row["magnitude"])
-            except (ValueError, KeyError):
+                if "magnitude" in row:
+                    row["magnitude"] = float(row["magnitude"])
+            except (ValueError, TypeError):
                 pass
 
             events.append(row)
+
+    return events
+
+
+def load_events_from_json(filename="earthquakes_tr.json"):
+    """
+    USGS pipeline'ı için: Türkiye içindeki depremleri JSON'dan okur.
+    """
+    file_path = DATA_DIR / filename
+    events = []
+
+    if not file_path.exists():
+        return events
+
+    with file_path.open("r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    for row in data:
+        try:
+            if "id" in row:
+                row["id"] = int(row["id"])
+        except (ValueError, TypeError):
+            pass
+
+        try:
+            if "magnitude" in row:
+                row["magnitude"] = float(row["magnitude"])
+        except (ValueError, TypeError):
+            pass
+
+        events.append(row)
 
     return events
 
@@ -64,9 +97,12 @@ def compute_basic_stats(events):
         "avg_magnitude": avg_mag,
     }
 
-def count_strong_earthquakes(events, threshold=5.0):
+
+def count_strong_earthquakes(events, threshold=2.5):
     """
-    Belirli bir threshold'dan buyuk magnitude'lı event sayısını döndürür.
+    Belirli bir eşik değerinin (threshold) üzerindeki
+    deprem sayısını döndürür.
+    Örn: threshold=5.0 -> 5.0 ve üzeri depremleri say.
     """
     count = 0
     for e in events:
@@ -74,3 +110,23 @@ def count_strong_earthquakes(events, threshold=5.0):
         if isinstance(mag, (int, float)) and mag >= threshold:
             count += 1
     return count
+
+
+def filter_events_in_bbox(events, min_lat, max_lat, min_lon, max_lon):
+    """
+    Verilen enlem/boylam dikdörtgeni (bounding box) içindeki event'leri döndürür.
+    Örn: Türkiye veya belirli bir şehir için filtreleme.
+    """
+    filtered = []
+
+    for e in events:
+        lat = e.get("latitude")
+        lon = e.get("longitude")
+
+        if not isinstance(lat, (int, float)) or not isinstance(lon, (int, float)):
+            continue
+
+        if (min_lat <= lat <= max_lat) and (min_lon <= lon <= max_lon):
+            filtered.append(e)
+
+    return filtered

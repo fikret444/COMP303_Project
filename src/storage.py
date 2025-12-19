@@ -1,4 +1,5 @@
 import csv
+import json
 from pathlib import Path
 from datetime import datetime
 from zoneinfo import ZoneInfo
@@ -6,40 +7,54 @@ from zoneinfo import ZoneInfo
 # Project root'u bul (src klasörünün bir üstü)
 ROOT_DIR = Path(__file__).resolve().parent.parent
 
-#Folder Path
+# Folder Path
 DATA_DIR = ROOT_DIR / "data"
 LOGS_DIR = ROOT_DIR / "logs"
 
-#Create if folders doesn't exist
+# Create if folders don't exist
 DATA_DIR.mkdir(exist_ok=True)
 LOGS_DIR.mkdir(exist_ok=True)
 
-def save_events_to_csv(events, filename="events.csv", append=False):
+
+def save_events_to_csv(events, filename="events.csv", append=True):
     """
-    events: list[dict] bekliyoruz
-    Hepsini data/ klasöründeki bir CSV dosysasına ekler.
+    İstersen ileride kullanırsın diye bırakıyoruz.
+    Şu an USGS pipeline'ında kullanılmıyor.
     """
     if not events:
-        #If the list is empty, don't do anything
         return
 
     file_path = DATA_DIR / filename
 
-    #İlk event'in key'lerini kolon adı olarak kabul edeceğiz
     fieldnames = list(events[0].keys())
+    file_exists = file_path.exists()
+    mode = "a" if append and file_exists else "w"
 
-    # Dosyayı HER SEFERİNDE baştan yazıyoruz ("w" mod)
-    with file_path.open("w", newline="", encoding="utf-8") as f:
+    with file_path.open(mode, newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
-        #Column names
-        writer.writeheader()
-
-        #Write all events line by line
+        if mode == "w":
+            writer.writeheader()
         writer.writerows(events)
+
+
+def save_events_to_json(events, filename="events.json"):
+    """
+    Event listesini data/ klasöründe JSON dosyasına kaydeder.
+    Örn: data/earthquakes_tr.json
+    """
+    if not events:
+        return
+
+    file_path = DATA_DIR / filename
+
+    with file_path.open("w", encoding="utf-8") as f:
+        json.dump(events, f, ensure_ascii=False, indent=2)
+
 
 def log_message(message, level="INFO"):
     """
     logs/app.log içine zaman damgası + seviye + mesaj yazar.
+    Zaman damgası Europe/Istanbul (Türkiye saati) kullanır.
     """
     log_file = LOGS_DIR / "app.log"
     now = datetime.now(ZoneInfo("Europe/Istanbul")).isoformat()
