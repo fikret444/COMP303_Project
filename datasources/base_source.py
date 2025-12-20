@@ -1,7 +1,8 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from typing import List, Any
-#from core.models import Event
+from typing import Any, List, Dict
+
+Event = Dict[str, Any]
 
 
 class DataSourceError(Exception):
@@ -15,10 +16,9 @@ class DataSource(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def parse(self, raw: Any) -> List["Event"]:
-       raise NotImplementedError
+    def parse(self, raw: Any) -> List[Event]:
+        raise NotImplementedError
 
-    def fetch_and_parse(self) -> List["Event"]:
+    def fetch_and_parse(self) -> List[Event]:
         raw = self.fetch_raw()
         return self.parse(raw)
-
