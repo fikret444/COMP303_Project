@@ -4,7 +4,7 @@ from CoreBusiness.RawEarthquake import RawEarthquake
 """
 
 #earthquake's fetch_events()
-fetch_events()
+events = fetch_events()
 
 #cleanizes raw events then saves (writes) into csv
 save_events_to_csv(clean_earthquake_events(events),filename="earthquakes1Cleaned.csv")
