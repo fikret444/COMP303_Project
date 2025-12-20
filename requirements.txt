@@ -1,0 +1,22 @@
+# SDEWS - Smart Disaster Early Warning System
+# Python Dependencies
+
+# Web Framework
+Flask==3.0.0
+
+# HTTP Requests
+requests==2.31.0
+
+# Web Scraping
+beautifulsoup4==4.12.2
+lxml==5.1.0
+
+# Data Processing (optional)
+pandas==2.1.4
+numpy==1.26.2
+
+# Configuration
+python-dotenv==1.0.0
+
+# Testing
+pytest==7.4.3
