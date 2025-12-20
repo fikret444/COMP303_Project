@@ -116,3 +116,121 @@
 2025-12-21T01:14:51.319836+03:00 [INFO] SDEWS Runtime System Stopped
 2025-12-21T01:14:51.320038+03:00 [INFO] ============================================================
 2025-12-21T01:14:51.320202+03:00 [INFO] Sistem kapatildi
+2025-12-21T01:21:04.843040+03:00 [INFO] SDEWS System Initialization
+2025-12-21T01:21:04.843328+03:00 [INFO] Data source'lar baslatiliyor...
+2025-12-21T01:21:04.843524+03:00 [INFO] [OK] USGS Earthquake Source hazir
+2025-12-21T01:21:04.843687+03:00 [INFO] [OK] OpenWeather Source hazir
+2025-12-21T01:21:04.843944+03:00 [INFO] Runtime system olusturuluyor...
+2025-12-21T01:21:04.844136+03:00 [INFO] DataSourceManager initialized with 2 sources
+2025-12-21T01:21:04.844293+03:00 [INFO] EventPipeline initialized with 3 consumers
+2025-12-21T01:21:04.844451+03:00 [INFO] RuntimeSystem initialized
+2025-12-21T01:21:04.844589+03:00 [INFO] [OK] Runtime System hazir
+2025-12-21T01:21:04.844721+03:00 [INFO] TEK CALISTIRMA MODU baslatiliyor
+2025-12-21T01:21:04.844910+03:00 [INFO] ============================================================
+2025-12-21T01:21:04.845061+03:00 [INFO] SDEWS Runtime System Starting
+2025-12-21T01:21:04.845195+03:00 [INFO] ============================================================
+2025-12-21T01:21:04.845329+03:00 [INFO] Starting 3 consumer workers
+2025-12-21T01:21:04.845842+03:00 [INFO] Consumer worker 0 started
+2025-12-21T01:21:04.846004+03:00 [INFO] Consumer worker 1 started
+2025-12-21T01:21:04.846135+03:00 [INFO] Consumer worker 2 started
+2025-12-21T01:21:04.846269+03:00 [INFO] Running single fetch-process cycle
+2025-12-21T01:21:04.846499+03:00 [INFO] Starting concurrent fetch from 2 sources
+2025-12-21T01:21:04.846753+03:00 [INFO] Fetching data from USGSEarthquakeSource...
+2025-12-21T01:21:04.846890+03:00 [INFO] Fetching data from OpenWeatherSource...
+2025-12-21T01:21:04.847238+03:00 [ERROR] Error fetching from OpenWeatherSource: OPENWEATHER_API_KEY is missing (set env variable).
+2025-12-21T01:21:05.284550+03:00 [INFO] Successfully fetched 37 items from USGSEarthquakeSource
+2025-12-21T01:21:05.285024+03:00 [INFO] All fetch operations completed
+2025-12-21T01:21:05.285290+03:00 [INFO] Added events from USGSEarthquakeSource to processing queue
+2025-12-21T01:21:05.285353+03:00 [INFO] Worker 0 processing event from USGSEarthquakeSource
+2025-12-21T01:21:05.285468+03:00 [INFO] Added 1 event batches to pipeline
+2025-12-21T01:21:05.285824+03:00 [INFO] USGS'ten temizlenen event sayısı: 37
+2025-12-21T01:21:05.290322+03:00 [INFO] All events processed
+2025-12-21T01:21:05.290560+03:00 [INFO] ============================================================
+2025-12-21T01:21:05.290779+03:00 [INFO] PROCESSING RESULTS
+2025-12-21T01:21:05.290932+03:00 [INFO] ============================================================
+2025-12-21T01:21:05.291177+03:00 [INFO] Result #1 - USGSEarthquakeSource: SUCCESS
+2025-12-21T01:21:05.291438+03:00 [INFO]   Events processed: 37
+2025-12-21T01:21:05.291600+03:00 [INFO]   Statistics:
+2025-12-21T01:21:05.291738+03:00 [INFO]     - Total events: 37
+2025-12-21T01:21:05.291871+03:00 [INFO]     - Max magnitude: 5.60
+2025-12-21T01:21:05.292001+03:00 [INFO]     - Avg magnitude: 3.60
+2025-12-21T01:21:05.292287+03:00 [INFO]   Saved to: earthquakes_1766269265.json
+2025-12-21T01:21:05.292418+03:00 [INFO] ------------------------------------------------------------
+2025-12-21T01:21:05.292681+03:00 [INFO] Stopping RuntimeSystem...
+2025-12-21T01:21:05.292863+03:00 [INFO] Stopping consumer workers...
+2025-12-21T01:21:05.293100+03:00 [INFO] Consumer worker 2 stopped
+2025-12-21T01:21:05.293060+03:00 [INFO] Consumer worker 1 stopped
+2025-12-21T01:21:05.293148+03:00 [INFO] Consumer worker 0 stopped
+2025-12-21T01:21:05.293487+03:00 [INFO] All consumer workers stopped
+2025-12-21T01:21:05.293697+03:00 [INFO] ============================================================
+2025-12-21T01:21:05.293878+03:00 [INFO] SYSTEM STATUS
+2025-12-21T01:21:05.294022+03:00 [INFO] ============================================================
+2025-12-21T01:21:05.294156+03:00 [INFO] Uptime: 0 seconds
+2025-12-21T01:21:05.294283+03:00 [INFO] Cycles completed: 1
+2025-12-21T01:21:05.294410+03:00 [INFO] Data Sources: 2
+2025-12-21T01:21:05.294532+03:00 [INFO] Processed events: 1
+2025-12-21T01:21:05.294653+03:00 [INFO] Errors: 0
+2025-12-21T01:21:05.294773+03:00 [INFO] ============================================================
+2025-12-21T01:21:05.294893+03:00 [INFO] ============================================================
+2025-12-21T01:21:05.295014+03:00 [INFO] SDEWS Runtime System Stopped
+2025-12-21T01:21:05.295131+03:00 [INFO] ============================================================
+2025-12-21T01:21:05.295259+03:00 [INFO] Sistem kapatildi
+2025-12-21T01:21:09.466173+03:00 [INFO] SDEWS System Initialization
+2025-12-21T01:21:09.466407+03:00 [INFO] Data source'lar baslatiliyor...
+2025-12-21T01:21:09.466578+03:00 [INFO] [OK] USGS Earthquake Source hazir
+2025-12-21T01:21:09.466797+03:00 [INFO] [OK] OpenWeather Source hazir
+2025-12-21T01:21:09.466974+03:00 [INFO] Runtime system olusturuluyor...
+2025-12-21T01:21:09.467135+03:00 [INFO] DataSourceManager initialized with 2 sources
+2025-12-21T01:21:09.467287+03:00 [INFO] EventPipeline initialized with 3 consumers
+2025-12-21T01:21:09.467438+03:00 [INFO] RuntimeSystem initialized
+2025-12-21T01:21:09.467577+03:00 [INFO] [OK] Runtime System hazir
+2025-12-21T01:21:09.467706+03:00 [INFO] TEK CALISTIRMA MODU baslatiliyor
+2025-12-21T01:21:09.467836+03:00 [INFO] ============================================================
+2025-12-21T01:21:09.467963+03:00 [INFO] SDEWS Runtime System Starting
+2025-12-21T01:21:09.468085+03:00 [INFO] ============================================================
+2025-12-21T01:21:09.468209+03:00 [INFO] Starting 3 consumer workers
+2025-12-21T01:21:09.468712+03:00 [INFO] Consumer worker 0 started
+2025-12-21T01:21:09.468864+03:00 [INFO] Consumer worker 1 started
+2025-12-21T01:21:09.469011+03:00 [INFO] Consumer worker 2 started
+2025-12-21T01:21:09.469058+03:00 [INFO] Running single fetch-process cycle
+2025-12-21T01:21:09.469318+03:00 [INFO] Starting concurrent fetch from 2 sources
+2025-12-21T01:21:09.469605+03:00 [INFO] Fetching data from USGSEarthquakeSource...
+2025-12-21T01:21:09.469719+03:00 [INFO] Fetching data from OpenWeatherSource...
+2025-12-21T01:21:09.470067+03:00 [ERROR] Error fetching from OpenWeatherSource: OPENWEATHER_API_KEY is missing (set env variable).
+2025-12-21T01:21:09.863075+03:00 [INFO] Successfully fetched 37 items from USGSEarthquakeSource
+2025-12-21T01:21:09.863583+03:00 [INFO] All fetch operations completed
+2025-12-21T01:21:09.863838+03:00 [INFO] Added events from USGSEarthquakeSource to processing queue
+2025-12-21T01:21:09.863895+03:00 [INFO] Worker 0 processing event from USGSEarthquakeSource
+2025-12-21T01:21:09.864003+03:00 [INFO] Added 1 event batches to pipeline
+2025-12-21T01:21:09.864379+03:00 [INFO] USGS'ten temizlenen event sayısı: 37
+2025-12-21T01:21:09.865462+03:00 [INFO] All events processed
+2025-12-21T01:21:09.865843+03:00 [INFO] ============================================================
+2025-12-21T01:21:09.866075+03:00 [INFO] PROCESSING RESULTS
+2025-12-21T01:21:09.866366+03:00 [INFO] ============================================================
+2025-12-21T01:21:09.866570+03:00 [INFO] Result #1 - USGSEarthquakeSource: SUCCESS
+2025-12-21T01:21:09.866845+03:00 [INFO]   Events processed: 37
+2025-12-21T01:21:09.867138+03:00 [INFO]   Statistics:
+2025-12-21T01:21:09.867443+03:00 [INFO]     - Total events: 37
+2025-12-21T01:21:09.867606+03:00 [INFO]     - Max magnitude: 5.60
+2025-12-21T01:21:09.867773+03:00 [INFO]     - Avg magnitude: 3.60
+2025-12-21T01:21:09.867962+03:00 [INFO]   Saved to: earthquakes_1766269269.json
+2025-12-21T01:21:09.868123+03:00 [INFO] ------------------------------------------------------------
+2025-12-21T01:21:09.868266+03:00 [INFO] Stopping RuntimeSystem...
+2025-12-21T01:21:09.868395+03:00 [INFO] Stopping consumer workers...
+2025-12-21T01:21:09.868575+03:00 [INFO] Consumer worker 2 stopped
+2025-12-21T01:21:09.868612+03:00 [INFO] Consumer worker 0 stopped
+2025-12-21T01:21:09.868660+03:00 [INFO] Consumer worker 1 stopped
+2025-12-21T01:21:09.869202+03:00 [INFO] All consumer workers stopped
+2025-12-21T01:21:09.869406+03:00 [INFO] ============================================================
+2025-12-21T01:21:09.869547+03:00 [INFO] SYSTEM STATUS
+2025-12-21T01:21:09.869696+03:00 [INFO] ============================================================
+2025-12-21T01:21:09.869832+03:00 [INFO] Uptime: 0 seconds
+2025-12-21T01:21:09.869958+03:00 [INFO] Cycles completed: 1
+2025-12-21T01:21:09.870117+03:00 [INFO] Data Sources: 2
+2025-12-21T01:21:09.870272+03:00 [INFO] Processed events: 1
+2025-12-21T01:21:09.870402+03:00 [INFO] Errors: 0
+2025-12-21T01:21:09.870556+03:00 [INFO] ============================================================
+2025-12-21T01:21:09.870681+03:00 [INFO] ============================================================
+2025-12-21T01:21:09.870805+03:00 [INFO] SDEWS Runtime System Stopped
+2025-12-21T01:21:09.870924+03:00 [INFO] ============================================================
+2025-12-21T01:21:09.871049+03:00 [INFO] Sistem kapatildi
