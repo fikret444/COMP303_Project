@@ -22,21 +22,21 @@ from processing import log_message
 
 
 def print_banner():
-    """SDEWS banner'ını yazdır."""
+    """SDEWS banner'ini yazdir."""
     banner = """
-    ╔══════════════════════════════════════════════════════════════╗
-    ║                                                              ║
-    ║          Smart Disaster Early Warning System (SDEWS)        ║
-    ║                                                              ║
-    ║  Concurrent Data Processing & Real-time Event Pipeline      ║
-    ║                                                              ║
-    ╚══════════════════════════════════════════════════════════════╝
+    ============================================================
     
-    Ekip Üyeleri:
+          Smart Disaster Early Warning System (SDEWS)
+    
+      Concurrent Data Processing & Real-time Event Pipeline
+    
+    ============================================================
+    
+    Ekip Uyeleri:
     - Hakan Demircan: API Integration & Web Scraping
     - Erdem Kaya: Core System & Data Models
-    - Fikret Ahıskalı: Concurrency & Runtime Pipeline
-    - Yağız Efe Hüşan: Data Processing, Storage & Analytics
+    - Fikret Ahiskali: Concurrency & Runtime Pipeline
+    - Yagiz Efe Husan: Data Processing, Storage & Analytics
     
     """
     print(banner)
@@ -47,19 +47,19 @@ def main():
     """SDEWS runtime sisteminin ana entry point'i."""
     print_banner()
     
-    # Data source'ları başlat
-    log_message("Data source'lar başlatılıyor...", "INFO")
+    # Data source'lari baslat
+    log_message("Data source'lar baslatiliyor...", "INFO")
     
-    # 1. USGS Earthquake Source (Hakan'ın çalışması)
+    # 1. USGS Earthquake Source (Hakan'in calismasi)
     earthquake_source = USGSEarthquakeSource()
-    log_message("✓ USGS Earthquake Source hazır", "INFO")
+    log_message("[OK] USGS Earthquake Source hazir", "INFO")
     
-    # 2. OpenWeather Source (Hakan'ın çalışması)
+    # 2. OpenWeather Source (Hakan'in calismasi)
     weather_source = OpenWeatherSource(city="Istanbul")
-    log_message("✓ OpenWeather Source hazır", "INFO")
+    log_message("[OK] OpenWeather Source hazir", "INFO")
     
-    # Runtime sistemi oluştur (Fikret'in çalışması)
-    log_message("Runtime system oluşturuluyor...", "INFO")
+    # Runtime sistemi olustur (Fikret'in calismasi)
+    log_message("Runtime system olusturuluyor...", "INFO")
     
     runtime = RuntimeSystem(
         data_sources=[earthquake_source, weather_source],
@@ -67,23 +67,23 @@ def main():
         num_consumers=3  # 3 paralel consumer thread
     )
     
-    log_message("✓ Runtime System hazır", "INFO")
+    log_message("[OK] Runtime System hazir", "INFO")
     
-    # Çalışma modunu belirle
+    # Calisma modunu belirle
     continuous = "--once" not in sys.argv
     
     if continuous:
-        log_message("SÜREKLI MOD başlatılıyor (Ctrl+C ile durdurun)", "INFO")
-        log_message("Sistemi durdurmak için Ctrl+C'ye basın", "INFO")
+        log_message("SUREKLI MOD baslatiliyor (Ctrl+C ile durdurun)", "INFO")
+        log_message("Sistemi durdurmak icin Ctrl+C'ye basin", "INFO")
     else:
-        log_message("TEK ÇALIŞTIRMA MODU başlatılıyor", "INFO")
+        log_message("TEK CALISTIRMA MODU baslatiliyor", "INFO")
     
     try:
         # Runtime sistemini başlat
         runtime.start(continuous=continuous)
         
     except KeyboardInterrupt:
-        log_message("\nKeyboard interrupt alındı", "INFO")
+        log_message("\nKeyboard interrupt alindi", "INFO")
     except Exception as e:
         log_message(f"Beklenmeyen hata: {str(e)}", "ERROR")
         import traceback
@@ -91,7 +91,7 @@ def main():
     finally:
         # Temizlik
         runtime.stop()
-        log_message("Sistem kapatıldı", "INFO")
+        log_message("Sistem kapatildi", "INFO")
 
 
 if __name__ == "__main__":

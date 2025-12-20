@@ -1,6 +1,6 @@
 """
 Data Processing & Analytics
-Yağız Efe Hüşan - Data Processing, Storage & Analytics
+Yagiz Efe Husan - Data Processing, Storage & Analytics
 """
 
 from .storage import save_events_to_json, save_events_to_csv, log_message
