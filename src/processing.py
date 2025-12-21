@@ -1,172 +1,264 @@
+# src/processing.py
+
 from datetime import datetime
 from .storage import log_message
 
-# Genel deprem event'i için sistem içinde kullanacağımız zorunlu alanlar
-REQUIRED_FIELDS = ["id", "event_type", "timestamp", "magnitude", "location"]
+# ---------------------------------------------------
+# 1) LOKAL / ÖRNEK DEPREM EVENT'LERİ İÇİN TEMİZLEME
+# ---------------------------------------------------
 
-# USGS kaynağından beklediğimiz temel alanlar
-USGS_REQUIRED_FIELDS = ["type", "time", "magnitude", "location"]
-
-
-def clean_earthquake_event(raw_event):
-    """
-    Tek bir ham deprem event'ini temizler.
-    Eksik veya hatalı veri varsa None döndürür.
-    Bu fonksiyon, bizim iç formatımıza uygun olan event'ler için kullanılır:
-    id, event_type, timestamp, magnitude, location.
-    """
-
-    # 1) Zorunlu alanlar var mı?
-    for field in REQUIRED_FIELDS:
-        if field not in raw_event or raw_event[field] in (None, ""):
-            log_message(
-                f"Eksik alan: {field}. Event kaydedilmedi: {raw_event}",
-                level="WARNING",
-            )
-            return None
-
-    # 2) Temel alanları normalize et
-    cleaned = {
-        "id": raw_event["id"],
-        "event_type": str(raw_event["event_type"]).lower(),
-        "timestamp": str(raw_event["timestamp"]),
-        "location": str(raw_event["location"]),
-    }
-
-    # 3) Magnitude'u sayıya çevir
-    try:
-        cleaned["magnitude"] = float(raw_event["magnitude"])
-    except (ValueError, TypeError):
-        log_message(
-            f"Geçersiz magnitude: {raw_event.get('magnitude')}. Event kaydedilmedi: {raw_event}",
-            level="WARNING",
-        )
-        return None
-
-    # 4) Opsiyonel: latitude/longitude varsa ekle
-    lat = raw_event.get("latitude")
-    lon = raw_event.get("longitude")
-
-    if lat is not None:
-        try:
-            cleaned["latitude"] = float(lat)
-        except (ValueError, TypeError):
-            log_message(
-                f"Geçersiz latitude: {lat}. Koordinat atlandı.",
-                level="WARNING",
-            )
-
-    if lon is not None:
-        try:
-            cleaned["longitude"] = float(lon)
-        except (ValueError, TypeError):
-            log_message(
-                f"Geçersiz longitude: {lon}. Koordinat atlandı.",
-                level="WARNING",
-            )
-
-    return cleaned
+LOCAL_EQ_REQUIRED_FIELDS = ["id", "event_type", "timestamp", "magnitude", "location"]
 
 
 def clean_earthquake_events(raw_events):
     """
-    İç formatımıza (id, event_type, timestamp, magnitude, location, ...)
-    yakın olan event listesi için toplu temizleme fonksiyonu.
+    Elle girdiğimiz / örnek deprem event'lerini normalize eder.
+
+    Beklenen ham format:
+    {
+        "id": 1,
+        "event_type": "earthquake",
+        "timestamp": "2020-11-30T14:51:00Z",
+        "magnitude": "6.9",
+        "location": "İzmir",
+    }
+
+    Dönen format:
+    - id: int
+    - event_type: "earthquake"
+    - timestamp: string (ISO benzeri)
+    - location: string
+    - magnitude: float
     """
-    cleaned_list = []
+    cleaned = []
 
     for ev in raw_events:
-        cleaned = clean_earthquake_event(ev)
-        if cleaned is not None:
-            cleaned_list.append(cleaned)
-
-    log_message(f"Temizlenen event sayısı: {len(cleaned_list)}", level="INFO")
-    return cleaned_list
-
-
-def clean_usgs_earthquake_events(usgs_events):
-    """
-    USGS kaynağından gelen ham deprem event listesini alır,
-    bizim sistemin kullandığı formata çevirip temizler.
-
-    Geri dönen her event şu formatta olur:
-    {
-        "id": int,
-        "event_type": "earthquake",
-        "timestamp": "ISO-8601 string",
-        "magnitude": float,
-        "location": str,
-        "latitude": float (opsiyonel),
-        "longitude": float (opsiyonel),
-    }
-    """
-    cleaned_list = []
-
-    for index, raw in enumerate(usgs_events, start=1):
-        # 1) USGS zorunlu alanları var mı?
-        missing = [
-            field
-            for field in USGS_REQUIRED_FIELDS
-            if field not in raw or raw[field] in (None, "")
-        ]
+        # Zorunlu alan kontrolü
+        missing = [field for field in LOCAL_EQ_REQUIRED_FIELDS if field not in ev]
         if missing:
             log_message(
-                f"USGS event'inde eksik alan(lar): {missing}. Event kaydedilmedi: {raw}",
+                f"Eksik alan: {missing}. Event kaydedilmedi: {ev}",
                 level="WARNING",
             )
             continue
 
-        # 2) Zamanı ISO string'e çevir
-        time_val = raw.get("time")
-        if isinstance(time_val, (int, float)):
-            # ms cinsinden epoch gelmişse
-            ts = datetime.fromtimestamp(time_val / 1000).isoformat()
-        elif hasattr(time_val, "isoformat"):
-            ts = time_val.isoformat()
-        else:
-            ts = str(time_val)
+        # event_type normalize
+        event_type = str(ev.get("event_type", "")).lower()
+        if event_type != "earthquake":
+            log_message(
+                f"Desteklenmeyen event_type: {event_type}. Event atlandı: {ev}",
+                level="WARNING",
+            )
+            continue
 
-        # 3) Magnitude'u float'a çevir
+        # magnitude float'a çevrilir
         try:
-            magnitude = float(raw.get("magnitude"))
+            mag = float(ev.get("magnitude"))
         except (TypeError, ValueError):
             log_message(
-                f"USGS event'inde geçersiz magnitude: {raw.get('magnitude')}. Event kaydedilmedi: {raw}",
+                f"Geçersiz magnitude: {ev.get('magnitude')}. Event kaydedilmedi: {ev}",
                 level="WARNING",
             )
             continue
 
-        cleaned = {
-            "id": index,
-            "event_type": str(raw.get("type", "earthquake")).lower(),
-            "timestamp": ts,
-            "location": str(raw.get("location", "Unknown")),
-            "magnitude": magnitude,
-        }
+        # id int'e çevrilir
+        try:
+            ev_id = int(ev.get("id"))
+        except (TypeError, ValueError):
+            log_message(
+                f"Geçersiz id: {ev.get('id')}. Event kaydedilmedi: {ev}",
+                level="WARNING",
+            )
+            continue
 
-        # 4) Opsiyonel: latitude / longitude varsa ekle
-        lat = raw.get("latitude")
-        lon = raw.get("longitude")
+        cleaned.append(
+            {
+                "id": ev_id,
+                "event_type": "earthquake",
+                "timestamp": str(ev.get("timestamp")),
+                "location": ev.get("location"),
+                "magnitude": mag,
+            }
+        )
 
-        if lat is not None:
+    log_message(f"Temizlenen event sayısı: {len(cleaned)}", level="INFO")
+    return cleaned
+
+
+# ---------------------------------------------------
+# 2) USGS DEPREM EVENT'LERİ İÇİN TEMİZLEME
+# ---------------------------------------------------
+
+USGS_REQUIRED_FIELDS = ["type", "source", "location", "magnitude", "time"]
+
+
+def clean_usgs_earthquake_events(raw_events):
+    """
+    USGS'ten gelen deprem event'lerini normalize eder.
+
+    Beklenen ham format (parse_usgs_geojson sonrası):
+    {
+        "type": "earthquake",
+        "source": "USGS",
+        "location": "...",
+        "magnitude": 4.3,
+        "time": datetime(...),
+        "latitude": ...,
+        "longitude": ...
+    }
+
+    Dönen format:
+    - id: int
+    - event_type: "earthquake"
+    - timestamp: ISO string
+    - location: string
+    - magnitude: float
+    - latitude / longitude: float veya None
+    - source: "USGS"
+    """
+    cleaned = []
+
+    for idx, ev in enumerate(raw_events, start=1):
+        # Zorunlu alan kontrolü
+        missing = [field for field in USGS_REQUIRED_FIELDS if field not in ev]
+        if missing:
+            log_message(
+                f"USGS event'inde eksik alan(lar): {missing}. Event atlandı: {ev}",
+                level="WARNING",
+            )
+            continue
+
+        event_type = str(ev.get("type", "")).lower()
+        if event_type != "earthquake":
+            # Sadece deprem event'leriyle ilgileniyoruz
+            continue
+
+        # magnitude float'a çevrilir
+        mag = ev.get("magnitude")
+        try:
+            mag = float(mag)
+        except (TypeError, ValueError):
+            log_message(
+                f"USGS event'inde geçersiz magnitude: {mag}. Event atlandı: {ev}",
+                level="WARNING",
+            )
+            continue
+
+        # time -> ISO string
+        t = ev.get("time")
+        if isinstance(t, datetime):
+            ts = t.isoformat()
+        else:
             try:
-                cleaned["latitude"] = float(lat)
-            except (TypeError, ValueError):
+                ts = datetime.fromisoformat(str(t)).isoformat()
+            except Exception:
                 log_message(
-                    f"USGS event'inde geçersiz latitude: {lat}. Koordinat atlandı.",
+                    f"USGS event'inde geçersiz zaman: {t}. Event atlandı: {ev}",
                     level="WARNING",
                 )
+                continue
 
-        if lon is not None:
-            try:
-                cleaned["longitude"] = float(lon)
-            except (TypeError, ValueError):
-                log_message(
-                    f"USGS event'inde geçersiz longitude: {lon}. Koordinat atlandı.",
-                    level="WARNING",
-                )
+        cleaned.append(
+            {
+                "id": idx,
+                "event_type": "earthquake",
+                "timestamp": ts,
+                "location": ev.get("location", "Unknown"),
+                "magnitude": mag,
+                "latitude": ev.get("latitude"),
+                "longitude": ev.get("longitude"),
+                "source": ev.get("source", "USGS"),
+            }
+        )
 
-        cleaned_list.append(cleaned)
+    log_message(
+        f"USGS'ten temizlenen event sayısı: {len(cleaned)}", level="INFO"
+    )
+    return cleaned
 
-    log_message(f"USGS'ten temizlenen event sayısı: {len(cleaned_list)}", level="INFO")
-    return cleaned_list
+
+# ---------------------------------------------------
+# 3) OPENWEATHER HAVA DURUMU EVENT'LERİ İÇİN TEMİZLEME
+# ---------------------------------------------------
+
+WEATHER_REQUIRED_FIELDS = [
+    "type",
+    "source",
+    "location",
+    "temperature",
+    "wind_speed",
+    "time",
+]
+
+
+def clean_openweather_events(raw_events):
+    """
+    OpenWeather'dan gelen anlık hava durumu event'lerini normalize eder.
+
+    Beklenen ham format (openweather.py / fetch_openweather):
+    {
+        "type": "weather",
+        "source": "OpenWeatherMap",
+        "location": "Ankara,TR",
+        "temperature": 12.3,
+        "wind_speed": 4.5,
+        "time": datetime(...)
+    }
+
+    Dönen format:
+    - id: int
+    - type: "weather"
+    - source: "OpenWeatherMap"
+    - location: string
+    - temperature: float
+    - wind_speed: float
+    - time: ISO string
+    """
+    cleaned = []
+
+    for idx, ev in enumerate(raw_events, start=1):
+        # Zorunlu alan kontrolü
+        missing = [field for field in WEATHER_REQUIRED_FIELDS if field not in ev]
+        if missing:
+            log_message(
+                f"OpenWeather event'inde eksik alan(lar): {missing}. Event atlandı: {ev}",
+                level="WARNING",
+            )
+            continue
+
+        # temperature / wind_speed sayıya çevrilir
+        try:
+            temp = float(ev.get("temperature"))
+            wind = float(ev.get("wind_speed"))
+        except (TypeError, ValueError) as e:
+            log_message(
+                f"OpenWeather event'inde geçersiz sayı ({e}). Event atlandı: {ev}",
+                level="WARNING",
+            )
+            continue
+
+        # time -> ISO string
+        time_val = ev.get("time")
+        if isinstance(time_val, datetime):
+            time_str = time_val.isoformat()
+        else:
+            # zaten string ise olduğu gibi bırak
+            time_str = str(time_val)
+
+        cleaned.append(
+            {
+                "id": idx,
+                "type": ev.get("type", "weather"),
+                "source": ev.get("source", "OpenWeatherMap"),
+                "location": ev.get("location"),
+                "temperature": temp,
+                "wind_speed": wind,
+                "time": time_str,
+            }
+        )
+
+    log_message(
+        f"OpenWeather'dan temizlenen hava durumu event sayısı: {len(cleaned)}",
+        level="INFO",
+    )
+    return cleaned
