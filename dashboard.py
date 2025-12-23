@@ -9,7 +9,15 @@ import os
 import glob
 from datetime import datetime
 from pathlib import Path
-from datasources.scraping.scrape_news import scrape_all_risk_headlines
+
+# Scraping modülü opsiyonel (lxml gerektirir)
+try:
+    from datasources.scraping.scrape_news import scrape_all_risk_headlines
+    SCRAPING_AVAILABLE = True
+except ImportError:
+    SCRAPING_AVAILABLE = False
+    def scrape_all_risk_headlines():
+        return []
 
 app = Flask(__name__)
 

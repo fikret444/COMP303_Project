@@ -1,6 +1,7 @@
 import requests
 from datetime import datetime
 from datasources.base_source import DataSource, DataSourceError
+from models import RawEarthquake
 
 
 class USGSEarthquakeSource(DataSource):
@@ -20,15 +21,17 @@ class USGSEarthquakeSource(DataSource):
             props = item.get("properties", {})
             coords = item.get("geometry", {}).get("coordinates", [None, None])
 
-            events.append({
-                "type": "earthquake",
-                "source": "USGS",
-                "location": props.get("place"),
-                "magnitude": props.get("mag"),
-                "time": datetime.fromtimestamp((props.get("time", 0) / 1000)),
-                "latitude": coords[1],
-                "longitude": coords[0],
-                "url": props.get("url"),
-            })
+            # Create RawEarthquake object instead of dictionary
+            raw_eq = RawEarthquake(
+                type="earthquake",
+                source="USGS",
+                location=props.get("place"),
+                magnitude=props.get("mag"),
+                time=datetime.fromtimestamp((props.get("time", 0) / 1000)),
+                latitude=coords[1],
+                longitude=coords[0]
+            )
+            
+            events.append(raw_eq)
 
         return events

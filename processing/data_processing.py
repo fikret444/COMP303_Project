@@ -1,5 +1,6 @@
 from datetime import datetime
 from .storage import log_message
+from models import RawEarthquake, CleanedEarthquake
 
 # Genel deprem event'i için sistem içinde kullanacağımız zorunlu alanlar
 REQUIRED_FIELDS = ["id", "event_type", "timestamp", "magnitude", "location"]
@@ -72,13 +73,33 @@ def clean_earthquake_events(raw_events):
     """
     İç formatımıza (id, event_type, timestamp, magnitude, location, ...)
     yakın olan event listesi için toplu temizleme fonksiyonu.
+    
+    Input: List of dictionaries or RawEarthquake objects
+    Output: List of CleanedEarthquake objects
     """
     cleaned_list = []
 
     for ev in raw_events:
-        cleaned = clean_earthquake_event(ev)
-        if cleaned is not None:
+        # Handle RawEarthquake objects
+        if isinstance(ev, RawEarthquake):
+            # Convert RawEarthquake to CleanedEarthquake using fromRaw
+            cleaned = CleanedEarthquake.fromRaw(ev)
             cleaned_list.append(cleaned)
+        else:
+            # Legacy dictionary support
+            cleaned_dict = clean_earthquake_event(ev)
+            if cleaned_dict is not None:
+                # Create CleanedEarthquake object from dictionary
+                cleaned = CleanedEarthquake(
+                    id=cleaned_dict["id"],
+                    event_type=cleaned_dict["event_type"],
+                    timestamp=cleaned_dict["timestamp"],
+                    magnitude=cleaned_dict["magnitude"],
+                    location=cleaned_dict["location"],
+                    latitude=cleaned_dict.get("latitude"),
+                    longitude=cleaned_dict.get("longitude")
+                )
+                cleaned_list.append(cleaned)
 
     log_message(f"Temizlenen event sayısı: {len(cleaned_list)}", level="INFO")
     return cleaned_list
@@ -88,36 +109,36 @@ def clean_usgs_earthquake_events(usgs_events):
     """
     USGS kaynağından gelen ham deprem event listesini alır,
     bizim sistemin kullandığı formata çevirip temizler.
-
-    Geri dönen her event şu formatta olur:
-    {
-        "id": int,
-        "event_type": "earthquake",
-        "timestamp": "ISO-8601 string",
-        "magnitude": float,
-        "location": str,
-        "latitude": float (opsiyonel),
-        "longitude": float (opsiyonel),
-    }
+    
+    Input: List of RawEarthquake objects or dictionaries
+    Output: List of CleanedEarthquake objects
     """
     cleaned_list = []
 
     for index, raw in enumerate(usgs_events, start=1):
-        # 1) USGS zorunlu alanları var mı?
-        missing = [
-            field
-            for field in USGS_REQUIRED_FIELDS
-            if field not in raw or raw[field] in (None, "")
-        ]
-        if missing:
-            log_message(
-                f"USGS event'inde eksik alan(lar): {missing}. Event kaydedilmedi: {raw}",
-                level="WARNING",
-            )
-            continue
+        # Handle both RawEarthquake objects and dictionaries
+        if isinstance(raw, RawEarthquake):
+            raw_dict = raw.toDictionary()
+            time_val = raw.time
+        else:
+            # Legacy dictionary support
+            raw_dict = raw
+            time_val = raw.get("time")
+            
+            # Check required fields for dictionary
+            missing = [
+                field
+                for field in USGS_REQUIRED_FIELDS
+                if field not in raw_dict or raw_dict[field] in (None, "")
+            ]
+            if missing:
+                log_message(
+                    f"USGS event'inde eksik alan(lar): {missing}. Event kaydedilmedi: {raw_dict}",
+                    level="WARNING",
+                )
+                continue
 
         # 2) Zamanı ISO string'e çevir
-        time_val = raw.get("time")
         if isinstance(time_val, (int, float)):
             # ms cinsinden epoch gelmişse
             ts = datetime.fromtimestamp(time_val / 1000).isoformat()
@@ -128,45 +149,46 @@ def clean_usgs_earthquake_events(usgs_events):
 
         # 3) Magnitude'u float'a çevir
         try:
-            magnitude = float(raw.get("magnitude"))
+            if isinstance(raw, RawEarthquake):
+                magnitude = float(raw.magnitude)
+            else:
+                magnitude = float(raw_dict.get("magnitude"))
         except (TypeError, ValueError):
+            mag_val = raw.magnitude if isinstance(raw, RawEarthquake) else raw_dict.get("magnitude")
             log_message(
-                f"USGS event'inde geçersiz magnitude: {raw.get('magnitude')}. Event kaydedilmedi: {raw}",
+                f"USGS event'inde geçersiz magnitude: {mag_val}. Event kaydedilmedi",
                 level="WARNING",
             )
             continue
 
-        cleaned = {
-            "id": index,
-            "event_type": str(raw.get("type", "earthquake")).lower(),
-            "timestamp": ts,
-            "location": str(raw.get("location", "Unknown")),
-            "magnitude": magnitude,
-        }
+        # 4) Location
+        if isinstance(raw, RawEarthquake):
+            location = raw.location
+        else:
+            location = raw_dict.get("location")
+        if not location:
+            location = "Unknown"
 
-        # 4) Opsiyonel: latitude / longitude varsa ekle
-        lat = raw.get("latitude")
-        lon = raw.get("longitude")
+        # 5) Latitude and Longitude
+        if isinstance(raw, RawEarthquake):
+            latitude = raw.latitude
+            longitude = raw.longitude
+        else:
+            latitude = raw_dict.get("latitude")
+            longitude = raw_dict.get("longitude")
 
-        if lat is not None:
-            try:
-                cleaned["latitude"] = float(lat)
-            except (TypeError, ValueError):
-                log_message(
-                    f"USGS event'inde geçersiz latitude: {lat}. Koordinat atlandı.",
-                    level="WARNING",
-                )
+        # Create CleanedEarthquake object
+        cleaned_eq = CleanedEarthquake(
+            id=index,
+            event_type="earthquake",
+            timestamp=ts,
+            location=str(location),
+            magnitude=magnitude,
+            latitude=latitude,
+            longitude=longitude
+        )
 
-        if lon is not None:
-            try:
-                cleaned["longitude"] = float(lon)
-            except (TypeError, ValueError):
-                log_message(
-                    f"USGS event'inde geçersiz longitude: {lon}. Koordinat atlandı.",
-                    level="WARNING",
-                )
-
-        cleaned_list.append(cleaned)
+        cleaned_list.append(cleaned_eq)
 
     log_message(f"USGS'ten temizlenen event sayısı: {len(cleaned_list)}", level="INFO")
     return cleaned_list

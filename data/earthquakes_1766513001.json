@@ -1,0 +1,268 @@
+[
+  {
+    "id": 1,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T20:12:32.020000",
+    "magnitude": 2.66,
+    "location": "1 km SW of La Parguera, Puerto Rico"
+  },
+  {
+    "id": 2,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T18:24:17.380000",
+    "magnitude": 2.68,
+    "location": "1 km SSW of Mayagüez, Puerto Rico"
+  },
+  {
+    "id": 3,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T16:20:55.938000",
+    "magnitude": 4.5,
+    "location": "141 km WNW of Neiafu, Tonga"
+  },
+  {
+    "id": 4,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T15:16:25.964000",
+    "magnitude": 4.9,
+    "location": "South Sandwich Islands region"
+  },
+  {
+    "id": 5,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T14:24:17.690000",
+    "magnitude": 2.48,
+    "location": "11 km ESE of Mammoth Lakes, CA"
+  },
+  {
+    "id": 6,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T14:22:09.935000",
+    "magnitude": 4.5,
+    "location": "72 km SE of Ambon, Indonesia"
+  },
+  {
+    "id": 7,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T12:56:58.880000",
+    "magnitude": 3.28,
+    "location": "3 km S of Pāhala, Hawaii"
+  },
+  {
+    "id": 8,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T12:54:53.027000",
+    "magnitude": 5.2,
+    "location": "119 km NNW of Finschhafen, Papua New Guinea"
+  },
+  {
+    "id": 9,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T12:44:21.788000",
+    "magnitude": 5.2,
+    "location": "163 km S of Ōyama, Japan"
+  },
+  {
+    "id": 10,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T12:32:49.566000",
+    "magnitude": 3.3,
+    "location": "109 km NW of Yakutat, Alaska"
+  },
+  {
+    "id": 11,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T12:09:25.878000",
+    "magnitude": 4.2,
+    "location": "89 km WSW of Puerto Madero, Mexico"
+  },
+  {
+    "id": 12,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T11:32:53.940000",
+    "magnitude": 2.72,
+    "location": "9 km SSW of Big Bear Lake, CA"
+  },
+  {
+    "id": 13,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T11:11:29.280000",
+    "magnitude": 2.63,
+    "location": "9 km WNW of Lake Davis, CA"
+  },
+  {
+    "id": 14,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T11:11:11.220000",
+    "magnitude": 2.7,
+    "location": "5 km SE of San Ramon, CA"
+  },
+  {
+    "id": 15,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T10:46:09.390000",
+    "magnitude": 4.9,
+    "location": "25 km S of Hualien City, Taiwan"
+  },
+  {
+    "id": 16,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T10:36:48.208000",
+    "magnitude": 2.6,
+    "location": "51 km W of Anchor Point, Alaska"
+  },
+  {
+    "id": 17,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T09:26:30.149000",
+    "magnitude": 4.3,
+    "location": "280 km E of Levuka, Fiji"
+  },
+  {
+    "id": 18,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T07:32:35.126000",
+    "magnitude": 5.1,
+    "location": "120 km E of Pirallahı, Azerbaijan"
+  },
+  {
+    "id": 19,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T07:31:28.369000",
+    "magnitude": 4.9,
+    "location": "West Chile Rise"
+  },
+  {
+    "id": 20,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T07:26:37.037000",
+    "magnitude": 3.6,
+    "location": "171 km W of Pistol River, Oregon"
+  },
+  {
+    "id": 21,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T07:10:35.099000",
+    "magnitude": 4.4,
+    "location": "54 km NNE of Sape, Indonesia"
+  },
+  {
+    "id": 22,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T06:54:56.188000",
+    "magnitude": 4.7,
+    "location": "Kermadec Islands region"
+  },
+  {
+    "id": 23,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T06:13:16.269000",
+    "magnitude": 2.8,
+    "location": "24 km SSE of Pope-Vannoy Landing, Alaska"
+  },
+  {
+    "id": 24,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T05:38:36.500000",
+    "magnitude": 3.0,
+    "location": "67 km NNE of San Juan, Puerto Rico"
+  },
+  {
+    "id": 25,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T04:08:54.765000",
+    "magnitude": 3.3,
+    "location": "107 km ESE of Chignik, Alaska"
+  },
+  {
+    "id": 26,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T02:54:49.617000",
+    "magnitude": 2.8,
+    "location": "63 km ESE of Atka, Alaska"
+  },
+  {
+    "id": 27,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T02:42:35.751000",
+    "magnitude": 2.6,
+    "location": "42 km ESE of Fox River, Alaska"
+  },
+  {
+    "id": 28,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T02:32:28.820000",
+    "magnitude": 3.28,
+    "location": "16 km S of Tres Pinos, CA"
+  },
+  {
+    "id": 29,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T02:19:16.870000",
+    "magnitude": 2.9,
+    "location": "67 km NW of Eureka Roadhouse, Alaska"
+  },
+  {
+    "id": 30,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T01:45:13.510000",
+    "magnitude": 3.2,
+    "location": "8 km SE of Point Possession, Alaska"
+  },
+  {
+    "id": 31,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T01:14:19.103000",
+    "magnitude": 2.7,
+    "location": "29 km SE of Knik River, Alaska"
+  },
+  {
+    "id": 32,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T01:04:49.530000",
+    "magnitude": 4.8,
+    "location": "18 km N of Ollagüe, Chile"
+  },
+  {
+    "id": 33,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T00:09:20.568000",
+    "magnitude": 4.1,
+    "location": "10 km SE of Kéfalos, Greece"
+  },
+  {
+    "id": 34,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-22T23:38:18.490000",
+    "magnitude": 2.61,
+    "location": "3 km SE of Wilkerson, CA"
+  },
+  {
+    "id": 35,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-22T22:56:50.440000",
+    "magnitude": 3.55,
+    "location": "22 km N of Brenas, Puerto Rico"
+  },
+  {
+    "id": 36,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-22T22:28:48.392000",
+    "magnitude": 3.2,
+    "location": "200 km W of Bandon, Oregon"
+  },
+  {
+    "id": 37,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-22T21:45:41.088000",
+    "magnitude": 4.7,
+    "location": "228 km NNE of Palu, Indonesia"
+  },
+  {
+    "id": 38,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-22T21:03:24.487000",
+    "magnitude": 4.6,
+    "location": "51 km W of Kandrian, Papua New Guinea"
+  }
+]

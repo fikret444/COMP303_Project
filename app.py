@@ -3,8 +3,12 @@ from flask import Flask, jsonify, request
 from datasources.usgs_earthquake import USGSEarthquakeSource
 from datasources.openweather_source import OpenWeatherSource
 
-# your scraping (adjust path to your project)
-from datasources.scraping.scrape_news import scrape_all_risk_headlines
+# your scraping (adjust path to your project) - opsiyonel (lxml gerektirir)
+try:
+    from datasources.scraping.scrape_news import scrape_all_risk_headlines
+except ImportError:
+    def scrape_all_risk_headlines():
+        return []
 
 app = Flask(__name__)
 

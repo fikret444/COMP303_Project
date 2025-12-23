@@ -20,13 +20,28 @@ def save_events_to_csv(events, filename="events.csv", append=True):
     """
     İstersen ileride kullanırsın diye bırakıyoruz.
     Şu an USGS pipeline'ında kullanılmıyor.
+    
+    Accepts both objects (with toDictionary method) and dictionaries.
     """
     if not events:
         return
 
     file_path = DATA_DIR / filename
 
-    fieldnames = list(events[0].keys())
+    # Convert objects to dictionaries if needed
+    serializable_events = []
+    for event in events:
+        # Check if it's an object with toDictionary method
+        if hasattr(event, 'toDictionary'):
+            serializable_events.append(event.toDictionary())
+        else:
+            # Already a dictionary
+            serializable_events.append(event)
+
+    if not serializable_events:
+        return
+
+    fieldnames = list(serializable_events[0].keys())
     file_exists = file_path.exists()
     mode = "a" if append and file_exists else "w"
 
@@ -34,18 +49,30 @@ def save_events_to_csv(events, filename="events.csv", append=True):
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         if mode == "w":
             writer.writeheader()
-        writer.writerows(events)
+        writer.writerows(serializable_events)
 
 
 def save_events_to_json(events, filename="events.json"):
     """
     Event listesini data/ klasöründe JSON dosyasına kaydeder.
     Örn: data/earthquakes_tr.json
+    
+    Accepts both objects (with toDictionary method) and dictionaries.
     """
     if not events:
         return
 
     file_path = DATA_DIR / filename
+
+    # Convert objects to dictionaries if needed
+    serializable_events = []
+    for event in events:
+        # Check if it's an object with toDictionary method
+        if hasattr(event, 'toDictionary'):
+            serializable_events.append(event.toDictionary())
+        else:
+            # Already a dictionary
+            serializable_events.append(event)
 
     # datetime objelerini ISO string'e çevir
     def json_serializer(obj):
@@ -54,7 +81,7 @@ def save_events_to_json(events, filename="events.json"):
         raise TypeError(f"Type {type(obj)} not serializable")
 
     with file_path.open("w", encoding="utf-8") as f:
-        json.dump(events, f, ensure_ascii=False, indent=2, default=json_serializer)
+        json.dump(serializable_events, f, ensure_ascii=False, indent=2, default=json_serializer)
 
 
 def log_message(message, level="INFO"):

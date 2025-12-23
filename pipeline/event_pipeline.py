@@ -41,15 +41,19 @@ class EventPipeline:
         
         log_message(f"EventPipeline initialized with {num_consumers} consumers", "INFO")
     
-    def _process_earthquake_events(self, events: List[Dict[str, Any]], source_name: str) -> Dict[str, Any]:
-        """Process earthquake events from USGS."""
+    def _process_earthquake_events(self, events: List[Any], source_name: str) -> Dict[str, Any]:
+        """Process earthquake events from USGS. Accepts RawEarthquake objects or dictionaries."""
         try:
+            # clean_usgs_earthquake_events now returns CleanedEarthquake objects
             cleaned_events = clean_usgs_earthquake_events(events)
             
             if cleaned_events:
                 filename = f"earthquakes_{int(time.time())}.json"
                 save_events_to_json(cleaned_events, filename)
-                stats = compute_basic_stats(cleaned_events)
+                
+                # Convert objects to dictionaries for stats computation if needed
+                stats_events = [ev.toDictionary() if hasattr(ev, 'toDictionary') else ev for ev in cleaned_events]
+                stats = compute_basic_stats(stats_events)
                 
                 return {
                     'success': True,
@@ -65,8 +69,8 @@ class EventPipeline:
             log_message(f"Error processing earthquake events: {str(e)}", "ERROR")
             return {'success': False, 'source': source_name, 'error': str(e)}
     
-    def _process_weather_events(self, events: List[Dict[str, Any]], source_name: str) -> Dict[str, Any]:
-        """Process weather events from OpenWeather."""
+    def _process_weather_events(self, events: List[Any], source_name: str) -> Dict[str, Any]:
+        """Process weather events from OpenWeather. Accepts Weather objects or dictionaries."""
         try:
             # events zaten bir liste, direkt kaydet
             if not events:
@@ -75,6 +79,7 @@ class EventPipeline:
             # Tüm weather verilerini tek bir dosyada topla
             from pathlib import Path
             from processing.storage import DATA_DIR
+            from models import Weather
             import json
             
             # Thread-safe birleştirme için lock kullan
@@ -88,7 +93,12 @@ class EventPipeline:
                         with open(weather_file, 'r', encoding='utf-8') as f:
                             existing_data = json.load(f)
                             if isinstance(existing_data, list):
-                                all_weather = existing_data
+                                # Convert dictionaries to Weather objects
+                                for item in existing_data:
+                                    if isinstance(item, dict):
+                                        all_weather.append(Weather.fromDict(item))
+                                    else:
+                                        all_weather.append(item)
                     except:
                         pass
                 
@@ -100,17 +110,21 @@ class EventPipeline:
                 
                 # Mevcut verileri ayır
                 for item in all_weather:
-                    if item.get('type') == 'weather_forecast':
+                    # Handle both objects and dictionaries
+                    item_dict = item.toDictionary() if hasattr(item, 'toDictionary') else item
+                    if item_dict.get('type') == 'weather_forecast':
                         forecast_list.append(item)
                     else:
-                        city = item.get('location')
+                        city = item_dict.get('location')
                         if city:
                             city_current_dict[city] = item
                 
                 # Yeni verileri işle
                 for event in events:
-                    event_type = event.get('type', 'weather')
-                    city = event.get('location')
+                    # Convert to dictionary for checking
+                    event_dict = event.toDictionary() if hasattr(event, 'toDictionary') else event
+                    event_type = event_dict.get('type', 'weather')
+                    city = event_dict.get('location')
                     
                     if event_type == 'weather_forecast':
                         # Forecast verilerini ekle
@@ -129,8 +143,8 @@ class EventPipeline:
                 'success': True,
                 'source': source_name,
                 'event_count': len(events),
-                'total_cities': len(all_weather),
-                'data': events[0] if events else None,
+                'total_cities': len(city_current_dict),
+                'data': events[0].toDictionary() if events and hasattr(events[0], 'toDictionary') else (events[0] if events else None),
                 'filename': 'weather_all.json'
             }
             
