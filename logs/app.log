@@ -1,236 +1,43 @@
-2025-12-21T00:59:00.103350+03:00 [INFO] SDEWS System Initialization
-2025-12-21T00:59:00.103758+03:00 [INFO] Data source'lar baslatiliyor...
-2025-12-21T00:59:00.104214+03:00 [INFO] [OK] USGS Earthquake Source hazir
-2025-12-21T00:59:00.104487+03:00 [INFO] [OK] OpenWeather Source hazir
-2025-12-21T00:59:00.104708+03:00 [INFO] Runtime system olusturuluyor...
-2025-12-21T00:59:00.104913+03:00 [INFO] DataSourceManager initialized with 2 sources
-2025-12-21T00:59:00.105095+03:00 [INFO] EventPipeline initialized with 3 consumers
-2025-12-21T00:59:00.105293+03:00 [INFO] RuntimeSystem initialized
-2025-12-21T00:59:00.105634+03:00 [INFO] [OK] Runtime System hazir
-2025-12-21T00:59:00.105876+03:00 [INFO] TEK CALISTIRMA MODU baslatiliyor
-2025-12-21T00:59:00.106172+03:00 [INFO] ============================================================
-2025-12-21T00:59:00.106360+03:00 [INFO] SDEWS Runtime System Starting
-2025-12-21T00:59:00.106525+03:00 [INFO] ============================================================
-2025-12-21T00:59:00.106676+03:00 [INFO] Starting 3 consumer workers
-2025-12-21T00:59:00.107259+03:00 [INFO] Consumer worker 0 started
-2025-12-21T00:59:00.107418+03:00 [INFO] Consumer worker 1 started
-2025-12-21T00:59:00.107615+03:00 [INFO] Running single fetch-process cycle
-2025-12-21T00:59:00.107559+03:00 [INFO] Consumer worker 2 started
-2025-12-21T00:59:00.107864+03:00 [INFO] Starting concurrent fetch from 2 sources
-2025-12-21T00:59:00.108313+03:00 [INFO] Fetching data from USGSEarthquakeSource...
-2025-12-21T00:59:00.108544+03:00 [INFO] Fetching data from OpenWeatherSource...
-2025-12-21T00:59:00.109057+03:00 [ERROR] Error fetching from OpenWeatherSource: OPENWEATHER_API_KEY is missing (set env variable).
-2025-12-21T00:59:00.528093+03:00 [INFO] Successfully fetched 37 items from USGSEarthquakeSource
-2025-12-21T00:59:00.528580+03:00 [INFO] All fetch operations completed
-2025-12-21T00:59:00.528875+03:00 [INFO] Added events from USGSEarthquakeSource to processing queue
-2025-12-21T00:59:00.528939+03:00 [INFO] Worker 0 processing event from USGSEarthquakeSource
-2025-12-21T00:59:00.529075+03:00 [INFO] Added 1 event batches to pipeline
-2025-12-21T00:59:00.529331+03:00 [INFO] USGS'ten temizlenen event sayısı: 37
-2025-12-21T00:59:00.530386+03:00 [INFO] All events processed
-2025-12-21T00:59:00.530595+03:00 [INFO] ============================================================
-2025-12-21T00:59:00.530766+03:00 [INFO] PROCESSING RESULTS
-2025-12-21T00:59:00.530920+03:00 [INFO] ============================================================
-2025-12-21T00:59:00.531071+03:00 [INFO] Result #1 - USGSEarthquakeSource: SUCCESS
-2025-12-21T00:59:00.531224+03:00 [INFO]   Events processed: 37
-2025-12-21T00:59:00.531366+03:00 [INFO]   Statistics:
-2025-12-21T00:59:00.531508+03:00 [INFO]     - Total events: 37
-2025-12-21T00:59:00.531651+03:00 [INFO]     - Max magnitude: 5.60
-2025-12-21T00:59:00.531793+03:00 [INFO]     - Avg magnitude: 3.67
-2025-12-21T00:59:00.531932+03:00 [INFO]   Saved to: earthquakes_1766267940.json
-2025-12-21T00:59:00.532072+03:00 [INFO] ------------------------------------------------------------
-2025-12-21T00:59:00.532212+03:00 [INFO] Stopping RuntimeSystem...
-2025-12-21T00:59:00.532382+03:00 [INFO] Stopping consumer workers...
-2025-12-21T00:59:00.532783+03:00 [INFO] Consumer worker 1 stopped
-2025-12-21T00:59:00.532860+03:00 [INFO] Consumer worker 2 stopped
-2025-12-21T00:59:00.532925+03:00 [INFO] Consumer worker 0 stopped
-2025-12-21T00:59:00.533787+03:00 [INFO] All consumer workers stopped
-2025-12-21T00:59:00.534187+03:00 [INFO] ============================================================
-2025-12-21T00:59:00.534540+03:00 [INFO] SYSTEM STATUS
-2025-12-21T00:59:00.534805+03:00 [INFO] ============================================================
-2025-12-21T00:59:00.534980+03:00 [INFO] Uptime: 0 seconds
-2025-12-21T00:59:00.535140+03:00 [INFO] Cycles completed: 1
-2025-12-21T00:59:00.535329+03:00 [INFO] Data Sources: 2
-2025-12-21T00:59:00.535546+03:00 [INFO] Processed events: 1
-2025-12-21T00:59:00.535785+03:00 [INFO] Errors: 0
-2025-12-21T00:59:00.536007+03:00 [INFO] ============================================================
-2025-12-21T00:59:00.536190+03:00 [INFO] ============================================================
-2025-12-21T00:59:00.536357+03:00 [INFO] SDEWS Runtime System Stopped
-2025-12-21T00:59:00.536506+03:00 [INFO] ============================================================
-2025-12-21T00:59:00.536696+03:00 [INFO] Sistem kapatildi
-2025-12-21T01:14:50.879139+03:00 [INFO] SDEWS System Initialization
-2025-12-21T01:14:50.879350+03:00 [INFO] Data source'lar baslatiliyor...
-2025-12-21T01:14:50.879552+03:00 [INFO] [OK] USGS Earthquake Source hazir
-2025-12-21T01:14:50.879754+03:00 [INFO] [OK] OpenWeather Source hazir
-2025-12-21T01:14:50.879907+03:00 [INFO] Runtime system olusturuluyor...
-2025-12-21T01:14:50.880129+03:00 [INFO] DataSourceManager initialized with 2 sources
-2025-12-21T01:14:50.880320+03:00 [INFO] EventPipeline initialized with 3 consumers
-2025-12-21T01:14:50.880493+03:00 [INFO] RuntimeSystem initialized
-2025-12-21T01:14:50.880640+03:00 [INFO] [OK] Runtime System hazir
-2025-12-21T01:14:50.880782+03:00 [INFO] TEK CALISTIRMA MODU baslatiliyor
-2025-12-21T01:14:50.880929+03:00 [INFO] ============================================================
-2025-12-21T01:14:50.881113+03:00 [INFO] SDEWS Runtime System Starting
-2025-12-21T01:14:50.881260+03:00 [INFO] ============================================================
-2025-12-21T01:14:50.881397+03:00 [INFO] Starting 3 consumer workers
-2025-12-21T01:14:50.881906+03:00 [INFO] Consumer worker 0 started
-2025-12-21T01:14:50.882093+03:00 [INFO] Consumer worker 1 started
-2025-12-21T01:14:50.882282+03:00 [INFO] Consumer worker 2 started
-2025-12-21T01:14:50.882342+03:00 [INFO] Running single fetch-process cycle
-2025-12-21T01:14:50.882645+03:00 [INFO] Starting concurrent fetch from 2 sources
-2025-12-21T01:14:50.883081+03:00 [INFO] Fetching data from USGSEarthquakeSource...
-2025-12-21T01:14:50.883223+03:00 [INFO] Fetching data from OpenWeatherSource...
-2025-12-21T01:14:50.883566+03:00 [ERROR] Error fetching from OpenWeatherSource: OPENWEATHER_API_KEY is missing (set env variable).
-2025-12-21T01:14:51.311077+03:00 [INFO] Successfully fetched 37 items from USGSEarthquakeSource
-2025-12-21T01:14:51.311686+03:00 [INFO] All fetch operations completed
-2025-12-21T01:14:51.312060+03:00 [INFO] Added events from USGSEarthquakeSource to processing queue
-2025-12-21T01:14:51.312306+03:00 [INFO] Added 1 event batches to pipeline
-2025-12-21T01:14:51.312135+03:00 [INFO] Worker 0 processing event from USGSEarthquakeSource
-2025-12-21T01:14:51.312989+03:00 [INFO] USGS'ten temizlenen event sayısı: 37
-2025-12-21T01:14:51.313923+03:00 [INFO] All events processed
-2025-12-21T01:14:51.314154+03:00 [INFO] ============================================================
-2025-12-21T01:14:51.314376+03:00 [INFO] PROCESSING RESULTS
-2025-12-21T01:14:51.314638+03:00 [INFO] ============================================================
-2025-12-21T01:14:51.314845+03:00 [INFO] Result #1 - USGSEarthquakeSource: SUCCESS
-2025-12-21T01:14:51.315061+03:00 [INFO]   Events processed: 37
-2025-12-21T01:14:51.315314+03:00 [INFO]   Statistics:
-2025-12-21T01:14:51.315496+03:00 [INFO]     - Total events: 37
-2025-12-21T01:14:51.315706+03:00 [INFO]     - Max magnitude: 5.60
-2025-12-21T01:14:51.315880+03:00 [INFO]     - Avg magnitude: 3.60
-2025-12-21T01:14:51.316076+03:00 [INFO]   Saved to: earthquakes_1766268891.json
-2025-12-21T01:14:51.316245+03:00 [INFO] ------------------------------------------------------------
-2025-12-21T01:14:51.316440+03:00 [INFO] Stopping RuntimeSystem...
-2025-12-21T01:14:51.316610+03:00 [INFO] Stopping consumer workers...
-2025-12-21T01:14:51.316874+03:00 [INFO] Consumer worker 1 stopped
-2025-12-21T01:14:51.316992+03:00 [INFO] Consumer worker 2 stopped
-2025-12-21T01:14:51.316940+03:00 [INFO] Consumer worker 0 stopped
-2025-12-21T01:14:51.317523+03:00 [INFO] All consumer workers stopped
-2025-12-21T01:14:51.317744+03:00 [INFO] ============================================================
-2025-12-21T01:14:51.317939+03:00 [INFO] SYSTEM STATUS
-2025-12-21T01:14:51.318128+03:00 [INFO] ============================================================
-2025-12-21T01:14:51.318339+03:00 [INFO] Uptime: 0 seconds
-2025-12-21T01:14:51.318576+03:00 [INFO] Cycles completed: 1
-2025-12-21T01:14:51.318787+03:00 [INFO] Data Sources: 2
-2025-12-21T01:14:51.318956+03:00 [INFO] Processed events: 1
-2025-12-21T01:14:51.319272+03:00 [INFO] Errors: 0
-2025-12-21T01:14:51.319422+03:00 [INFO] ============================================================
-2025-12-21T01:14:51.319656+03:00 [INFO] ============================================================
-2025-12-21T01:14:51.319836+03:00 [INFO] SDEWS Runtime System Stopped
-2025-12-21T01:14:51.320038+03:00 [INFO] ============================================================
-2025-12-21T01:14:51.320202+03:00 [INFO] Sistem kapatildi
-2025-12-21T01:21:04.843040+03:00 [INFO] SDEWS System Initialization
-2025-12-21T01:21:04.843328+03:00 [INFO] Data source'lar baslatiliyor...
-2025-12-21T01:21:04.843524+03:00 [INFO] [OK] USGS Earthquake Source hazir
-2025-12-21T01:21:04.843687+03:00 [INFO] [OK] OpenWeather Source hazir
-2025-12-21T01:21:04.843944+03:00 [INFO] Runtime system olusturuluyor...
-2025-12-21T01:21:04.844136+03:00 [INFO] DataSourceManager initialized with 2 sources
-2025-12-21T01:21:04.844293+03:00 [INFO] EventPipeline initialized with 3 consumers
-2025-12-21T01:21:04.844451+03:00 [INFO] RuntimeSystem initialized
-2025-12-21T01:21:04.844589+03:00 [INFO] [OK] Runtime System hazir
-2025-12-21T01:21:04.844721+03:00 [INFO] TEK CALISTIRMA MODU baslatiliyor
-2025-12-21T01:21:04.844910+03:00 [INFO] ============================================================
-2025-12-21T01:21:04.845061+03:00 [INFO] SDEWS Runtime System Starting
-2025-12-21T01:21:04.845195+03:00 [INFO] ============================================================
-2025-12-21T01:21:04.845329+03:00 [INFO] Starting 3 consumer workers
-2025-12-21T01:21:04.845842+03:00 [INFO] Consumer worker 0 started
-2025-12-21T01:21:04.846004+03:00 [INFO] Consumer worker 1 started
-2025-12-21T01:21:04.846135+03:00 [INFO] Consumer worker 2 started
-2025-12-21T01:21:04.846269+03:00 [INFO] Running single fetch-process cycle
-2025-12-21T01:21:04.846499+03:00 [INFO] Starting concurrent fetch from 2 sources
-2025-12-21T01:21:04.846753+03:00 [INFO] Fetching data from USGSEarthquakeSource...
-2025-12-21T01:21:04.846890+03:00 [INFO] Fetching data from OpenWeatherSource...
-2025-12-21T01:21:04.847238+03:00 [ERROR] Error fetching from OpenWeatherSource: OPENWEATHER_API_KEY is missing (set env variable).
-2025-12-21T01:21:05.284550+03:00 [INFO] Successfully fetched 37 items from USGSEarthquakeSource
-2025-12-21T01:21:05.285024+03:00 [INFO] All fetch operations completed
-2025-12-21T01:21:05.285290+03:00 [INFO] Added events from USGSEarthquakeSource to processing queue
-2025-12-21T01:21:05.285353+03:00 [INFO] Worker 0 processing event from USGSEarthquakeSource
-2025-12-21T01:21:05.285468+03:00 [INFO] Added 1 event batches to pipeline
-2025-12-21T01:21:05.285824+03:00 [INFO] USGS'ten temizlenen event sayısı: 37
-2025-12-21T01:21:05.290322+03:00 [INFO] All events processed
-2025-12-21T01:21:05.290560+03:00 [INFO] ============================================================
-2025-12-21T01:21:05.290779+03:00 [INFO] PROCESSING RESULTS
-2025-12-21T01:21:05.290932+03:00 [INFO] ============================================================
-2025-12-21T01:21:05.291177+03:00 [INFO] Result #1 - USGSEarthquakeSource: SUCCESS
-2025-12-21T01:21:05.291438+03:00 [INFO]   Events processed: 37
-2025-12-21T01:21:05.291600+03:00 [INFO]   Statistics:
-2025-12-21T01:21:05.291738+03:00 [INFO]     - Total events: 37
-2025-12-21T01:21:05.291871+03:00 [INFO]     - Max magnitude: 5.60
-2025-12-21T01:21:05.292001+03:00 [INFO]     - Avg magnitude: 3.60
-2025-12-21T01:21:05.292287+03:00 [INFO]   Saved to: earthquakes_1766269265.json
-2025-12-21T01:21:05.292418+03:00 [INFO] ------------------------------------------------------------
-2025-12-21T01:21:05.292681+03:00 [INFO] Stopping RuntimeSystem...
-2025-12-21T01:21:05.292863+03:00 [INFO] Stopping consumer workers...
-2025-12-21T01:21:05.293100+03:00 [INFO] Consumer worker 2 stopped
-2025-12-21T01:21:05.293060+03:00 [INFO] Consumer worker 1 stopped
-2025-12-21T01:21:05.293148+03:00 [INFO] Consumer worker 0 stopped
-2025-12-21T01:21:05.293487+03:00 [INFO] All consumer workers stopped
-2025-12-21T01:21:05.293697+03:00 [INFO] ============================================================
-2025-12-21T01:21:05.293878+03:00 [INFO] SYSTEM STATUS
-2025-12-21T01:21:05.294022+03:00 [INFO] ============================================================
-2025-12-21T01:21:05.294156+03:00 [INFO] Uptime: 0 seconds
-2025-12-21T01:21:05.294283+03:00 [INFO] Cycles completed: 1
-2025-12-21T01:21:05.294410+03:00 [INFO] Data Sources: 2
-2025-12-21T01:21:05.294532+03:00 [INFO] Processed events: 1
-2025-12-21T01:21:05.294653+03:00 [INFO] Errors: 0
-2025-12-21T01:21:05.294773+03:00 [INFO] ============================================================
-2025-12-21T01:21:05.294893+03:00 [INFO] ============================================================
-2025-12-21T01:21:05.295014+03:00 [INFO] SDEWS Runtime System Stopped
-2025-12-21T01:21:05.295131+03:00 [INFO] ============================================================
-2025-12-21T01:21:05.295259+03:00 [INFO] Sistem kapatildi
-2025-12-21T01:21:09.466173+03:00 [INFO] SDEWS System Initialization
-2025-12-21T01:21:09.466407+03:00 [INFO] Data source'lar baslatiliyor...
-2025-12-21T01:21:09.466578+03:00 [INFO] [OK] USGS Earthquake Source hazir
-2025-12-21T01:21:09.466797+03:00 [INFO] [OK] OpenWeather Source hazir
-2025-12-21T01:21:09.466974+03:00 [INFO] Runtime system olusturuluyor...
-2025-12-21T01:21:09.467135+03:00 [INFO] DataSourceManager initialized with 2 sources
-2025-12-21T01:21:09.467287+03:00 [INFO] EventPipeline initialized with 3 consumers
-2025-12-21T01:21:09.467438+03:00 [INFO] RuntimeSystem initialized
-2025-12-21T01:21:09.467577+03:00 [INFO] [OK] Runtime System hazir
-2025-12-21T01:21:09.467706+03:00 [INFO] TEK CALISTIRMA MODU baslatiliyor
-2025-12-21T01:21:09.467836+03:00 [INFO] ============================================================
-2025-12-21T01:21:09.467963+03:00 [INFO] SDEWS Runtime System Starting
-2025-12-21T01:21:09.468085+03:00 [INFO] ============================================================
-2025-12-21T01:21:09.468209+03:00 [INFO] Starting 3 consumer workers
-2025-12-21T01:21:09.468712+03:00 [INFO] Consumer worker 0 started
-2025-12-21T01:21:09.468864+03:00 [INFO] Consumer worker 1 started
-2025-12-21T01:21:09.469011+03:00 [INFO] Consumer worker 2 started
-2025-12-21T01:21:09.469058+03:00 [INFO] Running single fetch-process cycle
-2025-12-21T01:21:09.469318+03:00 [INFO] Starting concurrent fetch from 2 sources
-2025-12-21T01:21:09.469605+03:00 [INFO] Fetching data from USGSEarthquakeSource...
-2025-12-21T01:21:09.469719+03:00 [INFO] Fetching data from OpenWeatherSource...
-2025-12-21T01:21:09.470067+03:00 [ERROR] Error fetching from OpenWeatherSource: OPENWEATHER_API_KEY is missing (set env variable).
-2025-12-21T01:21:09.863075+03:00 [INFO] Successfully fetched 37 items from USGSEarthquakeSource
-2025-12-21T01:21:09.863583+03:00 [INFO] All fetch operations completed
-2025-12-21T01:21:09.863838+03:00 [INFO] Added events from USGSEarthquakeSource to processing queue
-2025-12-21T01:21:09.863895+03:00 [INFO] Worker 0 processing event from USGSEarthquakeSource
-2025-12-21T01:21:09.864003+03:00 [INFO] Added 1 event batches to pipeline
-2025-12-21T01:21:09.864379+03:00 [INFO] USGS'ten temizlenen event sayısı: 37
-2025-12-21T01:21:09.865462+03:00 [INFO] All events processed
-2025-12-21T01:21:09.865843+03:00 [INFO] ============================================================
-2025-12-21T01:21:09.866075+03:00 [INFO] PROCESSING RESULTS
-2025-12-21T01:21:09.866366+03:00 [INFO] ============================================================
-2025-12-21T01:21:09.866570+03:00 [INFO] Result #1 - USGSEarthquakeSource: SUCCESS
-2025-12-21T01:21:09.866845+03:00 [INFO]   Events processed: 37
-2025-12-21T01:21:09.867138+03:00 [INFO]   Statistics:
-2025-12-21T01:21:09.867443+03:00 [INFO]     - Total events: 37
-2025-12-21T01:21:09.867606+03:00 [INFO]     - Max magnitude: 5.60
-2025-12-21T01:21:09.867773+03:00 [INFO]     - Avg magnitude: 3.60
-2025-12-21T01:21:09.867962+03:00 [INFO]   Saved to: earthquakes_1766269269.json
-2025-12-21T01:21:09.868123+03:00 [INFO] ------------------------------------------------------------
-2025-12-21T01:21:09.868266+03:00 [INFO] Stopping RuntimeSystem...
-2025-12-21T01:21:09.868395+03:00 [INFO] Stopping consumer workers...
-2025-12-21T01:21:09.868575+03:00 [INFO] Consumer worker 2 stopped
-2025-12-21T01:21:09.868612+03:00 [INFO] Consumer worker 0 stopped
-2025-12-21T01:21:09.868660+03:00 [INFO] Consumer worker 1 stopped
-2025-12-21T01:21:09.869202+03:00 [INFO] All consumer workers stopped
-2025-12-21T01:21:09.869406+03:00 [INFO] ============================================================
-2025-12-21T01:21:09.869547+03:00 [INFO] SYSTEM STATUS
-2025-12-21T01:21:09.869696+03:00 [INFO] ============================================================
-2025-12-21T01:21:09.869832+03:00 [INFO] Uptime: 0 seconds
-2025-12-21T01:21:09.869958+03:00 [INFO] Cycles completed: 1
-2025-12-21T01:21:09.870117+03:00 [INFO] Data Sources: 2
-2025-12-21T01:21:09.870272+03:00 [INFO] Processed events: 1
-2025-12-21T01:21:09.870402+03:00 [INFO] Errors: 0
-2025-12-21T01:21:09.870556+03:00 [INFO] ============================================================
-2025-12-21T01:21:09.870681+03:00 [INFO] ============================================================
-2025-12-21T01:21:09.870805+03:00 [INFO] SDEWS Runtime System Stopped
-2025-12-21T01:21:09.870924+03:00 [INFO] ============================================================
-2025-12-21T01:21:09.871049+03:00 [INFO] Sistem kapatildi
+2025-12-06T11:55:04.476815 [WARNING] Eksik alan: magnitude. Event kaydedilmedi: {'id': 3, 'event_type': 'earthquake', 'timestamp': '2025-12-05T12:10:00Z', 'location': 'Ankara'}
+2025-12-06T11:55:04.477275 [INFO] Temizlenen event sayısı: 2
+2025-12-06T11:55:04.477702 [INFO] 2 tane temiz event CSV'ye kaydedildi.
+2025-12-07T16:28:24.843922 [WARNING] Eksik alan: magnitude. Event kaydedilmedi: {'id': 3, 'event_type': 'earthquake', 'timestamp': '2025-12-05T12:10:00Z', 'location': 'Ankara'}
+2025-12-07T16:28:24.844920 [INFO] Temizlenen event sayısı: 2
+2025-12-07T16:28:24.845272 [INFO] 2 tane temiz event CSV'ye kaydedildi.
+2025-12-07T16:28:42.479826 [WARNING] Eksik alan: magnitude. Event kaydedilmedi: {'id': 3, 'event_type': 'earthquake', 'timestamp': '2025-12-05T12:10:00Z', 'location': 'Ankara'}
+2025-12-07T16:28:42.480166 [INFO] Temizlenen event sayısı: 2
+2025-12-07T16:28:42.480376 [INFO] 2 tane temiz event CSV'ye kaydedildi.
+2025-12-07T16:30:06.181143 [WARNING] Eksik alan: magnitude. Event kaydedilmedi: {'id': 3, 'event_type': 'earthquake', 'timestamp': '2025-12-05T12:10:00Z', 'location': 'Ankara'}
+2025-12-07T16:30:06.182385 [INFO] Temizlenen event sayısı: 2
+2025-12-07T16:30:06.183202 [INFO] 2 tane temiz event CSV'ye kaydedildi.
+2025-12-07T16:33:10.019232 [WARNING] Eksik alan: magnitude. Event kaydedilmedi: {'id': 3, 'event_type': 'earthquake', 'timestamp': '2025-12-05T12:10:00Z', 'location': 'Ankara'}
+2025-12-07T16:33:10.020007 [INFO] Temizlenen event sayısı: 2
+2025-12-07T16:33:10.020296 [INFO] 2 tane temiz event CSV'ye kaydedildi.
+2025-12-07T16:33:10.020411 [INFO] Analitik özet: {'total_events': 2, 'max_magnitude': 7.8, 'min_magnitude': 6.9, 'avg_magnitude': 7.35}
+2025-12-07T19:37:31.449853 [WARNING] Eksik alan: magnitude. Event kaydedilmedi: {'id': 3, 'event_type': 'earthquake', 'timestamp': '2025-12-05T12:10:00Z', 'location': 'Ankara'}
+2025-12-07T19:37:31.450156 [INFO] Temizlenen event sayısı: 2
+2025-12-07T19:37:31.450434 [INFO] 2 tane temiz event CSV'ye kaydedildi.
+2025-12-07T20:15:50.770927+03:00 [WARNING] Eksik alan: magnitude. Event kaydedilmedi: {'id': 3, 'event_type': 'earthquake', 'timestamp': '2025-12-05T12:10:00Z', 'location': 'Ankara'}
+2025-12-07T20:15:50.771741+03:00 [INFO] Temizlenen event sayısı: 2
+2025-12-07T20:15:50.772224+03:00 [INFO] 2 tane temiz event CSV'ye kaydedildi.
+2025-12-07T23:40:48.807799+03:00 [WARNING] Eksik alan: magnitude. Event kaydedilmedi: {'id': 3, 'event_type': 'earthquake', 'timestamp': '2025-12-05T12:10:00Z', 'location': 'Ankara'}
+2025-12-07T23:40:48.808591+03:00 [INFO] Temizlenen event sayısı: 2
+2025-12-07T23:40:48.809045+03:00 [INFO] 2 tane temiz event CSV'ye kaydedildi.
+2025-12-07T23:46:06.897070+03:00 [WARNING] Eksik alan: magnitude. Event kaydedilmedi: {'id': 3, 'event_type': 'earthquake', 'timestamp': '2025-12-05T12:10:00Z', 'location': 'Ankara'}
+2025-12-07T23:46:06.897424+03:00 [INFO] Temizlenen event sayısı: 3
+2025-12-07T23:46:06.897640+03:00 [INFO] 3 tane temiz event CSV'ye kaydedildi.
+2025-12-08T00:07:17.791312+03:00 [WARNING] Eksik alan: magnitude. Event kaydedilmedi: {'id': 3, 'event_type': 'earthquake', 'timestamp': '2025-12-05T12:10:00Z', 'location': 'Ankara'}
+2025-12-08T00:07:17.792081+03:00 [INFO] Temizlenen event sayısı: 3
+2025-12-08T00:07:17.792467+03:00 [INFO] 3 tane temiz event CSV'ye kaydedildi.
+2025-12-08T00:07:17.792570+03:00 [INFO] Analitik özet: {'total_events': 3, 'max_magnitude': 7.8, 'min_magnitude': 6.9, 'avg_magnitude': 7.5}
+2025-12-08T00:07:17.792609+03:00 [INFO] 5.0 ve üzeri deprem var: 3
+2025-12-08T00:09:12.790835+03:00 [WARNING] Eksik alan: magnitude. Event kaydedilmedi: {'id': 3, 'event_type': 'earthquake', 'timestamp': '2025-12-05T12:10:00Z', 'location': 'Ankara'}
+2025-12-08T00:09:12.791174+03:00 [INFO] Temizlenen event sayısı: 4
+2025-12-08T00:09:12.791405+03:00 [INFO] 4 tane temiz event CSV'ye kaydedildi.
+2025-12-08T00:09:12.791563+03:00 [INFO] Analitik özet: {'total_events': 4, 'max_magnitude': 7.8, 'min_magnitude': 4.7, 'avg_magnitude': 6.8}
+2025-12-08T00:09:12.791624+03:00 [INFO] 5.0 ve üzeri deprem var: 3
+2025-12-12T17:54:38.605917+03:00 [WARNING] Eksik alan: magnitude. Event kaydedilmedi: {'id': 3, 'event_type': 'earthquake', 'timestamp': '2025-12-05T12:10:00Z', 'location': 'Ankara'}
+2025-12-12T17:54:38.606573+03:00 [INFO] Temizlenen event sayısı: 4
+2025-12-12T17:54:38.607121+03:00 [INFO] 4 tane temiz event CSV'ye kaydedildi.
+2025-12-12T17:54:38.607234+03:00 [INFO] Analitik özet: {'total_events': 4, 'max_magnitude': 7.8, 'min_magnitude': 4.7, 'avg_magnitude': 6.8}
+2025-12-12T17:54:38.607282+03:00 [INFO] 5.0 ve üzeri deprem var: 3
