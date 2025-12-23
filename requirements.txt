@@ -1,0 +1,25 @@
+# SDEWS - Smart Disaster Early Warning System
+# Python Dependencies
+
+# Web Framework
+Flask==3.0.0
+
+# HTTP Requests
+requests==2.31.0
+
+# Web Scraping
+beautifulsoup4==4.12.2
+lxml==5.1.0
+
+# Data Processing (optional - may require C compiler on Windows)
+# pandas==2.1.4  # Uncomment if needed
+# numpy==1.26.2  # Uncomment if needed
+
+# Configuration
+python-dotenv==1.0.0
+
+# Timezone support (required for zoneinfo on Windows)
+tzdata==2024.1
+
+# Testing
+pytest==7.4.3
