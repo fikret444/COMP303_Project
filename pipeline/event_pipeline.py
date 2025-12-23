@@ -65,17 +65,73 @@ class EventPipeline:
             log_message(f"Error processing earthquake events: {str(e)}", "ERROR")
             return {'success': False, 'source': source_name, 'error': str(e)}
     
-    def _process_weather_events(self, events: Dict[str, Any], source_name: str) -> Dict[str, Any]:
+    def _process_weather_events(self, events: List[Dict[str, Any]], source_name: str) -> Dict[str, Any]:
         """Process weather events from OpenWeather."""
         try:
-            filename = f"weather_{int(time.time())}.json"
-            save_events_to_json([events], filename)
+            # events zaten bir liste, direkt kaydet
+            if not events:
+                return {'success': False, 'source': source_name, 'error': 'No weather events'}
+            
+            # Tüm weather verilerini tek bir dosyada topla
+            from pathlib import Path
+            from processing.storage import DATA_DIR
+            import json
+            
+            # Thread-safe birleştirme için lock kullan
+            with self.lock:
+                weather_file = DATA_DIR / "weather_all.json"
+                
+                # Mevcut weather dosyasını oku (varsa)
+                all_weather = []
+                if weather_file.exists():
+                    try:
+                        with open(weather_file, 'r', encoding='utf-8') as f:
+                            existing_data = json.load(f)
+                            if isinstance(existing_data, list):
+                                all_weather = existing_data
+                    except:
+                        pass
+                
+                # Yeni verileri ekle veya güncelle
+                # Current weather verilerini şehir bazında güncelle
+                # Forecast verilerini ise ekle (aynı şehir için birden fazla forecast olabilir)
+                city_current_dict = {}
+                forecast_list = []
+                
+                # Mevcut verileri ayır
+                for item in all_weather:
+                    if item.get('type') == 'weather_forecast':
+                        forecast_list.append(item)
+                    else:
+                        city = item.get('location')
+                        if city:
+                            city_current_dict[city] = item
+                
+                # Yeni verileri işle
+                for event in events:
+                    event_type = event.get('type', 'weather')
+                    city = event.get('location')
+                    
+                    if event_type == 'weather_forecast':
+                        # Forecast verilerini ekle
+                        forecast_list.append(event)
+                    elif city:
+                        # Current weather verilerini güncelle
+                        city_current_dict[city] = event
+                
+                # Tüm verileri birleştir
+                all_weather = list(city_current_dict.values()) + forecast_list
+                
+                # Güncellenmiş veriyi kaydet
+                save_events_to_json(all_weather, "weather_all.json")
             
             return {
                 'success': True,
                 'source': source_name,
-                'data': events,
-                'filename': filename
+                'event_count': len(events),
+                'total_cities': len(all_weather),
+                'data': events[0] if events else None,
+                'filename': 'weather_all.json'
             }
             
         except Exception as e:

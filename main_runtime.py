@@ -54,15 +54,26 @@ def main():
     earthquake_source = USGSEarthquakeSource()
     log_message("[OK] USGS Earthquake Source hazir", "INFO")
     
-    # 2. OpenWeather Source (Hakan'in calismasi)
-    weather_source = OpenWeatherSource(city="Istanbul")
-    log_message("[OK] OpenWeather Source hazir", "INFO")
+    # 2. OpenWeather Sources - Türkiye'nin önemli şehirleri (Hakan'in calismasi)
+    # include_forecast=True ile 5 günlük tahmin verileri de çekiliyor
+    weather_sources = [
+        OpenWeatherSource(city="Istanbul", include_forecast=True),
+        OpenWeatherSource(city="Ankara", include_forecast=True),
+        OpenWeatherSource(city="Izmir", include_forecast=True),
+        OpenWeatherSource(city="Antalya", include_forecast=True),
+        OpenWeatherSource(city="Bursa", include_forecast=True),
+        OpenWeatherSource(city="Adana", include_forecast=True),
+    ]
+    log_message(f"[OK] {len(weather_sources)} OpenWeather Source hazir", "INFO")
     
     # Runtime sistemi olustur (Fikret'in calismasi)
     log_message("Runtime system olusturuluyor...", "INFO")
     
+    # Tüm data source'ları birleştir
+    all_sources = [earthquake_source] + weather_sources
+    
     runtime = RuntimeSystem(
-        data_sources=[earthquake_source, weather_source],
+        data_sources=all_sources,
         fetch_interval=120,  # Her 2 dakikada bir veri çek
         num_consumers=3  # 3 paralel consumer thread
     )

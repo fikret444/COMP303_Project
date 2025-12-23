@@ -47,8 +47,14 @@ def save_events_to_json(events, filename="events.json"):
 
     file_path = DATA_DIR / filename
 
+    # datetime objelerini ISO string'e çevir
+    def json_serializer(obj):
+        if isinstance(obj, datetime):
+            return obj.isoformat()
+        raise TypeError(f"Type {type(obj)} not serializable")
+
     with file_path.open("w", encoding="utf-8") as f:
-        json.dump(events, f, ensure_ascii=False, indent=2)
+        json.dump(events, f, ensure_ascii=False, indent=2, default=json_serializer)
 
 
 def log_message(message, level="INFO"):

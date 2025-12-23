@@ -77,7 +77,7 @@
 
         .main-content {
             display: grid;
-            grid-template-columns: 1fr 400px;
+            grid-template-columns: 1fr 350px;
             height: calc(100vh - 80px);
             gap: 0;
         }
@@ -96,6 +96,310 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
+        }
+
+        .right-sidebar {
+            background: white;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border-left: 1px solid #e0e0e0;
+        }
+
+        .right-sidebar-header {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .right-sidebar-header h3 {
+            margin: 0;
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 5px;
+            padding: 10px 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .filter-tab {
+            padding: 6px 12px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+
+        .filter-tab.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .filter-tab:hover {
+            background: #e9ecef;
+        }
+
+        .filter-tab.active:hover {
+            background: #5568d3;
+        }
+
+        .alerts-list, .news-list, .earthquake-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .earthquake-list h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            font-weight: 600;
+            padding: 0 10px;
+        }
+
+        .earthquake-item {
+            padding: 12px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #27ae60;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .earthquake-item:hover {
+            background: #e9ecef;
+            transform: translateX(3px);
+        }
+
+        .earthquake-item.strong {
+            border-left-color: #e74c3c;
+            background: #fee;
+        }
+
+        .eq-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .eq-magnitude {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .eq-magnitude.strong {
+            color: #e74c3c;
+        }
+
+        .eq-location {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 0.95em;
+        }
+
+        .eq-time {
+            font-size: 0.85em;
+            color: #999;
+        }
+
+        .regions-panel {
+            padding: 15px 10px;
+            border-top: 1px solid #e0e0e0;
+            background: #f8f9fa;
+        }
+
+        .regions-panel h3 {
+            font-size: 1em;
+            color: #333;
+            margin-bottom: 10px;
+            padding: 0 10px;
+        }
+
+        .region-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 10px;
+            margin-bottom: 5px;
+            background: white;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+
+        .region-name {
+            color: #666;
+        }
+
+        .region-count {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .alert-item, .news-item {
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .alert-item:hover, .news-item:hover {
+            background: #e9ecef;
+            transform: translateX(3px);
+        }
+
+        .alert-item.high {
+            border-left-color: #e74c3c;
+            background: #fee;
+        }
+
+        .alert-item.medium {
+            border-left-color: #f39c12;
+            background: #fff4e6;
+        }
+
+        .alert-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .alert-title {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        .alert-date {
+            font-size: 0.8em;
+            color: #999;
+        }
+
+        .alert-message {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .alert-section-header {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #667eea;
+            margin: 20px 0 10px 0;
+            padding: 10px;
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            border-radius: 5px;
+        }
+
+        .alert-section-header:first-child {
+            margin-top: 0;
+        }
+
+        .news-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 5px;
+        }
+
+        .news-title {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.9em;
+            flex: 1;
+        }
+
+        .news-source {
+            font-size: 0.75em;
+            color: #667eea;
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-left: 8px;
+        }
+
+        .news-time {
+            font-size: 0.75em;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .weather-details-panel {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 300px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            z-index: 1000;
+            padding: 20px;
+            max-height: calc(100vh - 140px);
+            overflow-y: auto;
+        }
+
+        .weather-details-header {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .weather-details-header h3 {
+            margin: 0;
+            color: #667eea;
+            font-size: 1.2em;
+        }
+
+        .weather-city-detail {
+            padding: 15px;
+            margin-bottom: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .weather-city-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .weather-metric {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .weather-metric:last-child {
+            border-bottom: none;
+        }
+
+        .weather-metric-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .weather-metric-value {
+            font-weight: 600;
+            color: #333;
         }
 
         .stats-panel {
@@ -313,6 +617,154 @@
         .loading {
             animation: pulse 1.5s infinite;
         }
+
+        /* Draggable Weather Window */
+        .weather-window {
+            position: absolute;
+            top: 100px;
+            right: 20px;
+            width: 400px;
+            max-height: 600px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .weather-window.active {
+            display: flex;
+        }
+
+        .weather-window-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            cursor: move;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+
+        .weather-window-header h3 {
+            margin: 0;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .weather-window-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .weather-window-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            transition: all 0.2s;
+        }
+
+        .weather-window-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .weather-window-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            max-height: calc(600px - 60px);
+        }
+
+        .weather-city-card {
+            padding: 15px;
+            margin-bottom: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .weather-city-card:hover {
+            background: #e9ecef;
+            transform: translateX(3px);
+        }
+
+        .weather-city-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .weather-city-name {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .weather-city-temp {
+            font-size: 1.6em;
+            font-weight: bold;
+        }
+
+        .weather-city-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            font-size: 0.9em;
+        }
+
+        .weather-detail-item {
+            text-align: center;
+            padding: 8px;
+            background: white;
+            border-radius: 5px;
+        }
+
+        .weather-detail-label {
+            color: #666;
+            font-size: 0.85em;
+            margin-bottom: 5px;
+        }
+
+        .weather-detail-value {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .weather-toggle-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        .weather-toggle-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
     </style>
 </head>
 <body>
@@ -334,8 +786,28 @@
     </div>
 
     <div class="main-content">
+        <!-- Merkez - Harita ve Hava Durumu -->
         <div class="map-container">
             <div id="map"></div>
+            <button class="weather-toggle-btn" onclick="toggleWeatherWindow()">Hava Durumu</button>
+            <div class="weather-window" id="weatherWindow">
+                <div class="weather-window-header" id="weatherWindowHeader">
+                    <h3>Hava Durumu</h3>
+                    <div class="weather-window-controls">
+                        <button class="weather-window-btn" onclick="minimizeWeatherWindow()" title="Küçült">-</button>
+                        <button class="weather-window-btn" onclick="toggleWeatherWindow()" title="Kapat">×</button>
+                    </div>
+                </div>
+                <div class="weather-window-body" id="weatherWindowBody">
+                    <div class="loading">Yükleniyor...</div>
+                </div>
+            </div>
+            <div class="weather-details-panel" id="weatherDetailsPanel" style="display: none;">
+                <div class="weather-details-header">
+                    <h3>Hava Durumu Detayları</h3>
+                </div>
+                <div id="weatherDetailsContent"></div>
+            </div>
             <div class="legend">
                 <h4>Deprem Büyüklüğü</h4>
                 <div class="legend-item">
@@ -350,43 +822,59 @@
                     <div class="legend-color small"></div>
                     <span>2.5 - 3.9 (Küçük)</span>
                 </div>
+                <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd;">
+                    <h4 style="margin-bottom: 10px; font-size: 0.95em;">Hava Durumu</h4>
+                    <div class="legend-item">
+                        <div style="width: 15px; height: 15px; background: #e74c3c; border-radius: 3px; margin-right: 8px; display: inline-block;"></div>
+                        <span>25°C+ (Çok Sıcak)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div style="width: 15px; height: 15px; background: #f39c12; border-radius: 3px; margin-right: 8px; display: inline-block;"></div>
+                        <span>20-24°C (Sıcak)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div style="width: 15px; height: 15px; background: #f1c40f; border-radius: 3px; margin-right: 8px; display: inline-block;"></div>
+                        <span>15-19°C (Ilık)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div style="width: 15px; height: 15px; background: #3498db; border-radius: 3px; margin-right: 8px; display: inline-block;"></div>
+                        <span>10-14°C (Serin)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div style="width: 15px; height: 15px; background: #3498db; border-radius: 3px; margin-right: 8px; display: inline-block;"></div>
+                        <span>5-9°C (Soğuk)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div style="width: 15px; height: 15px; background: #2c3e50; border-radius: 3px; margin-right: 8px; display: inline-block;"></div>
+                        <span>&lt;5°C (Çok Soğuk)</span>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="sidebar">
-            <div class="stats-panel">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="value" id="total-count">-</div>
-                        <div class="label">Toplam</div>
-                    </div>
-                    <div class="stat-card max">
-                        <div class="value" id="max-mag">-</div>
-                        <div class="label">En Büyük</div>
-                    </div>
-                    <div class="stat-card avg">
-                        <div class="value" id="avg-mag">-</div>
-                        <div class="label">Ortalama</div>
-                    </div>
-                    <div class="stat-card min">
-                        <div class="value" id="min-mag">-</div>
-                        <div class="label">En Küçük</div>
-                    </div>
-                </div>
+        <!-- Sağ Sidebar - Alerts ve News -->
+        <div class="right-sidebar">
+            <div class="right-sidebar-header">
+                <h3 id="rightSidebarTitle">Uyarılar ve Haberler</h3>
+                <span id="rightSidebarDate"></span>
             </div>
-
-            <div class="earthquake-list">
-                <h2>Son Depremler</h2>
-                <div id="earthquake-container">
-                    <div class="loading">Yükleniyor...</div>
-                </div>
+            <div class="filter-tabs">
+                <button class="filter-tab active" onclick="filterContent('earthquakes')">Depremler</button>
+                <button class="filter-tab" onclick="filterContent('alerts')">Mevcut Uyarılar</button>
+                <button class="filter-tab" onclick="filterContent('forecast')">İleriye Dönük</button>
+                <button class="filter-tab" onclick="filterContent('news')">Haberler</button>
             </div>
-
-            <div class="regions-panel">
-                <h3>Bölgelere Göre Dağılım</h3>
-                <div id="regions-container">
-                    <div class="loading">Yükleniyor...</div>
-                </div>
+            <div class="earthquake-list" id="earthquakeList">
+                <div class="loading">Yükleniyor...</div>
+            </div>
+            <div class="alerts-list" id="alertsList" style="display: none;">
+                <div class="loading">Yükleniyor...</div>
+            </div>
+            <div class="alerts-list" id="forecastAlertsList" style="display: none;">
+                <div class="loading">Yükleniyor...</div>
+            </div>
+            <div class="news-list" id="newsList" style="display: none;">
+                <div class="loading">Yükleniyor...</div>
             </div>
         </div>
     </div>
@@ -395,8 +883,8 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
-        // Harita başlat
-        const map = L.map('map').setView([20, 0], 2);
+        // Harita başlat - Türkiye'ye odaklan
+        const map = L.map('map').setView([39.0, 35.0], 6);
 
         // OpenStreetMap tile layer
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -404,7 +892,8 @@
             maxZoom: 18
         }).addTo(map);
 
-        let markers = [];
+        let earthquakeMarkers = [];
+        let weatherMarkers = [];
 
         function getMarkerColor(magnitude) {
             if (magnitude >= 5.0) return '#e74c3c';  // Kırmızı
@@ -424,8 +913,143 @@
         }
 
         function clearMarkers() {
-            markers.forEach(marker => map.removeLayer(marker));
-            markers = [];
+            earthquakeMarkers.forEach(marker => map.removeLayer(marker));
+            earthquakeMarkers = [];
+            weatherMarkers.forEach(marker => map.removeLayer(marker));
+            weatherMarkers = [];
+        }
+
+        function getTemperatureColor(temp) {
+            if (temp >= 25) return '#e74c3c';  // Kırmızı - Çok sıcak
+            if (temp >= 20) return '#f39c12';  // Turuncu - Sıcak
+            if (temp >= 15) return '#f1c40f';  // Sarı - Ilık
+            if (temp >= 10) return '#3498db';  // Mavi - Serin
+            if (temp >= 5) return '#3498db';   // Mavi - Soğuk
+            return '#2c3e50';  // Koyu mavi - Çok soğuk
+        }
+
+        function addWeatherMarker(weather) {
+            if (!weather.latitude || !weather.longitude) return;
+            
+            const temp = weather.temperature || 0;
+            const color = getTemperatureColor(temp);
+            
+            // Özel ikon oluştur - sadece sıcaklık değeri
+            const weatherIcon = L.divIcon({
+                className: 'weather-marker',
+                html: `
+                    <div style="
+                        background: ${color};
+                        border: 3px solid white;
+                        border-radius: 50%;
+                        width: 45px;
+                        height: 45px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+                        cursor: pointer;
+                    ">
+                        <span style="
+                            color: white;
+                            font-weight: bold;
+                            font-size: 12px;
+                        ">${temp.toFixed(0)}°</span>
+                    </div>
+                `,
+                iconSize: [45, 45],
+                iconAnchor: [22, 22],
+                popupAnchor: [0, -22]
+            });
+
+            const marker = L.marker([weather.latitude, weather.longitude], {
+                icon: weatherIcon
+            }).addTo(map);
+
+            // Bulut, yağış ve nem bilgilerini hazırla
+            const clouds = weather.clouds || 0;
+            const humidity = weather.humidity || 0;
+            const precipitation = weather.precipitation || 0;
+            const pressure = weather.pressure || 0;
+            const visibility = weather.visibility ? (weather.visibility / 1000).toFixed(1) : '-';
+            
+            marker.bindPopup(`
+                <div style="min-width: 250px; padding: 10px;">
+                    <h3 style="margin: 0 0 15px 0; color: ${color}; font-size: 1.4em; text-align: center; border-bottom: 2px solid ${color}; padding-bottom: 8px;">
+                        ${weather.location || 'Bilinmeyen'}
+                    </h3>
+                    <div style="text-align: center; margin-bottom: 15px;">
+                        <div style="font-size: 2.5em; font-weight: bold; color: ${color}; margin-bottom: 5px;">
+                            ${temp.toFixed(1)}°C
+                        </div>
+                        ${weather.feels_like ? `
+                        <div style="font-size: 0.9em; color: #666;">
+                            Hissedilen: ${weather.feels_like.toFixed(1)}°C
+                        </div>
+                        ` : ''}
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.9em; margin-bottom: 10px;">
+                        <div style="text-align: center; padding: 10px; background: #f8f9fa; border-radius: 5px;">
+                            <div style="color: #666; font-size: 0.8em; margin-bottom: 5px; font-weight: 600;">Rüzgar</div>
+                            <div style="font-weight: bold; color: #3498db; font-size: 1.1em;">
+                                ${weather.wind_speed ? weather.wind_speed.toFixed(1) : '-'} m/s
+                            </div>
+                            ${weather.wind_direction ? `
+                            <div style="font-size: 0.75em; color: #999; margin-top: 3px;">
+                                ${weather.wind_direction}°
+                            </div>
+                            ` : ''}
+                        </div>
+                        <div style="text-align: center; padding: 10px; background: #f8f9fa; border-radius: 5px;">
+                            <div style="color: #666; font-size: 0.8em; margin-bottom: 5px; font-weight: 600;">Nem</div>
+                            <div style="font-weight: bold; color: #3498db; font-size: 1.1em;">
+                                ${humidity}%
+                            </div>
+                        </div>
+                        <div style="text-align: center; padding: 10px; background: #f8f9fa; border-radius: 5px;">
+                            <div style="color: #666; font-size: 0.8em; margin-bottom: 5px; font-weight: 600;">Bulutluluk</div>
+                            <div style="font-weight: bold; color: #3498db; font-size: 1.1em;">
+                                ${clouds}%
+                            </div>
+                        </div>
+                        <div style="text-align: center; padding: 10px; background: #f8f9fa; border-radius: 5px;">
+                            <div style="color: #666; font-size: 0.8em; margin-bottom: 5px; font-weight: 600;">Yağış</div>
+                            <div style="font-weight: bold; color: #3498db; font-size: 1.1em;">
+                                ${precipitation > 0 ? precipitation.toFixed(1) + ' mm' : 'Yok'}
+                            </div>
+                        </div>
+                    </div>
+                    ${pressure > 0 ? `
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.9em; margin-bottom: 10px;">
+                        <div style="text-align: center; padding: 8px; background: #f8f9fa; border-radius: 5px;">
+                            <div style="color: #666; font-size: 0.8em; margin-bottom: 3px;">Basınç</div>
+                            <div style="font-weight: bold; color: #3498db;">
+                                ${pressure.toFixed(0)} hPa
+                            </div>
+                        </div>
+                        <div style="text-align: center; padding: 8px; background: #f8f9fa; border-radius: 5px;">
+                            <div style="color: #666; font-size: 0.8em; margin-bottom: 3px;">Görüş</div>
+                            <div style="font-weight: bold; color: #3498db;">
+                                ${visibility} km
+                            </div>
+                        </div>
+                    </div>
+                    ` : ''}
+                    ${weather.time ? `
+                    <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #e0e0e0; text-align: center; font-size: 0.85em; color: #999;">
+                        ${formatTime(weather.time)}
+                    </div>
+                    ` : ''}
+                </div>
+            `);
+            
+            // Marker'a tıklandığında haritayı zoomla
+            marker.on('click', function() {
+                map.setView([weather.latitude, weather.longitude], 10);
+            });
+
+            weatherMarkers.push(marker);
+            return marker;
         }
 
         function addEarthquakeMarker(eq) {
@@ -454,10 +1078,407 @@
                 </div>
             `);
 
-            markers.push(marker);
+            earthquakeMarkers.push(marker);
 
             // Liste itemine tıklanınca haritada göster
             return marker;
+        }
+
+        // Draggable window functionality
+        let isDragging = false;
+        let currentX, currentY, initialX, initialY;
+        let weatherWindow = null;
+        let weatherWindowHeader = null;
+
+        function initDraggable() {
+            weatherWindow = document.getElementById('weatherWindow');
+            weatherWindowHeader = document.getElementById('weatherWindowHeader');
+            
+            weatherWindowHeader.addEventListener('mousedown', dragStart);
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', dragEnd);
+        }
+
+        function dragStart(e) {
+            if (e.target.classList.contains('weather-window-btn')) return;
+            initialX = e.clientX - weatherWindow.offsetLeft;
+            initialY = e.clientY - weatherWindow.offsetTop;
+            if (e.target === weatherWindowHeader || weatherWindowHeader.contains(e.target)) {
+                isDragging = true;
+            }
+        }
+
+        function drag(e) {
+            if (isDragging) {
+                e.preventDefault();
+                currentX = e.clientX - initialX;
+                currentY = e.clientY - initialY;
+                
+                // Ekran sınırları içinde tut
+                const maxX = window.innerWidth - weatherWindow.offsetWidth;
+                const maxY = window.innerHeight - weatherWindow.offsetHeight;
+                
+                currentX = Math.max(0, Math.min(currentX, maxX));
+                currentY = Math.max(0, Math.min(currentY, maxY));
+                
+                weatherWindow.style.left = currentX + 'px';
+                weatherWindow.style.top = currentY + 'px';
+            }
+        }
+
+        function dragEnd() {
+            isDragging = false;
+        }
+
+        function toggleWeatherWindow() {
+            const window = document.getElementById('weatherWindow');
+            window.classList.toggle('active');
+            if (window.classList.contains('active')) {
+                loadWeatherWindowData();
+            }
+        }
+
+        function minimizeWeatherWindow() {
+            const window = document.getElementById('weatherWindow');
+            const body = document.getElementById('weatherWindowBody');
+            if (body.style.display === 'none') {
+                body.style.display = 'block';
+            } else {
+                body.style.display = 'none';
+            }
+        }
+
+        function loadWeatherWindowData() {
+            // Hem anlık hem forecast verilerini çek
+            Promise.all([
+                fetch('/api/weather').then(r => r.json()),
+                fetch('/api/forecast').then(r => r.json())
+            ]).then(([weatherData, forecastData]) => {
+                const container = document.getElementById('weatherWindowBody');
+                
+                if (weatherData.weather && weatherData.weather.length > 0) {
+                    container.innerHTML = '';
+                    
+                    weatherData.weather.forEach(weather => {
+                        const temp = weather.temperature || 0;
+                        const color = getTemperatureColor(temp);
+                        const city = weather.location || 'Bilinmeyen';
+                        
+                        // Bu şehir için forecast verilerini al
+                        const cityForecasts = forecastData.forecasts && forecastData.forecasts[city] ? forecastData.forecasts[city] : [];
+                        
+                        const card = document.createElement('div');
+                        card.className = 'weather-city-card';
+                        card.onclick = () => {
+                            if (weather.latitude && weather.longitude) {
+                                map.setView([weather.latitude, weather.longitude], 8);
+                                // İlgili marker'ı bul ve popup aç
+                                weatherMarkers.forEach(marker => {
+                                    const lat = marker.getLatLng().lat;
+                                    const lng = marker.getLatLng().lng;
+                                    if (Math.abs(lat - weather.latitude) < 0.1 && 
+                                        Math.abs(lng - weather.longitude) < 0.1) {
+                                        marker.openPopup();
+                                    }
+                                });
+                            }
+                        };
+                        
+                        // Forecast timeline HTML'i oluştur
+                        let forecastTimelineHTML = '';
+                        if (cityForecasts.length > 0) {
+                            forecastTimelineHTML = `
+                                <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e0e0e0;">
+                                    <div style="font-size: 0.9em; font-weight: 600; color: #667eea; margin-bottom: 10px;">5 Günlük Tahmin</div>
+                                    <div style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px;">
+                                        ${cityForecasts.slice(0, 8).map(forecast => {
+                                            const forecastTime = new Date(forecast.forecast_time);
+                                            const forecastTemp = forecast.temperature || 0;
+                                            const forecastColor = getTemperatureColor(forecastTemp);
+                                            return `
+                                                <div style="min-width: 80px; text-align: center; padding: 8px; background: #f8f9fa; border-radius: 5px;">
+                                                    <div style="font-size: 0.75em; color: #666; margin-bottom: 5px;">
+                                                        ${forecastTime.toLocaleDateString('tr-TR', { month: 'short', day: 'numeric' })}
+                                                    </div>
+                                                    <div style="font-size: 0.7em; color: #999; margin-bottom: 5px;">
+                                                        ${forecastTime.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}
+                                                    </div>
+                                                    <div style="font-size: 1.1em; font-weight: bold; color: ${forecastColor}; margin-bottom: 3px;">
+                                                        ${forecastTemp.toFixed(0)}°C
+                                                    </div>
+                                                    ${forecast.precipitation > 0 ? `
+                                                        <div style="font-size: 0.7em; color: #3498db;">
+                                                            💧 ${forecast.precipitation.toFixed(1)}mm
+                                                        </div>
+                                                    ` : ''}
+                                                </div>
+                                            `;
+                                        }).join('')}
+                                    </div>
+                                </div>
+                            `;
+                        }
+                        
+                        card.innerHTML = `
+                            <div class="weather-city-header">
+                                <div class="weather-city-name">${city}</div>
+                                <div class="weather-city-temp" style="color: ${color};">${temp.toFixed(1)}°C</div>
+                            </div>
+                            <div class="weather-city-details">
+                                <div class="weather-detail-item">
+                                    <div class="weather-detail-label">Rüzgar</div>
+                                    <div class="weather-detail-value">${weather.wind_speed ? weather.wind_speed.toFixed(1) : '-'} m/s</div>
+                                </div>
+                                <div class="weather-detail-item">
+                                    <div class="weather-detail-label">Nem</div>
+                                    <div class="weather-detail-value">${weather.humidity || '-'}%</div>
+                                </div>
+                                <div class="weather-detail-item">
+                                    <div class="weather-detail-label">Zaman</div>
+                                    <div class="weather-detail-value" style="font-size: 0.85em;">${weather.time ? formatTime(weather.time) : '-'}</div>
+                                </div>
+                            </div>
+                            ${forecastTimelineHTML}
+                        `;
+                        container.appendChild(card);
+                    });
+                } else {
+                    container.innerHTML = '<div style="color: #999; text-align: center; padding: 40px;">Hava durumu verisi bulunamadı</div>';
+                }
+            }).catch(error => {
+                console.error('Hava durumu verisi yükleme hatası:', error);
+                document.getElementById('weatherWindowBody').innerHTML = 
+                    '<div style="color: #999; text-align: center; padding: 40px;">Hava durumu verisi yüklenemedi</div>';
+            });
+        }
+
+        function loadWeatherData() {
+            fetch('/api/weather')
+                .then(response => response.json())
+                .then(data => {
+                    // Haritadan sadece eski weather marker'ları temizle (deprem marker'larına dokunma)
+                    weatherMarkers.forEach(marker => map.removeLayer(marker));
+                    weatherMarkers = [];
+                    
+                    // Haritaya yeni weather marker'ları ekle
+                    if (data.weather && data.weather.length > 0) {
+                        data.weather.forEach(weather => {
+                            addWeatherMarker(weather);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Hava durumu verisi yükleme hatası:', error);
+                });
+        }
+
+        // Alerts ve News yükleme fonksiyonları
+        function loadAlerts() {
+            Promise.all([
+                fetch('/api/alerts/current').then(r => r.json()),
+                fetch('/api/alerts/forecast').then(r => r.json())
+            ]).then(([currentData, forecastData]) => {
+                // Mevcut uyarılar - Hava Durumu ve Depremler olarak ayır
+                const currentContainer = document.getElementById('alertsList');
+                if (currentData.alerts && currentData.alerts.length > 0) {
+                    currentContainer.innerHTML = '';
+                    
+                    // Uyarıları türlerine göre ayır
+                    const weatherAlerts = currentData.alerts.filter(a => a.type === 'weather');
+                    const earthquakeAlerts = currentData.alerts.filter(a => a.type === 'earthquake');
+                    
+                    // Hava Durumu bölümü
+                    if (weatherAlerts.length > 0) {
+                        const header = document.createElement('div');
+                        header.className = 'alert-section-header';
+                        header.textContent = 'Hava Durumu';
+                        currentContainer.appendChild(header);
+                        
+                        weatherAlerts.forEach(alert => {
+                            const item = createAlertItem(alert);
+                            currentContainer.appendChild(item);
+                        });
+                    }
+                    
+                    // Depremler bölümü
+                    if (earthquakeAlerts.length > 0) {
+                        const header = document.createElement('div');
+                        header.className = 'alert-section-header';
+                        header.textContent = 'Depremler';
+                        currentContainer.appendChild(header);
+                        
+                        earthquakeAlerts.forEach(alert => {
+                            const item = createAlertItem(alert);
+                            currentContainer.appendChild(item);
+                        });
+                    }
+                    
+                    if (weatherAlerts.length === 0 && earthquakeAlerts.length === 0) {
+                        currentContainer.innerHTML = '<div style="color: #999; text-align: center; padding: 40px;">Mevcut uyarı bulunamadı</div>';
+                    }
+                } else {
+                    currentContainer.innerHTML = '<div style="color: #999; text-align: center; padding: 40px;">Mevcut uyarı bulunamadı</div>';
+                }
+                
+                // İleriye dönük uyarılar - Sadece Hava Durumu (deprem tahmini yok)
+                const forecastContainer = document.getElementById('forecastAlertsList');
+                if (forecastData.alerts && forecastData.alerts.length > 0) {
+                    forecastContainer.innerHTML = '';
+                    
+                    // İleriye dönük uyarılar sadece hava durumu
+                    const header = document.createElement('div');
+                    header.className = 'alert-section-header';
+                    header.textContent = 'Hava Durumu Tahminleri';
+                    forecastContainer.appendChild(header);
+                    
+                    forecastData.alerts.forEach(alert => {
+                        const item = createAlertItem(alert);
+                        forecastContainer.appendChild(item);
+                    });
+                } else {
+                    forecastContainer.innerHTML = '<div style="color: #999; text-align: center; padding: 40px;">İleriye dönük uyarı bulunamadı</div>';
+                }
+            }).catch(error => {
+                console.error('Alert yükleme hatası:', error);
+                document.getElementById('alertsList').innerHTML = 
+                    '<div style="color: #999; text-align: center; padding: 40px;">Uyarılar yüklenemedi</div>';
+                document.getElementById('forecastAlertsList').innerHTML = 
+                    '<div style="color: #999; text-align: center; padding: 40px;">Uyarılar yüklenemedi</div>';
+            });
+        }
+        
+        function createAlertItem(alert) {
+            const item = document.createElement('div');
+            item.className = `alert-item ${alert.severity}`;
+            item.onclick = () => {
+                // Alert'e göre haritada konumu göster
+                if (alert.data && alert.data.latitude && alert.data.longitude) {
+                    map.setView([alert.data.latitude, alert.data.longitude], 8);
+                } else if (alert.location) {
+                    // Konum adından koordinat bulmaya çalış (basit)
+                    console.log('Alert location:', alert.location);
+                }
+            };
+            
+            const date = new Date(alert.timestamp);
+            
+            item.innerHTML = `
+                <div class="alert-header">
+                    <div class="alert-title">${alert.title}</div>
+                    <div class="alert-date">${date.toLocaleDateString('tr-TR')}</div>
+                </div>
+                <div class="alert-message">${alert.message}</div>
+            `;
+            return item;
+        }
+
+        function loadNews() {
+            fetch('/api/news')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('newsList');
+                    
+                    // Badge güncelle (artık sol sidebar yok, bu kısım kaldırıldı)
+                    
+                    if (data.news && data.news.length > 0) {
+                        container.innerHTML = '';
+                        data.news.forEach(news => {
+                            const item = document.createElement('div');
+                            item.className = 'news-item';
+                            item.onclick = () => {
+                                if (news.url) {
+                                    window.open(news.url, '_blank');
+                                }
+                            };
+                            
+                            const date = new Date(news.time);
+                            item.innerHTML = `
+                                <div class="news-header">
+                                    <div class="news-title">${news.title}</div>
+                                    <span class="news-source">${news.source}</span>
+                                </div>
+                                <div class="news-time">${date.toLocaleDateString('tr-TR')} ${date.toLocaleTimeString('tr-TR')}</div>
+                            `;
+                            container.appendChild(item);
+                        });
+                    } else {
+                        container.innerHTML = '<div style="color: #999; text-align: center; padding: 40px;">Haber bulunamadı</div>';
+                    }
+                })
+                .catch(error => {
+                    console.error('News yükleme hatası:', error);
+                    document.getElementById('newsList').innerHTML = 
+                        '<div style="color: #999; text-align: center; padding: 40px;">Haberler yüklenemedi</div>';
+                });
+        }
+
+        // Filter ve Section fonksiyonları
+        let currentFilter = 'earthquakes'; // Varsayılan olarak Depremler sekmesi
+        
+        function filterContent(filter) {
+            currentFilter = filter;
+            
+            // Tab'ları güncelle
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // İçeriği göster/gizle
+            const earthquakeList = document.getElementById('earthquakeList');
+            const alertsList = document.getElementById('alertsList');
+            const newsList = document.getElementById('newsList');
+            const forecastAlertsList = document.getElementById('forecastAlertsList');
+            
+            if (filter === 'earthquakes') {
+                earthquakeList.style.display = 'block';
+                alertsList.style.display = 'none';
+                forecastAlertsList.style.display = 'none';
+                newsList.style.display = 'none';
+            } else if (filter === 'alerts') {
+                earthquakeList.style.display = 'none';
+                alertsList.style.display = 'block';
+                forecastAlertsList.style.display = 'none';
+                newsList.style.display = 'none';
+            } else if (filter === 'forecast') {
+                earthquakeList.style.display = 'none';
+                alertsList.style.display = 'none';
+                forecastAlertsList.style.display = 'block';
+                newsList.style.display = 'none';
+            } else if (filter === 'news') {
+                earthquakeList.style.display = 'none';
+                alertsList.style.display = 'none';
+                forecastAlertsList.style.display = 'none';
+                newsList.style.display = 'block';
+            }
+            
+            // Scroll'u en üste al
+            if (earthquakeList.style.display === 'block') {
+                earthquakeList.scrollTop = 0;
+            }
+            if (alertsList.style.display === 'block') {
+                alertsList.scrollTop = 0;
+            }
+            if (forecastAlertsList.style.display === 'block') {
+                forecastAlertsList.scrollTop = 0;
+            }
+            if (newsList.style.display === 'block') {
+                newsList.scrollTop = 0;
+            }
+        }
+
+
+        // Tarih güncelleme
+        function updateDate() {
+            const dateEl = document.getElementById('rightSidebarDate');
+            if (dateEl) {
+                const now = new Date();
+                dateEl.textContent = now.toLocaleDateString('tr-TR', { 
+                    day: '2-digit', 
+                    month: 'long', 
+                    year: 'numeric' 
+                });
+            }
         }
 
         function loadData() {
@@ -468,70 +1489,81 @@
                     document.getElementById('header-total').textContent = data.statistics.total;
                     document.getElementById('header-max').textContent = data.statistics.max_mag;
 
-                    // Yan panel istatistikler
-                    document.getElementById('total-count').textContent = data.statistics.total;
-                    document.getElementById('max-mag').textContent = data.statistics.max_mag;
-                    document.getElementById('avg-mag').textContent = data.statistics.avg_mag;
-                    document.getElementById('min-mag').textContent = data.statistics.min_mag;
-
-                    // Haritayı temizle ve yeni markerları ekle
-                    clearMarkers();
+                    // Haritadan sadece eski deprem marker'ları temizle (hava durumu marker'larına dokunma)
+                    earthquakeMarkers.forEach(marker => map.removeLayer(marker));
+                    earthquakeMarkers = [];
                     
+                    // Deprem marker'larını haritaya ekle
                     data.earthquakes.forEach(eq => {
-                        addEarthquakeMarker(eq);
+                        if (eq.latitude && eq.longitude) {
+                            addEarthquakeMarker(eq);
+                        }
                     });
 
-                    // Deprem listesi
-                    const container = document.getElementById('earthquake-container');
-                    container.innerHTML = '';
+                    // Deprem listesi - sağ sidebar'a ekle
+                    const container = document.getElementById('earthquakeList');
+                    container.innerHTML = '<h2>Son Depremler</h2>';
                     
-                    data.earthquakes.forEach((eq, index) => {
-                        const isStrong = eq.magnitude >= 5.0;
-                        const item = document.createElement('div');
-                        item.className = 'earthquake-item' + (isStrong ? ' strong' : '');
-                        item.onclick = () => {
-                            map.setView([eq.latitude, eq.longitude], 6);
-                            markers[index].openPopup();
-                        };
-                        item.innerHTML = `
-                            <div class="eq-header">
-                                <span class="eq-magnitude ${isStrong ? 'strong' : ''}">${eq.magnitude}</span>
-                            </div>
-                            <div class="eq-location">${eq.location}</div>
-                            <div class="eq-time">${formatTime(eq.timestamp)}</div>
-                        `;
-                        container.appendChild(item);
-                    });
-
-                    // Bölgeler
-                    const regionsContainer = document.getElementById('regions-container');
-                    regionsContainer.innerHTML = '';
-                    
-                    const sortedRegions = Object.entries(data.statistics.regions)
-                        .sort((a, b) => b[1] - a[1]);
-                    
-                    sortedRegions.forEach(([region, count]) => {
-                        const item = document.createElement('div');
-                        item.className = 'region-item';
-                        item.innerHTML = `
-                            <span class="region-name">${region}</span>
-                            <span class="region-count">${count}</span>
-                        `;
-                        regionsContainer.appendChild(item);
-                    });
+                    if (data.earthquakes && data.earthquakes.length > 0) {
+                        data.earthquakes.forEach((eq, index) => {
+                            const isStrong = eq.magnitude >= 5.0;
+                            const item = document.createElement('div');
+                            item.className = 'earthquake-item' + (isStrong ? ' strong' : '');
+                            item.onclick = () => {
+                                if (eq.latitude && eq.longitude) {
+                                    map.setView([eq.latitude, eq.longitude], 8);
+                                    // İlgili marker'ı bul ve popup aç
+                                    earthquakeMarkers.forEach(marker => {
+                                        const lat = marker.getLatLng().lat;
+                                        const lng = marker.getLatLng().lng;
+                                        if (Math.abs(lat - eq.latitude) < 0.1 && 
+                                            Math.abs(lng - eq.longitude) < 0.1) {
+                                            marker.openPopup();
+                                        }
+                                    });
+                                }
+                            };
+                            item.innerHTML = `
+                                <div class="eq-header">
+                                    <span class="eq-magnitude ${isStrong ? 'strong' : ''}">${eq.magnitude.toFixed(1)}</span>
+                                </div>
+                                <div class="eq-location">${eq.location || 'Bilinmeyen'}</div>
+                                <div class="eq-time">${formatTime(eq.timestamp)}</div>
+                            `;
+                            container.appendChild(item);
+                        });
+                    } else {
+                        container.innerHTML += '<div style="color: #999; text-align: center; padding: 40px;">Deprem verisi bulunamadı</div>';
+                    }
                 })
                 .catch(error => {
                     console.error('Veri yükleme hatası:', error);
-                    document.getElementById('earthquake-container').innerHTML = 
-                        '<div class="loading">Veri yüklenemedi. Lütfen önce main_runtime.py çalıştırın!</div>';
+                    const container = document.getElementById('earthquakeList');
+                    if (container) {
+                        container.innerHTML = '<div class="loading">Veri yüklenemedi. Lütfen önce main_runtime.py çalıştırın!</div>';
+                    }
                 });
         }
 
         // Sayfa yüklendiğinde veriyi çek
         loadData();
+        loadWeatherData();
+        loadAlerts();
+        loadNews();
+        updateDate();
+        initDraggable();
 
         // Her 30 saniyede bir otomatik yenile
-        setInterval(loadData, 30000);
+        setInterval(() => {
+            loadData();
+            loadWeatherData();
+            loadAlerts();
+            loadNews();
+            // Eğer weather window açıksa, içeriğini de güncelle
+            if (document.getElementById('weatherWindow').classList.contains('active')) {
+                loadWeatherWindowData();
+            }
+        }, 30000);
     </script>
 </body>
 </html>
