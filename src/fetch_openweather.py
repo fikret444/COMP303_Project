@@ -4,74 +4,41 @@
 # anlık hava durumu bilgisini çeker, temizler ve JSON'a kaydeder.
 
 import os
-from datetime import datetime
 
-import requests
+from datasources.openweather_source import OpenWeatherSource
 
 from .processing import clean_openweather_events
 from .storage import save_events_to_json, log_message
 
-OPENWEATHER_URL = "https://api.openweathermap.org/data/2.5/weather"
-
-# Örnek şehir: Ankara. İstersen "Istanbul,TR" gibi değiştirebilirsin.
-DEFAULT_CITY = "Ankara,TR"
-
-# API key ortam değişkeninden okunuyor
-OPENWEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY")
-
-
-def fetch_city_weather(city=DEFAULT_CITY):
-    """
-    OpenWeather'ın basit weather endpoint'inden
-    tek bir şehir için anlık hava durumu çeker.
-    """
-    if not OPENWEATHER_API_KEY:
-        raise RuntimeError(
-            "OPENWEATHER_API_KEY ortam değişkeni tanımlı değil. "
-            "Lütfen bir OpenWeather API anahtarı ayarlayın."
-        )
-
-    params = {
-        "q": city,
-        "appid": OPENWEATHER_API_KEY,
-        "units": "metric",
-    }
-
-    resp = requests.get(OPENWEATHER_URL, params=params, timeout=10)
-    resp.raise_for_status()
-    data = resp.json()
-
-    event = {
-        "type": "weather",
-        "source": "OpenWeatherMap",
-        "location": city,
-        "temperature": data["main"]["temp"],
-        "wind_speed": data["wind"]["speed"],
-        "time": datetime.now(),
-    }
-
-    return [event]
+# Varsayılan şehir (TR içi bir örnek)
+DEFAULT_CITY = "Ankara"
 
 
 def main():
-    # 1) Ham hava durumu verisini al
+    # Şehri ister ortam değişkeninden, ister sabitten al
+    city = os.getenv("OPENWEATHER_CITY", DEFAULT_CITY)
+
+    # 1) OpenWeather kaynağından ham + parse edilmiş event'leri çek
     try:
-        raw_events = fetch_city_weather()
+        source = OpenWeatherSource(city=city, include_forecast=False)
+        raw_events = source.fetch_and_parse()  # list[dict] döner
     except Exception as e:
-        msg = f"OpenWeather'dan veri alınamadı: {e}"
-        print("⚠️", msg)
+        msg = f"OpenWeather kaynağından veri alınırken hata: {e}"
         log_message(msg, level="ERROR")
+        print(f"❌ {msg}")
         return
 
-    print(f"⛅ OpenWeather'dan gelen ham event sayısı: {len(raw_events)}")
+    print(f"🌤 {city} için gelen ham event sayısı: {len(raw_events)}")
 
-    # 2) Temizle / normalize et
+    # 2) Ham weather event'lerini temizle / normalize et
     cleaned_events = clean_openweather_events(raw_events)
-    print(f"✅ Temizlenen event sayısı: {len(cleaned_events)}")
+    print(f"✅ Temizlenen hava durumu event sayısı: {len(cleaned_events)}")
 
-    # 3) JSON'a kaydet
+    # 3) Temizlenmiş event'leri JSON'a kaydet
     if cleaned_events:
-        filename = "weather_ankara_tr.json"
+        safe_city = city.replace(",", "_").replace(" ", "_")
+        filename = f"openweather_{safe_city}.json"
+
         save_events_to_json(cleaned_events, filename=filename)
         log_message(
             f"{len(cleaned_events)} adet hava durumu event'i JSON'a kaydedildi ({filename}).",
