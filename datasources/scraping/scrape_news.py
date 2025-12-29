@@ -1,7 +1,18 @@
 import requests
-from lxml import html
 from datetime import datetime
 from urllib.parse import urljoin
+
+# Try lxml first, fallback to BeautifulSoup4
+try:
+    from lxml import html
+    USE_LXML = True
+except ImportError:
+    try:
+        from bs4 import BeautifulSoup
+        USE_LXML = False
+    except ImportError:
+        USE_LXML = None
+        print("Warning: Neither lxml nor beautifulsoup4 is available. News scraping will not work.")
 
 
 KEYWORDS = [
@@ -67,29 +78,55 @@ def _allowed_by_path(link: str) -> bool:
 # -------------------------
 def scrape_ntv_candidates():
     base = "https://www.ntv.com.tr"
-    tree = html.fromstring(_download(base))
-
-    anchors = tree.xpath("//a[@href and (.//h2 or .//p)]")
-
-    items = []
-    for a in anchors:
-        href = a.get("href") or ""
-        link = urljoin(base, href)
-
-        # Prefer h2 title, else p text
-        t = a.xpath(".//h2/text()")
-        if t:
-            title = t[0]
-        else:
-            p = a.xpath(".//p/text()")
-            title = p[0] if p else ""
-
-        title = _normalize_space(title)
-        if len(title) < 10:
-            continue
-
-        items.append({"source": "NTV", "title": title, "link": link})
-
+    html_content = _download(base)
+    
+    if USE_LXML:
+        tree = html.fromstring(html_content)
+        anchors = tree.xpath("//a[@href and (.//h2 or .//p)]")
+        
+        items = []
+        for a in anchors:
+            href = a.get("href") or ""
+            link = urljoin(base, href)
+            
+            # Prefer h2 title, else p text
+            t = a.xpath(".//h2/text()")
+            if t:
+                title = t[0]
+            else:
+                p = a.xpath(".//p/text()")
+                title = p[0] if p else ""
+            
+            title = _normalize_space(title)
+            if len(title) < 10:
+                continue
+            
+            items.append({"source": "NTV", "title": title, "link": link})
+    elif USE_LXML is False:
+        # BeautifulSoup4 fallback
+        soup = BeautifulSoup(html_content, 'html.parser')
+        items = []
+        
+        # Find all links with h2 or p inside
+        for a in soup.find_all('a', href=True):
+            h2 = a.find('h2')
+            p = a.find('p')
+            
+            if h2:
+                title = _normalize_space(h2.get_text())
+            elif p:
+                title = _normalize_space(p.get_text())
+            else:
+                continue
+            
+            if len(title) < 10:
+                continue
+            
+            link = urljoin(base, a.get('href', ''))
+            items.append({"source": "NTV", "title": title, "link": link})
+    else:
+        return []
+    
     # dedupe by link first
     items = _dedupe_by_key(items, key_fn=lambda x: x["link"])
     return items
@@ -109,18 +146,37 @@ def scrape_cnnturk_candidates():
     items = []
 
     for url in CNN_LIST_URLS:
-        tree = html.fromstring(_download(url))
-
-        # Prefer anchor title + href, and avoid header/menu
-        anchors = tree.xpath("//a[@href and @title and not(ancestor::header)]")
-
-        for a in anchors:
-            title = _normalize_space(a.get("title") or "")
-            if len(title) < 10:
-                continue
-
-            link = urljoin(base, a.get("href") or "")
-            items.append({"source": "CNN TURK", "title": title, "link": link})
+        html_content = _download(url)
+        
+        if USE_LXML:
+            tree = html.fromstring(html_content)
+            # Prefer anchor title + href, and avoid header/menu
+            anchors = tree.xpath("//a[@href and @title and not(ancestor::header)]")
+            
+            for a in anchors:
+                title = _normalize_space(a.get("title") or "")
+                if len(title) < 10:
+                    continue
+                
+                link = urljoin(base, a.get("href") or "")
+                items.append({"source": "CNN TURK", "title": title, "link": link})
+        elif USE_LXML is False:
+            # BeautifulSoup4 fallback
+            soup = BeautifulSoup(html_content, 'html.parser')
+            # Avoid header links
+            header = soup.find('header')
+            if header:
+                header.decompose()
+            
+            for a in soup.find_all('a', href=True, title=True):
+                title = _normalize_space(a.get('title', ''))
+                if len(title) < 10:
+                    continue
+                
+                link = urljoin(base, a.get('href', ''))
+                items.append({"source": "CNN TURK", "title": title, "link": link})
+        else:
+            continue
 
     items = _dedupe_by_key(items, key_fn=lambda x: x["link"])
     return items

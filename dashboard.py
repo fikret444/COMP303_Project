@@ -10,11 +10,11 @@ import glob
 from datetime import datetime
 from pathlib import Path
 
-# Scraping modülü opsiyonel (lxml gerektirir)
+# Scraping modülü - artık BeautifulSoup4 ile de çalışır
 try:
     from datasources.scraping.scrape_news import scrape_all_risk_headlines
     SCRAPING_AVAILABLE = True
-except ImportError:
+except ImportError as e:
     SCRAPING_AVAILABLE = False
     def scrape_all_risk_headlines():
         return []

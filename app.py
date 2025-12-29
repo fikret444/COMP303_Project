@@ -3,7 +3,7 @@ from flask import Flask, jsonify, request
 from datasources.usgs_earthquake import USGSEarthquakeSource
 from datasources.openweather_source import OpenWeatherSource
 
-# your scraping (adjust path to your project) - opsiyonel (lxml gerektirir)
+# your scraping (adjust path to your project) - artık BeautifulSoup4 ile de çalışır
 try:
     from datasources.scraping.scrape_news import scrape_all_risk_headlines
 except ImportError:
@@ -37,4 +37,4 @@ def api_weather():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=5000)
