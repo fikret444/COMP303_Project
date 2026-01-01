@@ -1,5 +1,5 @@
 import requests
-from lxml import html
+from bs4 import BeautifulSoup
 from datetime import datetime
 from urllib.parse import urljoin
 
@@ -12,172 +12,98 @@ KEYWORDS = [
     "su kesintisi", "baraj", "taşkın"
 ]
 
-# categories we WANT (based on URL path)
-ALLOWED_PATH_HINTS = [
-    "/turkiye", "/gundem", "/son-dakika", "/yerel", "/hava", "/cevre", "/saglik"
-]
-
-# categories we DO NOT want (based on URL path, not titles)
 BLOCKED_PATH_HINTS = [
-    "/spor", "/sporskor", "/magazin", "/yasam", "/kultur", "/sanat", "/astroloji",
+    "/spor", "/magazin", "/yasam", "/kultur", "/sanat",
     "/ekonomi", "/finans", "/video", "/galeri", "/teknoloji", "/otomobil"
 ]
 
 
-def _download(url: str) -> str:
+def download(url):
     headers = {"User-Agent": "Mozilla/5.0"}
     r = requests.get(url, headers=headers, timeout=10)
     r.raise_for_status()
     return r.text
 
 
-def _normalize_space(s: str) -> str:
-    return " ".join((s or "").split()).strip()
+def has_keyword(title):
+    title = (title or "").lower()
+    return any(k in title for k in KEYWORDS)
 
 
-def _dedupe_by_key(items, key_fn):
+def blocked(link):
+    link = (link or "").lower()
+    return any(b in link for b in BLOCKED_PATH_HINTS)
+
+
+def dedupe_by_url(items):
     seen = set()
     out = []
     for it in items:
-        k = key_fn(it)
-        if not k or k in seen:
+        if it["url"] in seen:
             continue
-        seen.add(k)
+        seen.add(it["url"])
         out.append(it)
     return out
 
 
-def _has_keyword(text: str) -> bool:
-    low = (text or "").lower()
-    return any(k in low for k in KEYWORDS)
-
-
-def _blocked_by_path(link: str) -> bool:
-    low = (link or "").lower()
-    return any(b in low for b in BLOCKED_PATH_HINTS)
-
-
-def _allowed_by_path(link: str) -> bool:
-    low = (link or "").lower()
-    return any(a in low for a in ALLOWED_PATH_HINTS)
-
-
-# -------------------------
-# NTV
-# -------------------------
-def scrape_ntv_candidates():
+def scrape_ntv():
     base = "https://www.ntv.com.tr"
-    tree = html.fromstring(_download(base))
-
-    anchors = tree.xpath("//a[@href and (.//h2 or .//p)]")
+    html = download(base)
+    soup = BeautifulSoup(html, "html.parser")
 
     items = []
-    for a in anchors:
-        href = a.get("href") or ""
-        link = urljoin(base, href)
-
-        # Prefer h2 title, else p text
-        t = a.xpath(".//h2/text()")
-        if t:
-            title = t[0]
-        else:
-            p = a.xpath(".//p/text()")
-            title = p[0] if p else ""
-
-        title = _normalize_space(title)
+    for a in soup.find_all("a", href=True):
+        title = a.get_text(" ", strip=True)
         if len(title) < 10:
             continue
 
-        items.append({"source": "NTV", "title": title, "link": link})
+        link = urljoin(base, a["href"])
+        items.append({"source": "NTV", "title": title, "url": link})
 
-    # dedupe by link first
-    items = _dedupe_by_key(items, key_fn=lambda x: x["link"])
     return items
 
 
-# -------------------------
-# CNN TÜRK (use listing pages)
-# -------------------------
-CNN_LIST_URLS = [
-    "https://www.cnnturk.com/son-dakika-haberleri/",
-    "https://www.cnnturk.com/son-dakika-depremler/",
-    "https://www.cnnturk.com/turkiye/",
-]
-
-def scrape_cnnturk_candidates():
+def scrape_cnnturk():
     base = "https://www.cnnturk.com"
+    pages = [
+        "https://www.cnnturk.com/son-dakika-haberleri/",
+        "https://www.cnnturk.com/son-dakika-depremler/",
+        "https://www.cnnturk.com/turkiye/",
+    ]
+
     items = []
+    for page in pages:
+        html = download(page)
+        soup = BeautifulSoup(html, "html.parser")
 
-    for url in CNN_LIST_URLS:
-        tree = html.fromstring(_download(url))
-
-        # Prefer anchor title + href, and avoid header/menu
-        anchors = tree.xpath("//a[@href and @title and not(ancestor::header)]")
-
-        for a in anchors:
-            title = _normalize_space(a.get("title") or "")
+        for a in soup.find_all("a", href=True):
+            # CNN Turk sometimes keeps titles in "title" attribute
+            title = a.get("title") or a.get_text(" ", strip=True)
             if len(title) < 10:
                 continue
 
-            link = urljoin(base, a.get("href") or "")
-            items.append({"source": "CNN TURK", "title": title, "link": link})
+            link = urljoin(base, a["href"])
+            items.append({"source": "CNN TURK", "title": title.strip(), "url": link})
 
-    items = _dedupe_by_key(items, key_fn=lambda x: x["link"])
     return items
-
-
-# -------------------------
-# Strong filter (no blacklist titles)
-# -------------------------
-def filter_risk_items(items):
-    """
-    Keep items that:
-    - match risk keywords in title
-    - NOT blocked by URL category
-    - Prefer allowed categories (if present)
-    """
-    out = []
-
-    for it in items:
-        title = it["title"]
-        link = it["link"]
-
-        if not _has_keyword(title):
-            continue
-
-        if _blocked_by_path(link):
-            continue
-
-        # if site provides category hints, require allowed
-        # (NTV/CNN usually does. If it doesn't, we don't force it.)
-        if any(h in link.lower() for h in ALLOWED_PATH_HINTS):
-            if not _allowed_by_path(link):
-                continue
-
-        out.append(it)
-
-    # dedupe by title (in case same news appears twice)
-    out = _dedupe_by_key(out, key_fn=lambda x: x["title"])
-    return out
 
 
 def scrape_all_risk_headlines():
     now = datetime.now().isoformat(timespec="seconds")
-    merged = []
 
     try:
-        merged.extend(scrape_ntv_candidates())
-    except Exception as e:
-        merged.append({"source": "NTV", "title": f"(NTV scrape failed: {e})", "link": "https://www.ntv.com.tr"})
+        merged = scrape_ntv() + scrape_cnnturk()
+    except Exception:
+        merged = []
 
-    try:
-        merged.extend(scrape_cnnturk_candidates())
-    except Exception as e:
-        merged.append({"source": "CNN TURK", "title": f"(CNN scrape failed: {e})", "link": "https://www.cnnturk.com"})
+    # filter: keyword + not blocked
+    filtered = []
+    for it in merged:
+        if has_keyword(it["title"]) and not blocked(it["url"]):
+            filtered.append(it)
 
-    filtered = filter_risk_items(merged)
+    filtered = dedupe_by_url(filtered)
 
-    # shape events for your API response
     events = []
     for it in filtered[:60]:
         events.append({
@@ -185,12 +111,12 @@ def scrape_all_risk_headlines():
             "source": it["source"],
             "title": it["title"],
             "time": now,
-            "url": it["link"]  # now it's the real article link
+            "url": it["url"]
         })
 
     return events
 
 
-# Optional alias if you used scrape_news() before
+# alias (your app uses scrape_all_risk_headlines, but this helps if you call scrape_news)
 def scrape_news():
     return scrape_all_risk_headlines()
