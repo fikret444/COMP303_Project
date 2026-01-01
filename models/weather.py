@@ -35,14 +35,16 @@ class Weather:
         return f"type:{self.type}, source:{self.source}, location:{self.location}, temperature:{self.temperature}, wind_speed:{self.wind_speed}, time:{self.time}"
 
     def toDictionary(self):
-        """Convert Weather object to dictionary for JSON serialization."""
+        # Flask/jsonify cannot serialize datetime objects, so convert if needed
+        time_val = self.time.isoformat() if hasattr(self.time, "isoformat") else self.time
+
         result = {
             "type": self.type,
             "source": self.source,
             "location": self.location,
             "temperature": self.temperature,
             "wind_speed": self.wind_speed,
-            "time": self.time,
+            "time": time_val,
         }
         
         # Add optional fields if they exist

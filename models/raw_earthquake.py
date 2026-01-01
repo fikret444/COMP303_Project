@@ -16,15 +16,17 @@ class RawEarthquake:
 
 
     def toDictionary(self):
-        return {
-        "type": self.type,
-        "source": self.source,
-        "location": self.location,
-        "magnitude": self.magnitude,
-        "time": self.time,
-        "latitude": self.latitude,
-        "longitude": self.longitude,
+        # Flask/jsonify cannot serialize datetime objects, so convert if needed
+        time_val = self.time.isoformat() if hasattr(self.time, "isoformat") else self.time
 
+        return {
+            "type": self.type,
+            "source": self.source,
+            "location": self.location,
+            "magnitude": self.magnitude,
+            "time": time_val,
+            "latitude": self.latitude,
+            "longitude": self.longitude,
         }
 
     # c = class name (RawEarthquake)

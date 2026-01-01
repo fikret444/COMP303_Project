@@ -3,7 +3,7 @@ SDEWS Web Dashboard
 Tarayıcıda görsel deprem takip sistemi
 """
 
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 import json
 import os
 import glob
@@ -18,6 +18,13 @@ except ImportError as e:
     SCRAPING_AVAILABLE = False
     def scrape_all_risk_headlines():
         return []
+
+# EONET modülü
+try:
+    from datasources.eonet_source import EONETSource
+    EONET_AVAILABLE = True
+except ImportError as e:
+    EONET_AVAILABLE = False
 
 app = Flask(__name__)
 
@@ -242,9 +249,26 @@ def api_news():
             'timestamp': datetime.now().isoformat()
         })
 
-def generate_current_alerts(earthquakes, current_weather_data):
-    """Mevcut durumdan kaynaklanan alert'ler oluştur (current weather)"""
+def load_eonet_data():
+    """EONET doğal afet verilerini yükle"""
+    if not EONET_AVAILABLE:
+        return []
+    
+    try:
+        src = EONETSource(status="open", days=30, limit=100)
+        events = src.fetch_and_parse()
+        return [e.toDictionary() for e in events]
+    except Exception as e:
+        print(f"EONET veri yükleme hatası: {e}")
+        return []
+
+def generate_current_alerts(earthquakes, current_weather_data, eonet_events=None):
+    """Mevcut durumdan kaynaklanan alert'ler oluştur (current weather + EONET)"""
     alerts = []
+    
+    # EONET verileri yoksa yükle
+    if eonet_events is None:
+        eonet_events = load_eonet_data()
     
     # Deprem alert'leri (magnitude >= 5.0)
     for eq in earthquakes:
@@ -429,6 +453,48 @@ def generate_current_alerts(earthquakes, current_weather_data):
                 'data': weather
             })
     
+    # EONET doğal afet alert'leri (sadece açık olanlar)
+    for event in eonet_events:
+        if event.get('status') == 'open':
+            categories = event.get('categories', [])
+            title = event.get('title', 'Doğal Afet')
+            event_time = event.get('event_time', event.get('time', datetime.now().isoformat()))
+            
+            # Kategoriye göre severity belirle
+            severity = 'high'  # Varsayılan olarak yüksek öncelik
+            category_str = ','.join(categories).lower() if categories else ''
+            
+            # Yangın ve volkan için yüksek öncelik
+            if 'wildfire' in category_str or 'fire' in category_str or 'yangın' in category_str:
+                severity = 'high'
+            elif 'volcano' in category_str or 'volkan' in category_str:
+                severity = 'high'
+            elif 'storm' in category_str or 'fırtına' in category_str or 'severe' in category_str:
+                severity = 'high'
+            elif 'flood' in category_str or 'sel' in category_str:
+                severity = 'high'
+            else:
+                severity = 'medium'
+            
+            # Konum bilgisi
+            location = 'Bilinmeyen Konum'
+            if event.get('latitude') and event.get('longitude'):
+                location = f"Koordinat: {event.get('latitude'):.4f}, {event.get('longitude'):.4f}"
+            
+            # Kategori metni
+            category_text = ', '.join(categories) if categories else 'Doğal Afet'
+            
+            alerts.append({
+                'type': 'natural_event',
+                'category': 'current',
+                'severity': severity,
+                'title': f'Doğal Afet Uyarısı: {title}',
+                'message': f'{category_text} - {title}. Durum: AÇIK. {location}',
+                'location': location,
+                'timestamp': event_time,
+                'data': event
+            })
+    
     # Tarihe göre sırala (en yeni önce)
     alerts.sort(key=lambda x: x.get('timestamp', ''), reverse=True)
     return alerts
@@ -597,9 +663,10 @@ def api_alerts():
     """Tüm alert'leri JSON olarak döndür (current + forecast)"""
     earthquakes = load_earthquake_data()
     current_weather = get_current_weather_data()
+    eonet_events = load_eonet_data()
     forecasts = load_forecast_data()
     
-    current_alerts = generate_current_alerts(earthquakes, current_weather)
+    current_alerts = generate_current_alerts(earthquakes, current_weather, eonet_events)
     forecast_alerts = generate_forecast_alerts(forecasts)
     
     all_alerts = current_alerts + forecast_alerts
@@ -620,7 +687,8 @@ def api_alerts_current():
     """Sadece mevcut durumdan kaynaklanan alert'leri döndür"""
     earthquakes = load_earthquake_data()
     current_weather = get_current_weather_data()
-    alerts = generate_current_alerts(earthquakes, current_weather)
+    eonet_events = load_eonet_data()
+    alerts = generate_current_alerts(earthquakes, current_weather, eonet_events)
     
     return jsonify({
         'alerts': alerts,
@@ -641,6 +709,36 @@ def api_alerts_forecast():
         'high_severity': len([a for a in alerts if a.get('severity') == 'high']),
         'timestamp': datetime.now().isoformat()
     })
+
+@app.route('/api/eonet')
+def api_eonet():
+    """NASA EONET doğal afet verilerini döndür"""
+    if not EONET_AVAILABLE:
+        return jsonify({"error": "EONET module not available"}), 500
+    
+    try:
+        status = request.args.get("status", "all")
+        days = int(request.args.get("days", 365))
+        limit = int(request.args.get("limit", 50))
+
+        categories_str = request.args.get("categories", "")
+        category_ids = [c.strip() for c in categories_str.split(",") if c.strip()]
+
+        bbox_str = request.args.get("bbox", "")
+        bbox = None
+        if bbox_str:
+            parts = [p.strip() for p in bbox_str.split(",")]
+            if len(parts) == 4:
+                bbox = [float(x) for x in parts]
+
+        src = EONETSource(status=status, days=days, limit=limit, category_ids=category_ids, bbox=bbox)
+        events = src.fetch_and_parse()
+        return jsonify([e.toDictionary() for e in events])
+    except Exception as e:
+        import traceback
+        print(f"EONET API Error: {e}")
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     print("\n" + "="*60)

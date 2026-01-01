@@ -1,0 +1,686 @@
+[
+  {
+    "id": 1,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T19:40:06.204000",
+    "magnitude": 3.0,
+    "location": "112 km N of Yakutat, Alaska",
+    "latitude": 60.5566,
+    "longitude": -139.8593
+  },
+  {
+    "id": 2,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T19:09:07.261000",
+    "magnitude": 3.0,
+    "location": "15 km SSW of Larsen Bay, Alaska",
+    "latitude": 57.424,
+    "longitude": -154.113
+  },
+  {
+    "id": 3,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T18:56:38.827000",
+    "magnitude": 2.7,
+    "location": "107 km N of Yakutat, Alaska",
+    "latitude": 60.5067,
+    "longitude": -139.9258
+  },
+  {
+    "id": 4,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T18:56:11.110000",
+    "magnitude": 4.2,
+    "location": "12 km SSE of Horokanai, Japan",
+    "latitude": 43.9155,
+    "longitude": 142.2354
+  },
+  {
+    "id": 5,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T18:48:48.984000",
+    "magnitude": 3.1,
+    "location": "122 km NNW of Yakutat, Alaska",
+    "latitude": 60.5961,
+    "longitude": -140.3789
+  },
+  {
+    "id": 6,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T18:34:09.703000",
+    "magnitude": 2.7,
+    "location": "106 km N of Yakutat, Alaska",
+    "latitude": 60.4896,
+    "longitude": -140.0537
+  },
+  {
+    "id": 7,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T17:12:33.256000",
+    "magnitude": 2.5,
+    "location": "48 km W of Karluk, Alaska",
+    "latitude": 57.614,
+    "longitude": -155.27
+  },
+  {
+    "id": 8,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T17:07:53.901000",
+    "magnitude": 2.6,
+    "location": "110 km N of Yakutat, Alaska",
+    "latitude": 60.5366,
+    "longitude": -139.9079
+  },
+  {
+    "id": 9,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T17:02:50.950000",
+    "magnitude": 4.6,
+    "location": "194 km NW of Qalansīyah, Yemen",
+    "latitude": 13.9634,
+    "longitude": 52.2489
+  },
+  {
+    "id": 10,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T16:38:00.560000",
+    "magnitude": 2.7,
+    "location": "101 km N of Yakutat, Alaska",
+    "latitude": 60.4488,
+    "longitude": -139.9262
+  },
+  {
+    "id": 11,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T16:35:34.520000",
+    "magnitude": 3.99,
+    "location": "27 km NNE of Miches, Dominican Republic",
+    "latitude": 19.2151,
+    "longitude": -68.9508
+  },
+  {
+    "id": 12,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T16:25:40.050000",
+    "magnitude": 4.4,
+    "location": "12 km E of Lota, Chile",
+    "latitude": -37.0934,
+    "longitude": -73.0146
+  },
+  {
+    "id": 13,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T16:18:59.593000",
+    "magnitude": 4.9,
+    "location": "32 km NE of Shwebo, Burma (Myanmar)",
+    "latitude": 22.7786,
+    "longitude": 95.9225
+  },
+  {
+    "id": 14,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T16:10:00.688000",
+    "magnitude": 2.8,
+    "location": "102 km N of Yakutat, Alaska",
+    "latitude": 60.4549,
+    "longitude": -140.05
+  },
+  {
+    "id": 15,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T15:52:16.190000",
+    "magnitude": 3.7,
+    "location": "111 km N of Yakutat, Alaska",
+    "latitude": 60.5368,
+    "longitude": -139.9842
+  },
+  {
+    "id": 16,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T15:37:04.252000",
+    "magnitude": 4.6,
+    "location": "28 km WSW of La Concepción, Venezuela",
+    "latitude": 10.5015,
+    "longitude": -72.0685
+  },
+  {
+    "id": 17,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T15:00:36.890000",
+    "magnitude": 3.7,
+    "location": "109 km N of Yakutat, Alaska",
+    "latitude": 60.5137,
+    "longitude": -140.0329
+  },
+  {
+    "id": 18,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T14:35:54.351000",
+    "magnitude": 2.6,
+    "location": "116 km N of Yakutat, Alaska",
+    "latitude": 60.596,
+    "longitude": -139.6868
+  },
+  {
+    "id": 19,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T14:18:25.806000",
+    "magnitude": 3.2,
+    "location": "200 km SSE of Perryville, Alaska",
+    "latitude": 54.3056,
+    "longitude": -157.7173
+  },
+  {
+    "id": 20,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T14:15:57.208000",
+    "magnitude": 2.9,
+    "location": "111 km N of Yakutat, Alaska",
+    "latitude": 60.5325,
+    "longitude": -140.1074
+  },
+  {
+    "id": 21,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T14:07:36.690000",
+    "magnitude": 3.42,
+    "location": "81 km NNW of San Antonio, Puerto Rico",
+    "latitude": 19.1793333333333,
+    "longitude": -67.3828333333333
+  },
+  {
+    "id": 22,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T13:46:11.880000",
+    "magnitude": 5.0,
+    "location": "25 km ENE of Kinablangan, Philippines",
+    "latitude": 7.7381,
+    "longitude": 126.7755
+  },
+  {
+    "id": 23,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T13:36:30.024000",
+    "magnitude": 2.8,
+    "location": "15 km NNW of Whites City, New Mexico",
+    "latitude": 32.3088,
+    "longitude": -104.4393
+  },
+  {
+    "id": 24,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T13:20:54.604000",
+    "magnitude": 2.7,
+    "location": "115 km NNW of Yakutat, Alaska",
+    "latitude": 60.5505,
+    "longitude": -140.2685
+  },
+  {
+    "id": 25,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T13:07:57.527000",
+    "magnitude": 2.8,
+    "location": "111 km N of Yakutat, Alaska",
+    "latitude": 60.5391,
+    "longitude": -139.9658
+  },
+  {
+    "id": 26,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T13:07:01.304000",
+    "magnitude": 2.5,
+    "location": "34 km SW of Nanwalek, Alaska",
+    "latitude": 59.178,
+    "longitude": -152.414
+  },
+  {
+    "id": 27,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T13:02:49.580000",
+    "magnitude": 2.87,
+    "location": "2 km SSE of Magas Arriba, Puerto Rico",
+    "latitude": 18.0001666666667,
+    "longitude": -66.7635
+  },
+  {
+    "id": 28,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T12:54:34.158000",
+    "magnitude": 2.8,
+    "location": "112 km NNW of Yakutat, Alaska",
+    "latitude": 60.5365,
+    "longitude": -140.1553
+  },
+  {
+    "id": 29,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T12:05:08.723000",
+    "magnitude": 2.9,
+    "location": "109 km NNW of Yakutat, Alaska",
+    "latitude": 60.5065,
+    "longitude": -140.1671
+  },
+  {
+    "id": 30,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T12:01:50.724000",
+    "magnitude": 2.5,
+    "location": "107 km NNW of Yakutat, Alaska",
+    "latitude": 60.488,
+    "longitude": -140.157
+  },
+  {
+    "id": 31,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T11:54:44.433000",
+    "magnitude": 2.5,
+    "location": "111 km NNW of Yakutat, Alaska",
+    "latitude": 60.4938,
+    "longitude": -140.3757
+  },
+  {
+    "id": 32,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T11:52:29.550000",
+    "magnitude": 4.4,
+    "location": "120 km S of Akureyri, Iceland",
+    "latitude": 64.6147,
+    "longitude": -17.7259
+  },
+  {
+    "id": 33,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T11:48:24.237000",
+    "magnitude": 3.0,
+    "location": "111 km NNW of Yakutat, Alaska",
+    "latitude": 60.5277,
+    "longitude": -140.142
+  },
+  {
+    "id": 34,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T11:43:17.783000",
+    "magnitude": 2.9,
+    "location": "101 km N of Yakutat, Alaska",
+    "latitude": 60.4507,
+    "longitude": -139.9928
+  },
+  {
+    "id": 35,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T11:31:32.890000",
+    "magnitude": 3.41,
+    "location": "103 km NNW of San Antonio, Puerto Rico",
+    "latitude": 19.3895,
+    "longitude": -67.3883333333333
+  },
+  {
+    "id": 36,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T11:26:08.589000",
+    "magnitude": 3.1,
+    "location": "110 km NNW of Yakutat, Alaska",
+    "latitude": 60.5086,
+    "longitude": -140.2106
+  },
+  {
+    "id": 37,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T11:17:32.915000",
+    "magnitude": 2.9,
+    "location": "103 km NNW of Yakutat, Alaska",
+    "latitude": 60.4481,
+    "longitude": -140.191
+  },
+  {
+    "id": 38,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T11:15:17.696000",
+    "magnitude": 2.6,
+    "location": "113 km NNW of Yakutat, Alaska",
+    "latitude": 60.5214,
+    "longitude": -140.3381
+  },
+  {
+    "id": 39,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T10:54:37.838000",
+    "magnitude": 3.2,
+    "location": "101 km NNW of Yakutat, Alaska",
+    "latitude": 60.4276,
+    "longitude": -140.1601
+  },
+  {
+    "id": 40,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T10:52:35.928000",
+    "magnitude": 3.0,
+    "location": "110 km NNW of Yakutat, Alaska",
+    "latitude": 60.518,
+    "longitude": -140.1314
+  },
+  {
+    "id": 41,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T10:36:46.327000",
+    "magnitude": 3.3,
+    "location": "103 km N of Yakutat, Alaska",
+    "latitude": 60.4749,
+    "longitude": -139.9294
+  },
+  {
+    "id": 42,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T10:25:02.361000",
+    "magnitude": 3.5,
+    "location": "110 km NNW of Yakutat, Alaska",
+    "latitude": 60.5176,
+    "longitude": -140.1445
+  },
+  {
+    "id": 43,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T10:23:16.284000",
+    "magnitude": 2.6,
+    "location": "105 km NNW of Yakutat, Alaska",
+    "latitude": 60.4702,
+    "longitude": -140.1217
+  },
+  {
+    "id": 44,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T10:17:01.220000",
+    "magnitude": 3.2,
+    "location": "111 km NNW of Yakutat, Alaska",
+    "latitude": 60.4874,
+    "longitude": -140.402
+  },
+  {
+    "id": 45,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T10:11:42.612000",
+    "magnitude": 3.2,
+    "location": "109 km N of Yakutat, Alaska",
+    "latitude": 60.5189,
+    "longitude": -140.0541
+  },
+  {
+    "id": 46,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T10:10:14.225000",
+    "magnitude": 3.1,
+    "location": "109 km N of Yakutat, Alaska",
+    "latitude": 60.5204,
+    "longitude": -140.0106
+  },
+  {
+    "id": 47,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T10:08:30.272000",
+    "magnitude": 3.2,
+    "location": "111 km NNW of Yakutat, Alaska",
+    "latitude": 60.5295,
+    "longitude": -140.1181
+  },
+  {
+    "id": 48,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T10:05:25.862000",
+    "magnitude": 3.1,
+    "location": "115 km NNW of Yakutat, Alaska",
+    "latitude": 60.562,
+    "longitude": -140.144
+  },
+  {
+    "id": 49,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T10:02:50.813000",
+    "magnitude": 3.5,
+    "location": "113 km N of Yakutat, Alaska",
+    "latitude": 60.5543,
+    "longitude": -140.003
+  },
+  {
+    "id": 50,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T09:57:49.067000",
+    "magnitude": 3.3,
+    "location": "115 km N of Yakutat, Alaska",
+    "latitude": 60.5742,
+    "longitude": -139.987
+  },
+  {
+    "id": 51,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T09:54:59.829000",
+    "magnitude": 5.3,
+    "location": "108 km NNW of Yakutat, Alaska",
+    "latitude": 60.4785,
+    "longitude": -140.2927
+  },
+  {
+    "id": 52,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T09:54:14.421000",
+    "magnitude": 3.7,
+    "location": "111 km N of Yakutat, Alaska",
+    "latitude": 60.5347,
+    "longitude": -140.0265
+  },
+  {
+    "id": 53,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T09:51:01.337000",
+    "magnitude": 4.8,
+    "location": "104 km N of Yakutat, Alaska",
+    "latitude": 60.4703,
+    "longitude": -140.0731
+  },
+  {
+    "id": 54,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T09:49:06.369000",
+    "magnitude": 4.4,
+    "location": "112 km N of Yakutat, Alaska",
+    "latitude": 60.5437,
+    "longitude": -140.021
+  },
+  {
+    "id": 55,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T09:46:55.131000",
+    "magnitude": 5.7,
+    "location": "105 km NNW of Yakutat, Alaska",
+    "latitude": 60.4759,
+    "longitude": -140.1243
+  },
+  {
+    "id": 56,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T09:14:00.671000",
+    "magnitude": 4.3,
+    "location": "44 km NE of Jurm, Afghanistan",
+    "latitude": 37.1436,
+    "longitude": 71.1902
+  },
+  {
+    "id": 57,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T09:01:59.093000",
+    "magnitude": 5.0,
+    "location": "148 km NNE of Agats, Indonesia",
+    "latitude": -4.2339,
+    "longitude": 138.4388
+  },
+  {
+    "id": 58,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T08:47:16.851000",
+    "magnitude": 4.9,
+    "location": "188 km SSE of Vilyuchinsk, Russia",
+    "latitude": 51.3161,
+    "longitude": 159.2309
+  },
+  {
+    "id": 59,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T08:42:27.790000",
+    "magnitude": 2.48,
+    "location": "4 km SSE of Indios, Puerto Rico",
+    "latitude": 17.9586666666667,
+    "longitude": -66.7975
+  },
+  {
+    "id": 60,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T07:26:24.416000",
+    "magnitude": 5.3,
+    "location": "47 km W of San Antonio de los Cobres, Argentina",
+    "latitude": -24.1762,
+    "longitude": -66.787
+  },
+  {
+    "id": 61,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T06:08:17.930000",
+    "magnitude": 2.46,
+    "location": "2 km NNW of Las Marias, Puerto Rico",
+    "latitude": 18.3168333333333,
+    "longitude": -67.158
+  },
+  {
+    "id": 62,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T06:05:26.160000",
+    "magnitude": 5.4,
+    "location": "Banda Sea",
+    "latitude": -6.5324,
+    "longitude": 129.9014
+  },
+  {
+    "id": 63,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T05:56:21.518000",
+    "magnitude": 5.0,
+    "location": "207 km SE of Pondaguitan, Philippines",
+    "latitude": 4.992,
+    "longitude": 127.4535
+  },
+  {
+    "id": 64,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T05:43:04.050000",
+    "magnitude": 2.59,
+    "location": "22 km SE of Burney, CA",
+    "latitude": 40.7426681518555,
+    "longitude": -121.468330383301
+  },
+  {
+    "id": 65,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T04:53:01.814000",
+    "magnitude": 6.0,
+    "location": "southeast Indian Ridge",
+    "latitude": -45.6205,
+    "longitude": 96.3532
+  },
+  {
+    "id": 66,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T03:46:27.348000",
+    "magnitude": 3.8,
+    "location": "259 km SE of Chiniak, Alaska",
+    "latitude": 56.3413,
+    "longitude": -148.7115
+  },
+  {
+    "id": 67,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T03:03:02.521000",
+    "magnitude": 3.2,
+    "location": "108 km N of Yakutat, Alaska",
+    "latitude": 60.5134,
+    "longitude": -139.5741
+  },
+  {
+    "id": 68,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T02:52:08.528000",
+    "magnitude": 4.3,
+    "location": "177 km SSE of Vilyuchinsk, Russia",
+    "latitude": 51.5446,
+    "longitude": 159.6982
+  },
+  {
+    "id": 69,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T02:04:29.390000",
+    "magnitude": 4.6,
+    "location": "199 km SSE of Vilyuchinsk, Russia",
+    "latitude": 51.3241,
+    "longitude": 159.7049
+  },
+  {
+    "id": 70,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T01:39:16.620000",
+    "magnitude": 2.89,
+    "location": "33 km WSW of Petrolia, CA",
+    "latitude": 40.22216796875,
+    "longitude": -124.644996643066
+  },
+  {
+    "id": 71,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T01:09:55.909000",
+    "magnitude": 4.3,
+    "location": "Kepulauan Babar, Indonesia",
+    "latitude": -7.1146,
+    "longitude": 129.3635
+  },
+  {
+    "id": 72,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T01:08:02.022000",
+    "magnitude": 2.6,
+    "location": "75 km WNW of Karluk, Alaska",
+    "latitude": 57.708,
+    "longitude": -155.696
+  },
+  {
+    "id": 73,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-01T01:06:30.440000",
+    "magnitude": 3.7,
+    "location": "79 km SSE of Adak, Alaska",
+    "latitude": 51.179,
+    "longitude": -176.361
+  },
+  {
+    "id": 74,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-31T23:44:09.560000",
+    "magnitude": 2.6,
+    "location": "33 km E of West Yellowstone, Montana",
+    "latitude": 44.6613333333333,
+    "longitude": -110.677333333333
+  },
+  {
+    "id": 75,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-31T23:36:21.785000",
+    "magnitude": 4.0,
+    "location": "59 km W of Happy Valley, Alaska",
+    "latitude": 60.048,
+    "longitude": -152.771
+  },
+  {
+    "id": 76,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-31T23:27:47.804000",
+    "magnitude": 4.8,
+    "location": "165 km SSE of Vilyuchinsk, Russia",
+    "latitude": 51.5699,
+    "longitude": 159.3639
+  }
+]

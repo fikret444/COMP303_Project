@@ -16,9 +16,9 @@ class DataSource(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def parse(self, raw: Any) -> List[Event]:
+    def parse(self, raw: Any) -> List[Any]:
         raise NotImplementedError
 
-    def fetch_and_parse(self) -> List[Event]:
+    def fetch_and_parse(self) -> List[Any]:
         raw = self.fetch_raw()
         return self.parse(raw)

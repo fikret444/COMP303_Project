@@ -2250,3 +2250,421 @@
 2025-12-29T14:05:41.907878+03:00 [INFO] SDEWS Runtime System Stopped
 2025-12-29T14:05:41.908188+03:00 [INFO] ============================================================
 2025-12-29T14:05:41.908485+03:00 [INFO] Sistem kapatildi
+2026-01-01T21:06:56.195614+03:00 [INFO] SDEWS System Initialization
+2026-01-01T21:06:56.195903+03:00 [INFO] Data source'lar baslatiliyor...
+2026-01-01T21:06:56.196138+03:00 [INFO] [OK] USGS Earthquake Source hazir
+2026-01-01T21:06:56.196394+03:00 [INFO] [OK] 6 OpenWeather Source hazir
+2026-01-01T21:06:56.196637+03:00 [INFO] Runtime system olusturuluyor...
+2026-01-01T21:06:56.196903+03:00 [INFO] DataSourceManager initialized with 7 sources
+2026-01-01T21:06:56.197173+03:00 [INFO] EventPipeline initialized with 3 consumers
+2026-01-01T21:06:56.198999+03:00 [INFO] RuntimeSystem initialized
+2026-01-01T21:06:56.199191+03:00 [INFO] [OK] Runtime System hazir
+2026-01-01T21:06:56.199358+03:00 [INFO] TEK CALISTIRMA MODU baslatiliyor
+2026-01-01T21:06:56.199518+03:00 [INFO] ============================================================
+2026-01-01T21:06:56.199657+03:00 [INFO] SDEWS Runtime System Starting
+2026-01-01T21:06:56.199798+03:00 [INFO] ============================================================
+2026-01-01T21:06:56.200066+03:00 [INFO] Starting 3 consumer workers
+2026-01-01T21:06:56.200855+03:00 [INFO] Consumer worker 0 started
+2026-01-01T21:06:56.201083+03:00 [INFO] Consumer worker 1 started
+2026-01-01T21:06:56.201696+03:00 [INFO] Consumer worker 2 started
+2026-01-01T21:06:56.201830+03:00 [INFO] Running single fetch-process cycle
+2026-01-01T21:06:56.202254+03:00 [INFO] Starting concurrent fetch from 7 sources
+2026-01-01T21:06:56.202547+03:00 [INFO] Fetching data from USGSEarthquakeSource...
+2026-01-01T21:06:56.202688+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-01T21:06:56.203125+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-01T21:06:56.203503+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-01T21:06:56.203732+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-01T21:06:56.204076+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-01T21:06:56.204485+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-01T21:06:57.195629+03:00 [INFO] Successfully fetched 76 items from USGSEarthquakeSource
+2026-01-01T21:06:57.823211+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-01T21:06:57.862681+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-01T21:06:57.901644+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-01T21:06:57.914276+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-01T21:06:57.940234+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-01T21:07:00.112654+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-01T21:07:00.113108+03:00 [INFO] All fetch operations completed
+2026-01-01T21:07:00.113465+03:00 [INFO] Added events from USGSEarthquakeSource to processing queue
+2026-01-01T21:07:00.113523+03:00 [INFO] Worker 2 processing event from USGSEarthquakeSource
+2026-01-01T21:07:00.113667+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-01T21:07:00.113736+03:00 [INFO] Worker 0 processing event from OpenWeatherSource
+2026-01-01T21:07:00.114208+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-01T21:07:00.114285+03:00 [INFO] Worker 1 processing event from OpenWeatherSource
+2026-01-01T21:07:00.114063+03:00 [INFO] USGS'ten temizlenen event sayısı: 76
+2026-01-01T21:07:00.117695+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-01T21:07:00.131343+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-01T21:07:00.141860+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-01T21:07:00.142136+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-01T21:07:00.143761+03:00 [INFO] Added 7 event batches to pipeline
+2026-01-01T21:07:00.269634+03:00 [INFO] Worker 0 processing event from OpenWeatherSource
+2026-01-01T21:07:00.269726+03:00 [INFO] Worker 1 processing event from OpenWeatherSource
+2026-01-01T21:07:00.507632+03:00 [INFO] Worker 2 processing event from OpenWeatherSource
+2026-01-01T21:07:00.585354+03:00 [INFO] All events processed
+2026-01-01T21:07:00.585751+03:00 [INFO] ============================================================
+2026-01-01T21:07:00.585940+03:00 [INFO] PROCESSING RESULTS
+2026-01-01T21:07:00.586143+03:00 [INFO] ============================================================
+2026-01-01T21:07:00.586334+03:00 [INFO] Result #1 - USGSEarthquakeSource: SUCCESS
+2026-01-01T21:07:00.586483+03:00 [INFO]   Events processed: 76
+2026-01-01T21:07:00.586615+03:00 [INFO]   Statistics:
+2026-01-01T21:07:00.586747+03:00 [INFO]     - Total events: 76
+2026-01-01T21:07:00.586879+03:00 [INFO]     - Max magnitude: 6.00
+2026-01-01T21:07:00.587007+03:00 [INFO]     - Avg magnitude: 3.55
+2026-01-01T21:07:00.587132+03:00 [INFO]   Saved to: earthquakes_1767290820.json
+2026-01-01T21:07:00.587277+03:00 [INFO] ------------------------------------------------------------
+2026-01-01T21:07:00.587410+03:00 [INFO] Result #2 - OpenWeatherSource: SUCCESS
+2026-01-01T21:07:00.587539+03:00 [INFO]   Events processed: 41
+2026-01-01T21:07:00.587663+03:00 [INFO]   Saved to: weather_all.json
+2026-01-01T21:07:00.587785+03:00 [INFO] ------------------------------------------------------------
+2026-01-01T21:07:00.587906+03:00 [INFO] Result #3 - OpenWeatherSource: SUCCESS
+2026-01-01T21:07:00.588032+03:00 [INFO]   Events processed: 41
+2026-01-01T21:07:00.588151+03:00 [INFO]   Saved to: weather_all.json
+2026-01-01T21:07:00.588294+03:00 [INFO] ------------------------------------------------------------
+2026-01-01T21:07:00.588500+03:00 [INFO] Result #4 - OpenWeatherSource: SUCCESS
+2026-01-01T21:07:00.588668+03:00 [INFO]   Events processed: 41
+2026-01-01T21:07:00.588817+03:00 [INFO]   Saved to: weather_all.json
+2026-01-01T21:07:00.589011+03:00 [INFO] ------------------------------------------------------------
+2026-01-01T21:07:00.589220+03:00 [INFO] Result #5 - OpenWeatherSource: SUCCESS
+2026-01-01T21:07:00.589372+03:00 [INFO]   Events processed: 41
+2026-01-01T21:07:00.589508+03:00 [INFO]   Saved to: weather_all.json
+2026-01-01T21:07:00.589636+03:00 [INFO] ------------------------------------------------------------
+2026-01-01T21:07:00.589768+03:00 [INFO] Result #6 - OpenWeatherSource: SUCCESS
+2026-01-01T21:07:00.589897+03:00 [INFO]   Events processed: 41
+2026-01-01T21:07:00.590024+03:00 [INFO]   Saved to: weather_all.json
+2026-01-01T21:07:00.590150+03:00 [INFO] ------------------------------------------------------------
+2026-01-01T21:07:00.590277+03:00 [INFO] Result #7 - OpenWeatherSource: SUCCESS
+2026-01-01T21:07:00.590642+03:00 [INFO]   Events processed: 41
+2026-01-01T21:07:00.590824+03:00 [INFO]   Saved to: weather_all.json
+2026-01-01T21:07:00.590972+03:00 [INFO] ------------------------------------------------------------
+2026-01-01T21:07:00.591228+03:00 [INFO] Stopping RuntimeSystem...
+2026-01-01T21:07:00.591378+03:00 [INFO] Stopping consumer workers...
+2026-01-01T21:07:00.591594+03:00 [INFO] Consumer worker 0 stopped
+2026-01-01T21:07:00.591636+03:00 [INFO] Consumer worker 1 stopped
+2026-01-01T21:07:00.591677+03:00 [INFO] Consumer worker 2 stopped
+2026-01-01T21:07:00.592123+03:00 [INFO] All consumer workers stopped
+2026-01-01T21:07:00.592360+03:00 [INFO] ============================================================
+2026-01-01T21:07:00.592537+03:00 [INFO] SYSTEM STATUS
+2026-01-01T21:07:00.592698+03:00 [INFO] ============================================================
+2026-01-01T21:07:00.592840+03:00 [INFO] Uptime: 4 seconds
+2026-01-01T21:07:00.592981+03:00 [INFO] Cycles completed: 1
+2026-01-01T21:07:00.593115+03:00 [INFO] Data Sources: 7
+2026-01-01T21:07:00.593247+03:00 [INFO] Processed events: 7
+2026-01-01T21:07:00.593376+03:00 [INFO] Errors: 0
+2026-01-01T21:07:00.593503+03:00 [INFO] ============================================================
+2026-01-01T21:07:00.593629+03:00 [INFO] ============================================================
+2026-01-01T21:07:00.593782+03:00 [INFO] SDEWS Runtime System Stopped
+2026-01-01T21:07:00.593915+03:00 [INFO] ============================================================
+2026-01-01T21:07:00.594146+03:00 [INFO] Sistem kapatildi
+2026-01-01T21:14:46.851072+03:00 [INFO] SDEWS System Initialization
+2026-01-01T21:14:46.851290+03:00 [INFO] Data source'lar baslatiliyor...
+2026-01-01T21:14:46.851480+03:00 [INFO] [OK] USGS Earthquake Source hazir
+2026-01-01T21:14:46.851710+03:00 [INFO] [OK] 6 OpenWeather Source hazir
+2026-01-01T21:14:46.851882+03:00 [INFO] Runtime system olusturuluyor...
+2026-01-01T21:14:46.852048+03:00 [INFO] DataSourceManager initialized with 7 sources
+2026-01-01T21:14:46.852211+03:00 [INFO] EventPipeline initialized with 3 consumers
+2026-01-01T21:14:46.852371+03:00 [INFO] RuntimeSystem initialized
+2026-01-01T21:14:46.852518+03:00 [INFO] [OK] Runtime System hazir
+2026-01-01T21:14:46.852653+03:00 [INFO] TEK CALISTIRMA MODU baslatiliyor
+2026-01-01T21:14:46.852787+03:00 [INFO] ============================================================
+2026-01-01T21:14:46.852924+03:00 [INFO] SDEWS Runtime System Starting
+2026-01-01T21:14:46.853051+03:00 [INFO] ============================================================
+2026-01-01T21:14:46.853180+03:00 [INFO] Starting 3 consumer workers
+2026-01-01T21:14:46.853686+03:00 [INFO] Consumer worker 0 started
+2026-01-01T21:14:46.853826+03:00 [INFO] Consumer worker 1 started
+2026-01-01T21:14:46.853956+03:00 [INFO] Consumer worker 2 started
+s cycle
+2026-01-01T21:14:46.854450+03:00 [INFO] Starting concurrent fetch from 7 sources
+2026-01-01T21:14:46.854728+03:00 [INFO] Fetching data from USGSEarthquakeSource...
+2026-01-01T21:14:46.854847+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-01T21:14:46.854958+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-01T21:14:46.855351+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-01T21:14:46.855721+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-01T21:14:46.856635+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-01T21:14:46.856883+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-01T21:14:47.720557+03:00 [INFO] Successfully fetched 77 items from USGSEarthquakeSource
+2026-01-01T21:14:48.309761+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-01T21:14:48.331580+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-01T21:14:48.369693+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-01T21:14:48.402506+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-01T21:14:48.406127+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-01T21:14:48.429992+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-01T21:14:48.430464+03:00 [INFO] All fetch operations completed
+2026-01-01T21:14:48.430883+03:00 [INFO] Added events from USGSEarthquakeSource to processing queue
+2026-01-01T21:14:48.430945+03:00 [INFO] Worker 0 processing event from USGSEarthquakeSource
+2026-01-01T21:14:48.431244+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-01T21:14:48.431656+03:00 [INFO] USGS'ten temizlenen event sayısı: 77
+2026-01-01T21:14:48.431754+03:00 [INFO] Worker 1 processing event from OpenWeatherSource
+2026-01-01T21:14:48.431990+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-01T21:14:48.432073+03:00 [INFO] Worker 2 processing event from OpenWeatherSource
+2026-01-01T21:14:48.433335+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-01T21:14:48.434380+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-01T21:14:48.434768+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-01T21:14:48.457169+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-01T21:14:48.467169+03:00 [INFO] Added 7 event batches to pipeline
+2026-01-01T21:14:48.592477+03:00 [INFO] Worker 0 processing event from OpenWeatherSource
+2026-01-01T21:14:48.592543+03:00 [INFO] Worker 1 processing event from OpenWeatherSource
+2026-01-01T21:14:48.592618+03:00 [INFO] Worker 2 processing event from OpenWeatherSource
+2026-01-01T21:14:48.823778+03:00 [INFO] Worker 0 processing event from OpenWeatherSource
+2026-01-01T21:14:48.903152+03:00 [INFO] All events processed
+2026-01-01T21:14:48.903537+03:00 [INFO] ============================================================
+2026-01-01T21:14:48.903742+03:00 [INFO] PROCESSING RESULTS
+2026-01-01T21:14:48.903897+03:00 [INFO] ============================================================
+2026-01-01T21:14:48.904036+03:00 [INFO] Result #1 - USGSEarthquakeSource: SUCCESS
+2026-01-01T21:14:48.904171+03:00 [INFO]   Events processed: 77
+2026-01-01T21:14:48.904306+03:00 [INFO]   Statistics:
+2026-01-01T21:14:48.904436+03:00 [INFO]     - Total events: 77
+2026-01-01T21:14:48.904572+03:00 [INFO]     - Max magnitude: 6.00
+2026-01-01T21:14:48.904703+03:00 [INFO]     - Avg magnitude: 3.54
+2026-01-01T21:14:48.904827+03:00 [INFO]   Saved to: earthquakes_1767291288.json
+2026-01-01T21:14:48.904953+03:00 [INFO] ------------------------------------------------------------
+2026-01-01T21:14:48.905083+03:00 [INFO] Result #2 - OpenWeatherSource: SUCCESS
+2026-01-01T21:14:48.905209+03:00 [INFO]   Events processed: 41
+2026-01-01T21:14:48.905334+03:00 [INFO]   Saved to: weather_all.json
+2026-01-01T21:14:48.905624+03:00 [INFO] ------------------------------------------------------------
+2026-01-01T21:14:48.905765+03:00 [INFO] Result #3 - OpenWeatherSource: SUCCESS
+2026-01-01T21:14:48.905923+03:00 [INFO]   Events processed: 41
+2026-01-01T21:14:48.906120+03:00 [INFO]   Saved to: weather_all.json
+2026-01-01T21:14:48.906265+03:00 [INFO] ------------------------------------------------------------
+2026-01-01T21:14:48.906394+03:00 [INFO] Result #4 - OpenWeatherSource: SUCCESS
+2026-01-01T21:14:48.906520+03:00 [INFO]   Events processed: 41
+2026-01-01T21:14:48.906644+03:00 [INFO]   Saved to: weather_all.json
+2026-01-01T21:14:48.906788+03:00 [INFO] ------------------------------------------------------------
+2026-01-01T21:14:48.906929+03:00 [INFO] Result #5 - OpenWeatherSource: SUCCESS
+2026-01-01T21:14:48.907057+03:00 [INFO]   Events processed: 41
+2026-01-01T21:14:48.907184+03:00 [INFO]   Saved to: weather_all.json
+2026-01-01T21:14:48.907307+03:00 [INFO] ------------------------------------------------------------
+2026-01-01T21:14:48.907434+03:00 [INFO] Result #6 - OpenWeatherSource: SUCCESS
+2026-01-01T21:14:48.907558+03:00 [INFO]   Events processed: 41
+2026-01-01T21:14:48.907728+03:00 [INFO]   Saved to: weather_all.json
+2026-01-01T21:14:48.907888+03:00 [INFO] ------------------------------------------------------------
+2026-01-01T21:14:48.908028+03:00 [INFO] Result #7 - OpenWeatherSource: SUCCESS
+2026-01-01T21:14:48.908157+03:00 [INFO]   Events processed: 41
+2026-01-01T21:14:48.908285+03:00 [INFO]   Saved to: weather_all.json
+2026-01-01T21:14:48.908413+03:00 [INFO] ------------------------------------------------------------
+2026-01-01T21:14:48.908543+03:00 [INFO] Stopping RuntimeSystem...
+2026-01-01T21:14:48.908670+03:00 [INFO] Stopping consumer workers...
+2026-01-01T21:14:48.908887+03:00 [INFO] Consumer worker 2 stopped
+2026-01-01T21:14:48.908852+03:00 [INFO] Consumer worker 0 stopped
+2026-01-01T21:14:48.908945+03:00 [INFO] Consumer worker 1 stopped
+2026-01-01T21:14:48.909318+03:00 [INFO] All consumer workers stopped
+2026-01-01T21:14:48.909507+03:00 [INFO] ============================================================
+2026-01-01T21:14:48.909664+03:00 [INFO] SYSTEM STATUS
+2026-01-01T21:14:48.909801+03:00 [INFO] ============================================================
+2026-01-01T21:14:48.909937+03:00 [INFO] Uptime: 2 seconds
+2026-01-01T21:14:48.910066+03:00 [INFO] Cycles completed: 1
+2026-01-01T21:14:48.910196+03:00 [INFO] Data Sources: 7
+2026-01-01T21:14:48.910324+03:00 [INFO] Processed events: 7
+2026-01-01T21:14:48.910451+03:00 [INFO] Errors: 0
+2026-01-01T21:14:48.910587+03:00 [INFO] ============================================================
+2026-01-01T21:14:48.910733+03:00 [INFO] ============================================================
+2026-01-01T21:14:48.910859+03:00 [INFO] SDEWS Runtime System Stopped
+2026-01-01T21:14:48.910983+03:00 [INFO] ============================================================
+2026-01-01T21:14:48.911154+03:00 [INFO] Sistem kapatildi
+2026-01-01T21:57:17.350928+03:00 [INFO] SDEWS System Initialization
+2026-01-01T21:57:17.351202+03:00 [INFO] Data source'lar baslatiliyor...
+2026-01-01T21:57:17.351395+03:00 [INFO] [OK] USGS Earthquake Source hazir
+2026-01-01T21:57:17.351566+03:00 [INFO] [OK] 6 OpenWeather Source hazir
+2026-01-01T21:57:17.351722+03:00 [INFO] Runtime system olusturuluyor...
+2026-01-01T21:57:17.351889+03:00 [INFO] DataSourceManager initialized with 7 sources
+2026-01-01T21:57:17.352270+03:00 [INFO] EventPipeline initialized with 3 consumers
+2026-01-01T21:57:17.352468+03:00 [INFO] RuntimeSystem initialized
+2026-01-01T21:57:17.352615+03:00 [INFO] [OK] Runtime System hazir
+2026-01-01T21:57:17.352751+03:00 [INFO] TEK CALISTIRMA MODU baslatiliyor
+2026-01-01T21:57:17.352894+03:00 [INFO] ============================================================
+2026-01-01T21:57:17.353033+03:00 [INFO] SDEWS Runtime System Starting
+2026-01-01T21:57:17.353232+03:00 [INFO] ============================================================
+2026-01-01T21:57:17.353632+03:00 [INFO] Starting 3 consumer workers
+2026-01-01T21:57:17.354614+03:00 [INFO] Consumer worker 0 started
+2026-01-01T21:57:17.354798+03:00 [INFO] Consumer worker 1 started
+2026-01-01T21:57:17.354976+03:00 [INFO] Consumer worker 2 started
+2026-01-01T21:57:17.355023+03:00 [INFO] Running single fetch-process cycle
+2026-01-01T21:57:17.355317+03:00 [INFO] Starting concurrent fetch from 7 sources
+2026-01-01T21:57:17.355597+03:00 [INFO] Fetching data from USGSEarthquakeSource...
+2026-01-01T21:57:17.355726+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-01T21:57:17.356092+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-01T21:57:17.356256+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-01T21:57:17.356774+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-01T21:57:17.357044+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-01T21:57:17.357270+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-01T21:57:18.266969+03:00 [INFO] Successfully fetched 76 items from USGSEarthquakeSource
+2026-01-01T21:57:18.866870+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-01T21:57:18.893409+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-01T21:57:18.940064+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-01T21:57:18.943710+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-01T21:57:18.960364+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-01T21:57:18.967193+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-01T21:57:18.967577+03:00 [INFO] All fetch operations completed
+2026-01-01T21:57:18.967848+03:00 [INFO] Added events from USGSEarthquakeSource to processing queue
+2026-01-01T21:57:18.968076+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-01T21:57:18.968129+03:00 [INFO] Worker 2 processing event from OpenWeatherSource
+2026-01-01T21:57:18.968346+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-01T21:57:18.968669+03:00 [INFO] Worker 1 processing event from OpenWeatherSource
+2026-01-01T21:57:18.968628+03:00 [INFO] USGS'ten temizlenen event sayısı: 76
+2026-01-01T21:57:18.969036+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-01T21:57:18.969504+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-01T21:57:18.995808+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-01T21:57:18.996161+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-01T21:57:18.997061+03:00 [INFO] Added 7 event batches to pipeline
+2026-01-01T21:57:19.135620+03:00 [INFO] Worker 2 processing event from OpenWeatherSource
+2026-01-01T21:57:19.135553+03:00 [INFO] Worker 0 processing event from OpenWeatherSource
+2026-01-01T21:57:19.135721+03:00 [INFO] Worker 1 processing event from OpenWeatherSource
+2026-01-01T21:57:19.405804+03:00 [INFO] Worker 2 processing event from OpenWeatherSource
+2026-01-01T21:57:19.497747+03:00 [INFO] All events processed
+2026-01-01T21:57:19.498090+03:00 [INFO] ============================================================
+2026-01-01T21:57:19.498329+03:00 [INFO] PROCESSING RESULTS
+2026-01-01T21:57:19.498531+03:00 [INFO] ============================================================
+2026-01-01T21:57:19.498811+03:00 [INFO] Result #1 - USGSEarthquakeSource: SUCCESS
+2026-01-01T21:57:19.499042+03:00 [INFO]   Events processed: 76
+2026-01-01T21:57:19.499221+03:00 [INFO]   Statistics:
+2026-01-01T21:57:19.499509+03:00 [INFO]     - Total events: 76
+2026-01-01T21:57:19.499680+03:00 [INFO]     - Max magnitude: 6.00
+2026-01-01T21:57:19.499825+03:00 [INFO]     - Avg magnitude: 3.54
+2026-01-01T21:57:19.500021+03:00 [INFO]   Saved to: earthquakes_1767293838.json
+2026-01-01T21:57:19.500208+03:00 [INFO] ------------------------------------------------------------
+2026-01-01T21:57:19.500382+03:00 [INFO] Result #2 - OpenWeatherSource: SUCCESS
+2026-01-01T21:57:19.500532+03:00 [INFO]   Events processed: 41
+2026-01-01T21:57:19.500663+03:00 [INFO]   Saved to: weather_all.json
+2026-01-01T21:57:19.500809+03:00 [INFO] ------------------------------------------------------------
+2026-01-01T21:57:19.500970+03:00 [INFO] Result #3 - OpenWeatherSource: SUCCESS
+2026-01-01T21:57:19.501107+03:00 [INFO]   Events processed: 41
+2026-01-01T21:57:19.501231+03:00 [INFO]   Saved to: weather_all.json
+2026-01-01T21:57:19.501521+03:00 [INFO] ------------------------------------------------------------
+2026-01-01T21:57:19.501862+03:00 [INFO] Result #4 - OpenWeatherSource: SUCCESS
+2026-01-01T21:57:19.502094+03:00 [INFO]   Events processed: 41
+2026-01-01T21:57:19.502264+03:00 [INFO]   Saved to: weather_all.json
+2026-01-01T21:57:19.502410+03:00 [INFO] ------------------------------------------------------------
+2026-01-01T21:57:19.502556+03:00 [INFO] Result #5 - OpenWeatherSource: SUCCESS
+2026-01-01T21:57:19.502691+03:00 [INFO]   Events processed: 41
+2026-01-01T21:57:19.502821+03:00 [INFO]   Saved to: weather_all.json
+2026-01-01T21:57:19.502955+03:00 [INFO] ------------------------------------------------------------
+2026-01-01T21:57:19.503084+03:00 [INFO] Result #6 - OpenWeatherSource: SUCCESS
+2026-01-01T21:57:19.503218+03:00 [INFO]   Events processed: 41
+2026-01-01T21:57:19.503339+03:00 [INFO]   Saved to: weather_all.json
+2026-01-01T21:57:19.503465+03:00 [INFO] ------------------------------------------------------------
+2026-01-01T21:57:19.503675+03:00 [INFO] Result #7 - OpenWeatherSource: SUCCESS
+2026-01-01T21:57:19.503902+03:00 [INFO]   Events processed: 41
+2026-01-01T21:57:19.504065+03:00 [INFO]   Saved to: weather_all.json
+2026-01-01T21:57:19.504200+03:00 [INFO] ------------------------------------------------------------
+2026-01-01T21:57:19.504332+03:00 [INFO] Stopping RuntimeSystem...
+2026-01-01T21:57:19.504466+03:00 [INFO] Stopping consumer workers...
+2026-01-01T21:57:19.504812+03:00 [INFO] Consumer worker 1 stopped
+2026-01-01T21:57:19.504747+03:00 [INFO] Consumer worker 0 stopped
+2026-01-01T21:57:19.504881+03:00 [INFO] Consumer worker 2 stopped
+2026-01-01T21:57:19.505399+03:00 [INFO] All consumer workers stopped
+2026-01-01T21:57:19.505661+03:00 [INFO] ============================================================
+2026-01-01T21:57:19.505840+03:00 [INFO] SYSTEM STATUS
+2026-01-01T21:57:19.506059+03:00 [INFO] ============================================================
+2026-01-01T21:57:19.506250+03:00 [INFO] Uptime: 2 seconds
+2026-01-01T21:57:19.506402+03:00 [INFO] Cycles completed: 1
+2026-01-01T21:57:19.506557+03:00 [INFO] Data Sources: 7
+2026-01-01T21:57:19.506747+03:00 [INFO] Processed events: 7
+2026-01-01T21:57:19.506922+03:00 [INFO] Errors: 0
+2026-01-01T21:57:19.507076+03:00 [INFO] ============================================================
+2026-01-01T21:57:19.507211+03:00 [INFO] ============================================================
+2026-01-01T21:57:19.507470+03:00 [INFO] SDEWS Runtime System Stopped
+2026-01-01T21:57:19.507719+03:00 [INFO] ============================================================
+2026-01-01T21:57:19.508097+03:00 [INFO] Sistem kapatildi
+2026-01-01T22:16:37.250919+03:00 [INFO] SDEWS System Initialization
+2026-01-01T22:16:37.251142+03:00 [INFO] Data source'lar baslatiliyor...
+2026-01-01T22:16:37.251315+03:00 [INFO] [OK] USGS Earthquake Source hazir
+2026-01-01T22:16:37.251472+03:00 [INFO] [OK] 6 OpenWeather Source hazir
+2026-01-01T22:16:37.251673+03:00 [INFO] Runtime system olusturuluyor...
+2026-01-01T22:16:37.251936+03:00 [INFO] DataSourceManager initialized with 7 sources
+2026-01-01T22:16:37.252108+03:00 [INFO] EventPipeline initialized with 3 consumers
+2026-01-01T22:16:37.252260+03:00 [INFO] RuntimeSystem initialized
+2026-01-01T22:16:37.252395+03:00 [INFO] [OK] Runtime System hazir
+2026-01-01T22:16:37.252525+03:00 [INFO] TEK CALISTIRMA MODU baslatiliyor
+2026-01-01T22:16:37.252657+03:00 [INFO] ============================================================
+2026-01-01T22:16:37.252782+03:00 [INFO] SDEWS Runtime System Starting
+2026-01-01T22:16:37.252910+03:00 [INFO] ============================================================
+2026-01-01T22:16:37.253035+03:00 [INFO] Starting 3 consumer workers
+2026-01-01T22:16:37.253525+03:00 [INFO] Consumer worker 0 started
+2026-01-01T22:16:37.253993+03:00 [INFO] Running single fetch-process cycle
+2026-01-01T22:16:37.253923+03:00 [INFO] Consumer worker 2 started
+2026-01-01T22:16:37.253714+03:00 [INFO] Consumer worker 1 started
+2026-01-01T22:16:37.254335+03:00 [INFO] Starting concurrent fetch from 7 sources
+2026-01-01T22:16:37.254757+03:00 [INFO] Fetching data from USGSEarthquakeSource...
+2026-01-01T22:16:37.254943+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-01T22:16:37.255250+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-01T22:16:37.255448+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-01T22:16:37.255745+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-01T22:16:37.255936+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-01T22:16:37.256291+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-01T22:16:38.120158+03:00 [INFO] Successfully fetched 76 items from USGSEarthquakeSource
+2026-01-01T22:16:38.786055+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-01T22:16:38.817748+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-01T22:16:38.831149+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-01T22:16:38.845436+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-01T22:16:38.849269+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-01T22:16:38.863409+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-01T22:16:38.863812+03:00 [INFO] All fetch operations completed
+2026-01-01T22:16:38.864304+03:00 [INFO] Added events from USGSEarthquakeSource to processing queue
+2026-01-01T22:16:38.864372+03:00 [INFO] Worker 1 processing event from USGSEarthquakeSource
+2026-01-01T22:16:38.864654+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-01T22:16:38.864730+03:00 [INFO] Worker 2 processing event from OpenWeatherSource
+2026-01-01T22:16:38.865054+03:00 [INFO] USGS'ten temizlenen event sayısı: 76
+2026-01-01T22:16:38.865293+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-01T22:16:38.865423+03:00 [INFO] Worker 0 processing event from OpenWeatherSource
+2026-01-01T22:16:38.865951+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-01T22:16:38.895310+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-01T22:16:38.896422+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-01T22:16:38.898144+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-01T22:16:38.899447+03:00 [INFO] Added 7 event batches to pipeline
+2026-01-01T22:16:39.046284+03:00 [INFO] Worker 2 processing event from OpenWeatherSource
+2026-01-01T22:16:39.046220+03:00 [INFO] Worker 1 processing event from OpenWeatherSource
+2026-01-01T22:16:39.046355+03:00 [INFO] Worker 0 processing event from OpenWeatherSource
+2026-01-01T22:16:39.314628+03:00 [INFO] Worker 2 processing event from OpenWeatherSource
+2026-01-01T22:16:39.405511+03:00 [INFO] All events processed
+2026-01-01T22:16:39.405894+03:00 [INFO] ============================================================
+2026-01-01T22:16:39.406230+03:00 [INFO] PROCESSING RESULTS
+2026-01-01T22:16:39.406470+03:00 [INFO] ============================================================
+2026-01-01T22:16:39.406683+03:00 [INFO] Result #1 - USGSEarthquakeSource: SUCCESS
+2026-01-01T22:16:39.406837+03:00 [INFO]   Events processed: 76
+2026-01-01T22:16:39.406982+03:00 [INFO]   Statistics:
+2026-01-01T22:16:39.407120+03:00 [INFO]     - Total events: 76
+2026-01-01T22:16:39.407264+03:00 [INFO]     - Max magnitude: 6.00
+2026-01-01T22:16:39.407390+03:00 [INFO]     - Avg magnitude: 3.54
+2026-01-01T22:16:39.407560+03:00 [INFO]   Saved to: earthquakes_1767294998.json
+2026-01-01T22:16:39.407706+03:00 [INFO] ------------------------------------------------------------
+2026-01-01T22:16:39.407871+03:00 [INFO] Result #2 - OpenWeatherSource: SUCCESS
+2026-01-01T22:16:39.408062+03:00 [INFO]   Events processed: 41
+2026-01-01T22:16:39.408213+03:00 [INFO]   Saved to: weather_all.json
+2026-01-01T22:16:39.408346+03:00 [INFO] ------------------------------------------------------------
+2026-01-01T22:16:39.408476+03:00 [INFO] Result #3 - OpenWeatherSource: SUCCESS
+2026-01-01T22:16:39.408606+03:00 [INFO]   Events processed: 41
+2026-01-01T22:16:39.408735+03:00 [INFO]   Saved to: weather_all.json
+2026-01-01T22:16:39.408856+03:00 [INFO] ------------------------------------------------------------
+2026-01-01T22:16:39.408979+03:00 [INFO] Result #4 - OpenWeatherSource: SUCCESS
+2026-01-01T22:16:39.409102+03:00 [INFO]   Events processed: 41
+2026-01-01T22:16:39.409224+03:00 [INFO]   Saved to: weather_all.json
+2026-01-01T22:16:39.409367+03:00 [INFO] ------------------------------------------------------------
+2026-01-01T22:16:39.409491+03:00 [INFO] Result #5 - OpenWeatherSource: SUCCESS
+2026-01-01T22:16:39.409615+03:00 [INFO]   Events processed: 41
+2026-01-01T22:16:39.409754+03:00 [INFO]   Saved to: weather_all.json
+2026-01-01T22:16:39.409877+03:00 [INFO] ------------------------------------------------------------
+2026-01-01T22:16:39.410002+03:00 [INFO] Result #6 - OpenWeatherSource: SUCCESS
+2026-01-01T22:16:39.410126+03:00 [INFO]   Events processed: 41
+2026-01-01T22:16:39.410246+03:00 [INFO]   Saved to: weather_all.json
+2026-01-01T22:16:39.410370+03:00 [INFO] ------------------------------------------------------------
+2026-01-01T22:16:39.410500+03:00 [INFO] Result #7 - OpenWeatherSource: SUCCESS
+2026-01-01T22:16:39.410647+03:00 [INFO]   Events processed: 41
+2026-01-01T22:16:39.410769+03:00 [INFO]   Saved to: weather_all.json
+2026-01-01T22:16:39.410892+03:00 [INFO] ------------------------------------------------------------
+2026-01-01T22:16:39.411015+03:00 [INFO] Stopping RuntimeSystem...
+2026-01-01T22:16:39.411233+03:00 [INFO] Stopping consumer workers...
+2026-01-01T22:16:39.411434+03:00 [INFO] Consumer worker 1 stopped
+2026-01-01T22:16:39.411480+03:00 [INFO] Consumer worker 0 stopped
+2026-01-01T22:16:39.411533+03:00 [INFO] Consumer worker 2 stopped
+2026-01-01T22:16:39.411901+03:00 [INFO] All consumer workers stopped
+2026-01-01T22:16:39.412097+03:00 [INFO] ============================================================
+2026-01-01T22:16:39.412247+03:00 [INFO] SYSTEM STATUS
+2026-01-01T22:16:39.412397+03:00 [INFO] ============================================================
+2026-01-01T22:16:39.412529+03:00 [INFO] Uptime: 2 seconds
+2026-01-01T22:16:39.412657+03:00 [INFO] Cycles completed: 1
+2026-01-01T22:16:39.412781+03:00 [INFO] Data Sources: 7
+2026-01-01T22:16:39.412906+03:00 [INFO] Processed events: 7
+2026-01-01T22:16:39.413040+03:00 [INFO] Errors: 0
+2026-01-01T22:16:39.413166+03:00 [INFO] ============================================================
+2026-01-01T22:16:39.413310+03:00 [INFO] ============================================================
+2026-01-01T22:16:39.413437+03:00 [INFO] SDEWS Runtime System Stopped
+2026-01-01T22:16:39.413590+03:00 [INFO] ============================================================
+2026-01-01T22:16:39.413877+03:00 [INFO] Sistem kapatildi
