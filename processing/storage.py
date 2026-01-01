@@ -64,6 +64,7 @@ def log_message(message, level="INFO"):
     """
     log_file = LOGS_DIR / "app.log"
     now = datetime.now(ZoneInfo("Europe/Istanbul")).isoformat()
+    now = now.replace("T", " T", 1)
 
     with log_file.open("a", encoding="utf-8") as f:
         f.write(f"{now} [{level}] {message}\n")
