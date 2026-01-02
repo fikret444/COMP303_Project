@@ -1237,8 +1237,8 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
-        // Harita başlat - Türkiye'ye odaklan
-        const map = L.map('map').setView([39.0, 35.0], 6);
+        // Harita başlat - Amerika kıtalarına odaklan
+        const map = L.map('map').setView([20.0, -100.0], 4);
 
         // OpenStreetMap tile layer
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -1250,11 +1250,19 @@
         let weatherMarkers = [];
         let eonetMarkers = [];
         let eonetLayers = []; // Polygon ve circle layer'ları için
+        let wildfireMarkers = [];
+        let stormMarkers = [];
+        let floodMarkers = [];
+        let volcanoMarkers = [];
         
         // Kategori filtreleme için veri saklama
         let allEarthquakeData = [];
         let allEONETData = [];
         let allWeatherData = [];
+        let allWildfireData = [];
+        let allStormData = [];
+        let allFloodData = [];
+        let allVolcanoData = [];
         
         // Aktif filtreler
         const activeFilters = {
@@ -1294,6 +1302,14 @@
             eonetMarkers = [];
             eonetLayers.forEach(layer => map.removeLayer(layer));
             eonetLayers = [];
+            wildfireMarkers.forEach(marker => map.removeLayer(marker));
+            wildfireMarkers = [];
+            stormMarkers.forEach(marker => map.removeLayer(marker));
+            stormMarkers = [];
+            floodMarkers.forEach(marker => map.removeLayer(marker));
+            floodMarkers = [];
+            volcanoMarkers.forEach(marker => map.removeLayer(marker));
+            volcanoMarkers = [];
         }
 
         function getEONETCategoryColor(categories) {
@@ -1435,8 +1451,8 @@
                 // Popup'ı en üstteki circle'a bağla
                 const topCircle = circleLayers[0];
                 const statusBadge = firstEvent.status === 'open' 
-                    ? '<span style="background: #e74c3c; color: white; padding: 3px 8px; border-radius: 3px; font-size: 0.8em;">AÇIK</span>'
-                    : '<span style="background: #95a5a6; color: white; padding: 3px 8px; border-radius: 3px; font-size: 0.8em;">KAPALI</span>';
+                    ? '<span style="background: #e74c3c; color: white; padding: 3px 8px; border-radius: 3px; font-size: 0.8em;" title="Olay hala devam ediyor">AKTİF</span>'
+                    : '<span style="background: #95a5a6; color: white; padding: 3px 8px; border-radius: 3px; font-size: 0.8em;" title="Olay sona ermiş">SONA ERDİ</span>';
                 
                 topCircle.bindPopup(`
                     <div style="min-width: 280px; padding: 10px;">
@@ -1449,7 +1465,7 @@
                         </div>
                         ${firstEvent.categories && firstEvent.categories.length > 0 ? `
                         <div style="margin-bottom: 10px;">
-                            <strong>Kategori:</strong> ${firstEvent.categories.join(', ')}
+                            <strong>Kategori:</strong> ${firstEvent.categories && firstEvent.categories.length > 0 ? (typeof firstEvent.categories[0] === 'object' ? firstEvent.categories.map(cat => cat.title || cat.id || 'Bilinmeyen').join(', ') : firstEvent.categories.join(', ')) : 'Bilinmeyen'}
                         </div>
                         ` : ''}
                         ${firstEvent.event_time ? `
@@ -1482,8 +1498,8 @@
                 
                 // Popup'ı polygon'a bağla
                 const statusBadge = firstEvent.status === 'open' 
-                    ? '<span style="background: #e74c3c; color: white; padding: 3px 8px; border-radius: 3px; font-size: 0.8em;">AÇIK</span>'
-                    : '<span style="background: #95a5a6; color: white; padding: 3px 8px; border-radius: 3px; font-size: 0.8em;">KAPALI</span>';
+                    ? '<span style="background: #e74c3c; color: white; padding: 3px 8px; border-radius: 3px; font-size: 0.8em;" title="Olay hala devam ediyor">AKTİF</span>'
+                    : '<span style="background: #95a5a6; color: white; padding: 3px 8px; border-radius: 3px; font-size: 0.8em;" title="Olay sona ermiş">SONA ERDİ</span>';
                 
                 polygon.bindPopup(`
                     <div style="min-width: 280px; padding: 10px;">
@@ -1496,7 +1512,7 @@
                         </div>
                         ${firstEvent.categories && firstEvent.categories.length > 0 ? `
                         <div style="margin-bottom: 10px;">
-                            <strong>Kategori:</strong> ${firstEvent.categories.join(', ')}
+                            <strong>Kategori:</strong> ${firstEvent.categories && firstEvent.categories.length > 0 ? (typeof firstEvent.categories[0] === 'object' ? firstEvent.categories.map(cat => cat.title || cat.id || 'Bilinmeyen').join(', ') : firstEvent.categories.join(', ')) : 'Bilinmeyen'}
                         </div>
                         ` : ''}
                         ${firstEvent.event_time ? `
@@ -1638,28 +1654,16 @@
             }
             
             if (catStr.includes('volcano') || catStr.includes('volkan')) {
-                // Volkan - Üçgen (dağ) (küçültülmüş)
+                // Volkan - Üçgen (dağ) (görseldeki gibi basit)
                 return `
                     <div style="
                         width: 0;
                         height: 0;
-                        border-left: 12px solid transparent;
-                        border-right: 12px solid transparent;
-                        border-bottom: 20px solid ${color};
+                        border-left: 10px solid transparent;
+                        border-right: 10px solid transparent;
+                        border-bottom: 18px solid ${color};
                         filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-                        position: relative;
-                    ">
-                        <div style="
-                            position: absolute;
-                            top: 20px;
-                            left: -2px;
-                            width: 0;
-                            height: 0;
-                            border-left: 14px solid transparent;
-                            border-right: 14px solid transparent;
-                            border-bottom: 2px solid white;
-                        "></div>
-                    </div>
+                    "></div>
                 `;
             }
             
@@ -1754,8 +1758,8 @@
             }).addTo(map);
 
             const statusBadge = event.status === 'open' 
-                ? '<span style="background: #e74c3c; color: white; padding: 3px 8px; border-radius: 3px; font-size: 0.8em;">AÇIK</span>'
-                : '<span style="background: #95a5a6; color: white; padding: 3px 8px; border-radius: 3px; font-size: 0.8em;">KAPALI</span>';
+                ? '<span style="background: #e74c3c; color: white; padding: 3px 8px; border-radius: 3px; font-size: 0.8em;" title="Olay hala devam ediyor">AKTİF</span>'
+                : '<span style="background: #95a5a6; color: white; padding: 3px 8px; border-radius: 3px; font-size: 0.8em;" title="Olay sona ermiş">SONA ERDİ</span>';
 
             marker.bindPopup(`
                 <div style="min-width: 280px; padding: 10px;">
@@ -1767,7 +1771,7 @@
                     </div>
                     ${event.categories && event.categories.length > 0 ? `
                     <div style="margin-bottom: 10px;">
-                        <strong>Kategori:</strong> ${event.categories.join(', ')}
+                        <strong>Kategori:</strong> ${event.categories && event.categories.length > 0 ? (typeof event.categories[0] === 'object' ? event.categories.map(cat => cat.title || cat.id || 'Bilinmeyen').join(', ') : event.categories.join(', ')) : 'Bilinmeyen'}
                     </div>
                     ` : ''}
                     ${event.event_time ? `
@@ -1790,8 +1794,8 @@
         }
 
         function loadEONETData() {
-            // EONET API'si birden fazla kategoriyi desteklemiyor, bu yüzden kategori parametresi göndermiyoruz
-            // Iceberg'leri client-side'da filtreleyeceğiz
+            // EONET verileri backend'de (pipeline) filtreleniyor - sadece Amerika kıtaları
+            // Iceberg'ler de backend'de filtreleniyor
             fetch('/api/eonet?status=open&days=30&limit=100')
                 .then(response => {
                     if (!response.ok) {
@@ -1849,19 +1853,19 @@
             const temp = weather.temperature || 0;
             const color = getTemperatureColor(temp);
             
-            // Hava durumu için kare şekli
+            // Hava durumu için kare şekli (diğer ikonlarla uyumlu boyut)
             const weatherShapeHTML = `
                 <div style="
-                    width: 40px;
-                    height: 40px;
+                    width: 28px;
+                    height: 28px;
                     background: ${color};
-                    border: 3px solid white;
-                    border-radius: 5px;
-                    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+                    border: 2px solid white;
+                    border-radius: 4px;
+                    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    font-size: 12px;
+                    font-size: 10px;
                     font-weight: bold;
                     color: white;
                 ">
@@ -1872,9 +1876,9 @@
             const weatherIcon = L.divIcon({
                 className: 'weather-marker',
                 html: weatherShapeHTML,
-                iconSize: [40, 40],
-                iconAnchor: [20, 40],
-                popupAnchor: [0, -40]
+                iconSize: [28, 28],
+                iconAnchor: [14, 28],
+                popupAnchor: [0, -28]
             });
 
             const marker = L.marker([weather.latitude, weather.longitude], {
@@ -1964,6 +1968,253 @@
             });
 
             weatherMarkers.push(marker);
+            return marker;
+        }
+
+        function addWildfireMarker(wildfire) {
+            if (!wildfire.latitude || !wildfire.longitude) {
+                return;
+            }
+            
+            const color = '#e74c3c'; // Kırmızı - yangın
+            const shapeHTML = `
+                <div style="
+                    width: 0;
+                    height: 0;
+                    border-left: 12px solid transparent;
+                    border-right: 12px solid transparent;
+                    border-bottom: 20px solid ${color};
+                    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+                "></div>
+            `;
+            
+            const wildfireIcon = L.divIcon({
+                className: 'wildfire-marker',
+                html: shapeHTML,
+                iconSize: [24, 20],
+                iconAnchor: [12, 20],
+                popupAnchor: [0, -20]
+            });
+
+            const marker = L.marker([wildfire.latitude, wildfire.longitude], {
+                icon: wildfireIcon
+            }).addTo(map);
+
+            const city = wildfire.city || 'Bilinmeyen';
+            const time = wildfire.time ? new Date(wildfire.time).toLocaleString('tr-TR') : 'Bilinmiyor';
+            
+            marker.bindPopup(`
+                <div style="min-width: 200px;">
+                    <h3 style="margin: 0 0 10px 0; color: ${color}; font-size: 1.2em; border-bottom: 2px solid ${color}; padding-bottom: 5px;">
+                        Orman Yangını
+                    </h3>
+                    <p style="margin: 5px 0;"><strong>Başlık:</strong><br>${wildfire.title || 'Bilinmiyor'}</p>
+                    <p style="margin: 5px 0;"><strong>Şehir:</strong><br>${city}</p>
+                    <p style="margin: 5px 0;"><strong>Zaman:</strong><br>${time}</p>
+                    ${wildfire.link ? `<p style="margin: 5px 0;"><a href="${wildfire.link}" target="_blank">Detaylar</a></p>` : ''}
+                </div>
+            `);
+
+            marker.on('click', function() {
+                map.setView([wildfire.latitude, wildfire.longitude], 10);
+            });
+
+            wildfireMarkers.push(marker);
+            return marker;
+        }
+
+        function addStormMarker(storm) {
+            if (!storm.latitude || !storm.longitude) {
+                return;
+            }
+            
+            const color = '#f39c12'; // Turuncu - fırtına
+            const shapeHTML = `
+                <div style="
+                    display: flex;
+                    gap: 2px;
+                ">
+                    <div style="
+                        width: 10px;
+                        height: 10px;
+                        background: ${color};
+                        border: 1px solid white;
+                        transform: rotate(45deg);
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+                    "></div>
+                    <div style="
+                        width: 10px;
+                        height: 10px;
+                        background: ${color};
+                        border: 1px solid white;
+                        transform: rotate(45deg);
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+                    "></div>
+                </div>
+            `;
+            
+            const stormIcon = L.divIcon({
+                className: 'storm-marker',
+                html: shapeHTML,
+                iconSize: [24, 10],
+                iconAnchor: [12, 10],
+                popupAnchor: [0, -10]
+            });
+
+            const marker = L.marker([storm.latitude, storm.longitude], {
+                icon: stormIcon
+            }).addTo(map);
+
+            const city = storm.city || 'Bilinmeyen';
+            const time = storm.time ? new Date(storm.time).toLocaleString('tr-TR') : 'Bilinmiyor';
+            
+            marker.bindPopup(`
+                <div style="min-width: 200px;">
+                    <h3 style="margin: 0 0 10px 0; color: ${color}; font-size: 1.2em; border-bottom: 2px solid ${color}; padding-bottom: 5px;">
+                        Fırtına
+                    </h3>
+                    <p style="margin: 5px 0;"><strong>Başlık:</strong><br>${storm.title || 'Bilinmiyor'}</p>
+                    <p style="margin: 5px 0;"><strong>Şehir:</strong><br>${city}</p>
+                    <p style="margin: 5px 0;"><strong>Zaman:</strong><br>${time}</p>
+                    ${storm.link ? `<p style="margin: 5px 0;"><a href="${storm.link}" target="_blank">Detaylar</a></p>` : ''}
+                </div>
+            `);
+
+            marker.on('click', function() {
+                map.setView([storm.latitude, storm.longitude], 10);
+            });
+
+            stormMarkers.push(marker);
+            return marker;
+        }
+
+        function addFloodMarker(flood) {
+            if (!flood.latitude || !flood.longitude) {
+                return;
+            }
+            
+            const riskLevel = flood.risk_level || 'unknown';
+            let color = '#3498db'; // Mavi - varsayılan
+            if (riskLevel === 'high') color = '#e74c3c'; // Kırmızı
+            else if (riskLevel === 'medium') color = '#f39c12'; // Turuncu
+            else color = '#3498db'; // Mavi - low
+            
+            const shapeHTML = `
+                <div style="
+                    width: 16px;
+                    height: 16px;
+                    background: repeating-linear-gradient(
+                        90deg,
+                        ${color} 0px,
+                        ${color} 2px,
+                        transparent 2px,
+                        transparent 4px
+                    );
+                    border: 2px solid white;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+                "></div>
+            `;
+            
+            const floodIcon = L.divIcon({
+                className: 'flood-marker',
+                html: shapeHTML,
+                iconSize: [20, 20],
+                iconAnchor: [10, 20],
+                popupAnchor: [0, -20]
+            });
+
+            const marker = L.marker([flood.latitude, flood.longitude], {
+                icon: floodIcon
+            }).addTo(map);
+
+            const location = flood.location || 'Bilinmeyen';
+            const time = flood.time ? new Date(flood.time).toLocaleString('tr-TR') : 'Bilinmiyor';
+            const discharge = flood.river_discharge !== undefined ? flood.river_discharge.toFixed(2) : 'N/A';
+            
+            marker.bindPopup(`
+                <div style="min-width: 200px;">
+                    <h3 style="margin: 0 0 10px 0; color: ${color}; font-size: 1.2em; border-bottom: 2px solid ${color}; padding-bottom: 5px;">
+                        Sel Riski
+                    </h3>
+                    <p style="margin: 5px 0;"><strong>Lokasyon:</strong><br>${location}</p>
+                    <p style="margin: 5px 0;"><strong>Risk Seviyesi:</strong><br><span style="color: ${color}; font-weight: bold;">${riskLevel.toUpperCase()}</span></p>
+                    <p style="margin: 5px 0;"><strong>Nehir Debi:</strong><br>${discharge} m³/s</p>
+                    <p style="margin: 5px 0;"><strong>Zaman:</strong><br>${time}</p>
+                </div>
+            `);
+
+            marker.on('click', function() {
+                map.setView([flood.latitude, flood.longitude], 10);
+            });
+
+            floodMarkers.push(marker);
+            return marker;
+        }
+
+        function addVolcanoMarker(volcano) {
+            if (!volcano.latitude || !volcano.longitude) {
+                return;
+            }
+            
+            const color = '#8e44ad'; // Mor - volkan
+            // Görseldeki gibi basit mor üçgen (dağ şekli)
+            const shapeHTML = `
+                <div style="
+                    width: 0;
+                    height: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-bottom: 18px solid ${color};
+                    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+                "></div>
+            `;
+            
+            const volcanoIcon = L.divIcon({
+                className: 'volcano-marker',
+                html: shapeHTML,
+                iconSize: [24, 24],
+                iconAnchor: [12, 24],
+                popupAnchor: [0, -24]
+            });
+
+            const marker = L.marker([volcano.latitude, volcano.longitude], {
+                icon: volcanoIcon
+            }).addTo(map);
+
+            const time = volcano.event_time || volcano.time ? new Date(volcano.event_time || volcano.time).toLocaleString('tr-TR') : 'Bilinmiyor';
+            
+            // Status belirleme: closed alanı varsa ve null değilse kapalı, aksi halde açık
+            // Ama tarih çok eskiyse (30 günden fazla) ve closed yoksa, muhtemelen sona ermiş
+            let status = volcano.status || 'unknown';
+            let isOpen = status === 'open' || (!volcano.closed && status !== 'closed');
+            if (isOpen && (volcano.event_time || volcano.time)) {
+                const eventDate = new Date(volcano.event_time || volcano.time);
+                const now = new Date();
+                const daysDiff = (now - eventDate) / (1000 * 60 * 60 * 24);
+                // 30 günden eski ve closed bilgisi yoksa, muhtemelen sona ermiş
+                if (daysDiff > 30 && !volcano.closed) {
+                    isOpen = false;
+                    status = 'closed';
+                }
+            }
+            
+            marker.bindPopup(`
+                <div style="min-width: 200px;">
+                    <h3 style="margin: 0 0 10px 0; color: ${color}; font-size: 1.2em; border-bottom: 2px solid ${color}; padding-bottom: 5px;">
+                        Volkan
+                    </h3>
+                    <p style="margin: 5px 0;"><strong>Başlık:</strong><br>${volcano.title || 'Bilinmiyor'}</p>
+                    <p style="margin: 5px 0;"><strong>Durum:</strong><br><span style="color: ${isOpen ? '#e74c3c' : '#95a5a6'}; font-weight: bold;" title="${isOpen ? 'Olay hala devam ediyor' : 'Olay sona ermiş'}">${isOpen ? 'AKTİF' : 'SONA ERDİ'}</span></p>
+                    <p style="margin: 5px 0;"><strong>Zaman:</strong><br>${time}</p>
+                    ${volcano.link ? `<p style="margin: 5px 0;"><a href="${volcano.link}" target="_blank">Detaylar</a></p>` : ''}
+                </div>
+            `);
+
+            marker.on('click', function() {
+                map.setView([volcano.latitude, volcano.longitude], 10);
+            });
+
+            volcanoMarkers.push(marker);
             return marker;
         }
 
@@ -2189,15 +2440,28 @@
                 .then(data => {
                     // Veriyi sakla - API'den gelen veri formatını kontrol et
                     // API formatı: {weather: [...], count: ..., timestamp: ...}
+                    let rawWeatherData = [];
                     if (data && data.weather && Array.isArray(data.weather)) {
-                        allWeatherData = data.weather;
+                        rawWeatherData = data.weather;
                     } else if (Array.isArray(data)) {
-                        allWeatherData = data;
-                    } else {
-                        allWeatherData = [];
+                        rawWeatherData = data;
                     }
                     
-                    console.log('Hava durumu verisi yüklendi:', allWeatherData.length, 'şehir');
+                    // Amerika kıtaları filtresi: [minLon, minLat, maxLon, maxLat] = [-180, -60, -30, 85]
+                    const americasBbox = {minLon: -180, minLat: -60, maxLon: -30, maxLat: 85};
+                    allWeatherData = rawWeatherData.filter(weather => {
+                        const lat = weather.latitude;
+                        const lon = weather.longitude;
+                        
+                        // Koordinat varsa ve Amerika kıtaları içindeyse ekle
+                        if (lat != null && lon != null) {
+                            return (americasBbox.minLat <= lat && lat <= americasBbox.maxLat &&
+                                    americasBbox.minLon <= lon && lon <= americasBbox.maxLon);
+                        }
+                        return false; // Koordinat yoksa atla
+                    });
+                    
+                    console.log('Hava durumu verisi yüklendi:', allWeatherData.length, 'şehir (Amerika kıtaları filtrelenmiş)');
                     console.log('Hava durumu verisi örnek:', allWeatherData[0]);
                     
                     // Filtreleme uygula (marker'lar eklenecek)
@@ -2207,6 +2471,63 @@
                     console.error('Hava durumu verisi yükleme hatası:', error);
                     allWeatherData = [];
                     applyFilters();
+                });
+        }
+
+        // Wildfire, Storm ve Flood verilerini yükle
+        function loadWildfireData() {
+            fetch('/api/wildfires')
+                .then(response => response.json())
+                .then(data => {
+                    allWildfireData = data.wildfires || [];
+                    console.log('Wildfire data loaded:', allWildfireData.length);
+                    applyFilters();
+                })
+                .catch(error => {
+                    console.error('Wildfire verisi yükleme hatası:', error);
+                    allWildfireData = [];
+                });
+        }
+
+        function loadStormData() {
+            fetch('/api/storms')
+                .then(response => response.json())
+                .then(data => {
+                    allStormData = data.storms || [];
+                    console.log('Storm data loaded:', allStormData.length);
+                    applyFilters();
+                })
+                .catch(error => {
+                    console.error('Storm verisi yükleme hatası:', error);
+                    allStormData = [];
+                });
+        }
+
+        function loadFloodData() {
+            fetch('/api/floods')
+                .then(response => response.json())
+                .then(data => {
+                    allFloodData = data.floods || [];
+                    console.log('Flood data loaded:', allFloodData.length);
+                    applyFilters();
+                })
+                .catch(error => {
+                    console.error('Flood verisi yükleme hatası:', error);
+                    allFloodData = [];
+                });
+        }
+
+        function loadVolcanoData() {
+            fetch('/api/volcanoes')
+                .then(response => response.json())
+                .then(data => {
+                    allVolcanoData = data.volcanoes || [];
+                    console.log('Volcano data loaded:', allVolcanoData.length);
+                    applyFilters();
+                })
+                .catch(error => {
+                    console.error('Volcano verisi yükleme hatası:', error);
+                    allVolcanoData = [];
                 });
         }
 
@@ -2534,7 +2855,15 @@
         
         function getEventCategory(event) {
             if (!event.categories || event.categories.length === 0) return 'other';
-            const categoriesStr = event.categories.join(',').toLowerCase();
+            
+            // Categories array'i object olabilir, string'e çevir
+            let categoriesStr = '';
+            if (typeof event.categories[0] === 'object') {
+                categoriesStr = event.categories.map(cat => (cat.title || cat.id || '')).join(',').toLowerCase();
+            } else {
+                categoriesStr = event.categories.join(',').toLowerCase();
+            }
+            
             if (categoriesStr.includes('wildfire') || categoriesStr.includes('yangın') || categoriesStr.includes('fire')) return 'wildfires';
             if (categoriesStr.includes('flood') || categoriesStr.includes('sel')) return 'floods';
             if (categoriesStr.includes('storm') || categoriesStr.includes('fırtına') || categoriesStr.includes('severe')) return 'storms';
@@ -2548,13 +2877,89 @@
             const container = document.getElementById('eonetList');
             container.innerHTML = '<h2 style="color: #9b59b6; margin-bottom: 15px; font-size: 1.2em; font-weight: 600; padding: 0 10px;">NASA EONET - Doğal Afetler</h2>';
             
+            // Tüm doğal afet verilerini birleştir (EONET + Volkan + Fırtına + Yangın + Sel)
+            const allNaturalEvents = [];
+            
+            // EONET verilerini ekle
             if (data && data.length > 0) {
+                allNaturalEvents.push(...data);
+            }
+            
+            // Volkan verilerini ekle (EONET formatına dönüştür)
+            if (allVolcanoData && allVolcanoData.length > 0) {
+                allVolcanoData.forEach(volcano => {
+                    allNaturalEvents.push({
+                        ...volcano,
+                        categories: volcano.categories || ['Volcanoes'],
+                        type: volcano.type || 'volcano',
+                        event_id: volcano.event_id || `volcano_${volcano.latitude}_${volcano.longitude}`
+                    });
+                });
+            }
+            
+            // Fırtına verilerini ekle (EONET formatına dönüştür)
+            if (allStormData && allStormData.length > 0) {
+                allStormData.forEach(storm => {
+                    // categories array'i object olabilir, string'e çevir
+                    let categories = storm.categories || [];
+                    if (categories.length > 0 && typeof categories[0] === 'object') {
+                        categories = categories.map(cat => cat.title || cat.id || 'Severe Storms');
+                    }
+                    allNaturalEvents.push({
+                        ...storm,
+                        categories: categories.length > 0 ? categories : ['Severe Storms'],
+                        type: storm.type || 'storm',
+                        event_id: storm.event_id || `storm_${storm.latitude}_${storm.longitude}`
+                    });
+                });
+            }
+            
+            // Yangın verilerini ekle (EONET formatına dönüştür)
+            if (allWildfireData && allWildfireData.length > 0) {
+                allWildfireData.forEach(wildfire => {
+                    // categories array'i object olabilir, string'e çevir
+                    let categories = wildfire.categories || [];
+                    if (categories.length > 0 && typeof categories[0] === 'object') {
+                        categories = categories.map(cat => cat.title || cat.id || 'Wildfires');
+                    } else if (categories.length === 0) {
+                        categories = ['Wildfires'];
+                    }
+                    allNaturalEvents.push({
+                        ...wildfire,
+                        categories: categories,
+                        type: wildfire.type || 'wildfire',
+                        event_id: wildfire.event_id || `wildfire_${wildfire.latitude}_${wildfire.longitude}`
+                    });
+                });
+            }
+            
+            // Sel verilerini ekle (EONET formatına dönüştür)
+            if (allFloodData && allFloodData.length > 0) {
+                allFloodData.forEach(flood => {
+                    allNaturalEvents.push({
+                        ...flood,
+                        categories: ['Floods'],
+                        type: flood.type || 'flood_risk',
+                        title: flood.location || 'Flood Risk',
+                        event_time: flood.time || flood.event_time,
+                        event_id: `flood_${flood.latitude}_${flood.longitude}_${flood.time || ''}`,
+                        status: flood.risk_level === 'high' ? 'open' : (flood.risk_level === 'medium' ? 'open' : 'closed')
+                    });
+                });
+            }
+            
+            if (allNaturalEvents.length > 0) {
                 // Kategoriye göre filtrele
-                const filteredData = data.filter(event => {
+                const filteredData = allNaturalEvents.filter(event => {
                     const category = getEventCategory(event);
+                    // Volkan kategorisi için özel kontrol - aktif filtre kapalıysa gösterilmemeli
+                    if (category === 'volcanoes') {
+                        return activeFilters.volcanoes;
+                    }
+                    // Diğer kategoriler için normal filtreleme
                     return activeFilters[category] || (category === 'other' && (
                         activeFilters.wildfires || activeFilters.floods || activeFilters.storms || 
-                        activeFilters.volcanoes || activeFilters.droughts || activeFilters.snow
+                        activeFilters.droughts || activeFilters.snow
                     ));
                 });
                 
@@ -2570,39 +2975,119 @@
                 Object.values(uniqueEvents).forEach((event, index) => {
                     const color = getEONETCategoryColor(event.categories);
                     const icon = getEONETCategoryIcon(event.categories);
-                    const isOpen = event.status === 'open';
+                    
+                    // Status belirleme: closed alanı varsa ve null değilse kapalı, aksi halde açık
+                    // Ama tarih çok eskiyse (30 günden fazla) ve closed yoksa, muhtemelen sona ermiş
+                    let isOpen = event.status === 'open' || (!event.closed && !event.status);
+                    if (isOpen && event.event_time) {
+                        const eventDate = new Date(event.event_time);
+                        const now = new Date();
+                        const daysDiff = (now - eventDate) / (1000 * 60 * 60 * 24);
+                        // 30 günden eski ve closed bilgisi yoksa, muhtemelen sona ermiş
+                        if (daysDiff > 30 && !event.closed) {
+                            isOpen = false;
+                        }
+                    }
                     
                     const item = document.createElement('div');
                     item.className = 'alert-item' + (isOpen ? ' high' : '');
                     item.onclick = () => {
                         if (event.latitude && event.longitude) {
                             map.setView([event.latitude, event.longitude], 8);
-                            // İlgili marker'ı bul ve popup aç
+                            // İlgili marker'ı bul ve popup aç - tüm marker tiplerini kontrol et
+                            let found = false;
+                            
+                            // EONET marker'ları kontrol et
                             eonetMarkers.forEach(marker => {
                                 const lat = marker.getLatLng().lat;
                                 const lng = marker.getLatLng().lng;
                                 if (Math.abs(lat - event.latitude) < 0.1 && 
                                     Math.abs(lng - event.longitude) < 0.1) {
                                     marker.openPopup();
+                                    found = true;
                                 }
                             });
+                            
+                            // Volkan marker'ları kontrol et
+                            if (!found) {
+                                volcanoMarkers.forEach(marker => {
+                                    const lat = marker.getLatLng().lat;
+                                    const lng = marker.getLatLng().lng;
+                                    if (Math.abs(lat - event.latitude) < 0.1 && 
+                                        Math.abs(lng - event.longitude) < 0.1) {
+                                        marker.openPopup();
+                                        found = true;
+                                    }
+                                });
+                            }
+                            
+                            // Fırtına marker'ları kontrol et
+                            if (!found) {
+                                stormMarkers.forEach(marker => {
+                                    const lat = marker.getLatLng().lat;
+                                    const lng = marker.getLatLng().lng;
+                                    if (Math.abs(lat - event.latitude) < 0.1 && 
+                                        Math.abs(lng - event.longitude) < 0.1) {
+                                        marker.openPopup();
+                                        found = true;
+                                    }
+                                });
+                            }
+                            
+                            // Yangın marker'ları kontrol et
+                            if (!found) {
+                                wildfireMarkers.forEach(marker => {
+                                    const lat = marker.getLatLng().lat;
+                                    const lng = marker.getLatLng().lng;
+                                    if (Math.abs(lat - event.latitude) < 0.1 && 
+                                        Math.abs(lng - event.longitude) < 0.1) {
+                                        marker.openPopup();
+                                        found = true;
+                                    }
+                                });
+                            }
+                            
+                            // Sel marker'ları kontrol et
+                            if (!found) {
+                                floodMarkers.forEach(marker => {
+                                    const lat = marker.getLatLng().lat;
+                                    const lng = marker.getLatLng().lng;
+                                    if (Math.abs(lat - event.latitude) < 0.1 && 
+                                        Math.abs(lng - event.longitude) < 0.1) {
+                                        marker.openPopup();
+                                    }
+                                });
+                            }
                         }
                     };
                     
-                    const categoriesText = event.categories && event.categories.length > 0 
-                        ? event.categories.join(', ') 
-                        : 'Bilinmeyen';
+                    // Categories'i string'e çevir (object olabilir)
+                    let categoriesText = 'Bilinmeyen';
+                    if (event.categories && event.categories.length > 0) {
+                        if (typeof event.categories[0] === 'object') {
+                            categoriesText = event.categories.map(cat => cat.title || cat.id || 'Bilinmeyen').join(', ');
+                        } else {
+                            categoriesText = event.categories.join(', ');
+                        }
+                    }
+                    
+                    // Durum açıklaması
+                    const statusText = isOpen ? 'AKTİF' : 'SONA ERDİ';
+                    const statusTooltip = isOpen ? 'Olay hala devam ediyor' : 'Olay sona ermiş';
                     
                     item.innerHTML = `
                         <div class="alert-header">
                             <span class="alert-title">${icon} ${event.title || 'Doğal Afet'}</span>
-                            <span class="alert-date" style="background: ${isOpen ? '#e74c3c' : '#95a5a6'}; color: white; padding: 2px 8px; border-radius: 3px; font-size: 0.75em;">
-                                ${isOpen ? 'AÇIK' : 'KAPALI'}
+                            <span class="alert-date" 
+                                  style="background: ${isOpen ? '#e74c3c' : '#95a5a6'}; color: white; padding: 2px 8px; border-radius: 3px; font-size: 0.75em; cursor: help;" 
+                                  title="${statusTooltip}">
+                                ${statusText}
                             </span>
                         </div>
                         <div class="alert-message">
                             <strong>Kategori:</strong> ${categoriesText}
                             ${event.event_time ? `<br><strong>Zaman:</strong> ${new Date(event.event_time).toLocaleString('tr-TR')}` : ''}
+                            ${event.risk_level ? `<br><strong>Risk Seviyesi:</strong> ${event.risk_level.toUpperCase()}` : ''}
                         </div>
                     `;
                     container.appendChild(item);
@@ -2626,6 +3111,12 @@
             eonetMarkers = [];
             eonetLayers.forEach(layer => map.removeLayer(layer));
             eonetLayers = [];
+            wildfireMarkers.forEach(marker => map.removeLayer(marker));
+            wildfireMarkers = [];
+            stormMarkers.forEach(marker => map.removeLayer(marker));
+            stormMarkers = [];
+            floodMarkers.forEach(marker => map.removeLayer(marker));
+            floodMarkers = [];
             
             // Depremleri göster/gizle
             if (activeFilters.earthquakes && allEarthquakeData.length > 0) {
@@ -2668,14 +3159,59 @@
                 console.log('Hava durumu filtresi kapalı');
             }
             
+            // Wildfire verilerini göster/gizle
+            if (activeFilters.wildfires && allWildfireData.length > 0) {
+                allWildfireData.forEach(wildfire => {
+                    if (wildfire.latitude && wildfire.longitude) {
+                        addWildfireMarker(wildfire);
+                    }
+                });
+                console.log('Wildfire marker\'ları eklendi:', wildfireMarkers.length);
+            }
+            
+            // Storm verilerini göster/gizle
+            if (activeFilters.storms && allStormData.length > 0) {
+                allStormData.forEach(storm => {
+                    if (storm.latitude && storm.longitude) {
+                        addStormMarker(storm);
+                    }
+                });
+                console.log('Storm marker\'ları eklendi:', stormMarkers.length);
+            }
+            
+            // Flood verilerini göster/gizle
+            if (activeFilters.floods && allFloodData.length > 0) {
+                allFloodData.forEach(flood => {
+                    if (flood.latitude && flood.longitude) {
+                        addFloodMarker(flood);
+                    }
+                });
+                console.log('Flood marker\'ları eklendi:', floodMarkers.length);
+            }
+            
+            // Volcano verilerini göster/gizle
+            if (activeFilters.volcanoes && allVolcanoData.length > 0) {
+                allVolcanoData.forEach(volcano => {
+                    if (volcano.latitude && volcano.longitude) {
+                        addVolcanoMarker(volcano);
+                    }
+                });
+                console.log('Volcano marker\'ları eklendi:', volcanoMarkers.length);
+            }
+            
             // EONET olaylarını filtrele ve göster
             if (allEONETData.length > 0) {
                 // Kategoriye göre filtrele
                 const filteredEONET = allEONETData.filter(event => {
                     const category = getEventCategory(event);
+                    // Volkan kategorisi için özel kontrol - aktif filtre kapalıysa gösterilmemeli
+                    if (category === 'volcanoes') {
+                        return activeFilters.volcanoes;
+                    }
+                    // Diğer kategoriler için normal filtreleme
                     return activeFilters[category] || (category === 'other' && (
                         activeFilters.wildfires || activeFilters.floods || activeFilters.storms || 
-                        activeFilters.volcanoes || activeFilters.droughts || activeFilters.snow
+                        activeFilters.droughts || activeFilters.snow
                     ));
                 });
                 
@@ -2697,9 +3233,10 @@
                     });
                 }
                 
-                // Sidebar listesini de güncelle
-                updateEONETSidebarList(allEONETData);
             }
+            
+            // Sidebar listesini her zaman güncelle (tüm veri kaynaklarını birleştirerek)
+            updateEONETSidebarList(allEONETData);
         }
 
         // Accordion toggle fonksiyonu
@@ -2720,6 +3257,10 @@
         loadData();
         loadWeatherData();
         loadEONETData();
+        loadWildfireData();
+        loadStormData();
+        loadFloodData();
+        loadVolcanoData();
         loadAlerts();
         loadNews();
         updateDate();
@@ -2730,6 +3271,10 @@
             loadData();
             loadWeatherData();
             loadEONETData();
+            loadWildfireData();
+            loadStormData();
+            loadFloodData();
+            loadVolcanoData();
             loadAlerts();
             loadNews();
             // Eğer weather window açıksa, içeriğini de güncelle

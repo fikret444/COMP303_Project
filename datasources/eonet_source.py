@@ -1,145 +1,196 @@
+# datasources/eonet_source.py
+
+from __future__ import annotations
+
 import requests
 from datetime import datetime
+from typing import List, Optional
 
-from datasources.base_source import DataSource, DataSourceError
-from models import NaturalEvent
+from datasources.base_source import DataSource, DataSourceError, Event
 
 
 class EONETSource(DataSource):
-    BASE_URL = "https://eonet.gsfc.nasa.gov/api/v3/events"
-    GEOJSON_URL = "https://eonet.gsfc.nasa.gov/api/v3/events/geojson"
+    """
+    NASA EONET v3 API'den tüm doğal afet olaylarını çeker (genel source).
+    
+    Bu sınıf tüm kategorileri çeker (wildfires, storms, volcanoes, floods, vb.)
+    ve genel bir natural_event formatında döndürür.
+    
+    Doküman:
+      https://eonet.gsfc.nasa.gov/docs/v3
+    """
 
-    def __init__(self, status="open", days=30, limit=50, category_ids=None, bbox=None):
+    BASE_URL = "https://eonet.gsfc.nasa.gov/api/v3/events"
+
+    def __init__(
+        self,
+        status: str = "open",
+        days: int = 30,
+        limit: int = 100,
+        bbox: Optional[List[float]] = None,
+    ):
+        """
+        status: 'open' | 'closed' | 'all'
+        days  : Kaç gün geriye dönük olaylar
+        limit : Maksimum olay sayısı
+        bbox  : [minLon, minLat, maxLon, maxLat] formatında bounding box (opsiyonel)
+                EONET API'si için "minLon,maxLat,maxLon,minLat" formatına dönüştürülür
+        """
         self.status = status
         self.days = days
         self.limit = limit
-        self.category_ids = category_ids or []
-        self.bbox = bbox  # IMPORTANT: [upperLeftLon, upperLeftLat, lowerRightLon, lowerRightLat]
+        self.bbox = bbox
+
+    def _convert_bbox_to_string(self, bbox: List[float]) -> str:
+        """
+        Bbox'ı EONET API formatına çevirir.
+        Input: [minLon, minLat, maxLon, maxLat]
+        Output: "minLon,maxLat,maxLon,minLat"
+        """
+        if len(bbox) != 4:
+            raise ValueError("Bbox must have 4 elements: [minLon, minLat, maxLon, maxLat]")
+        min_lon, min_lat, max_lon, max_lat = bbox
+        return f"{min_lon},{max_lat},{max_lon},{min_lat}"
 
     def fetch_raw(self):
+        """
+        EONET'ten tüm kategorilerdeki olayları JSON olarak çeker.
+        """
         params = {
             "status": self.status,
-            "limit": self.limit
+            "days": self.days,
+            "limit": self.limit,
         }
 
-        if self.days is not None:
-            params["days"] = self.days
-
-        # EONET API birden fazla kategoriyi virgülle ayırarak desteklemiyor
-        # Sadece tek kategori gönderilebilir, bu yüzden kategori parametresini kaldırıyoruz
-        # Filtreleme client-side'da yapılacak
-        # if self.category_ids:
-        #     params["category"] = ",".join(self.category_ids)
-
-        if self.bbox and len(self.bbox) == 4:
-            params["bbox"] = ",".join(str(x) for x in self.bbox)
-
-        # If bbox is used, EONET expects it on the GeoJSON endpoint
-        url = self.GEOJSON_URL if self.bbox else self.BASE_URL
+        # Bbox varsa string formatına çevir ve ekle
+        if self.bbox:
+            bbox_str = self._convert_bbox_to_string(self.bbox)
+            params["bbox"] = bbox_str
 
         try:
-            r = requests.get(url, params=params, timeout=15)
+            r = requests.get(self.BASE_URL, params=params, timeout=15)
             r.raise_for_status()
             return r.json()
         except Exception as e:
             raise DataSourceError(f"EONET fetch failed: {e}")
 
-    def parse(self, raw):
-        result = []
-        fetch_time = datetime.now().isoformat(timespec="seconds")
+    def parse(self, raw) -> List[Event]:
+        """
+        EONET Event nesnelerini şu sade formata çeviriyoruz:
 
-        # CASE 1: GeoJSON response (bbox)
-        if "features" in raw:
-            for f in raw.get("features", []):
-                props = f.get("properties", {})
-                geom = f.get("geometry", {})
-                coords = geom.get("coordinates", None)
+        {
+            "type": "natural_event",
+            "source": "NASA EONET",
+            "event_id": ...,
+            "title": ...,
+            "description": ...,
+            "time": datetime | None,
+            "event_time": datetime | None,
+            "latitude": float | None,
+            "longitude": float | None,
+            "categories": [...],
+            "category_ids": [...],
+            "category_titles": [...],
+            "closed": ...,
+            "link": ...,
+            "status": "open" | "closed",
+            "geometry_type": "Point" | "Polygon" | ...
+        }
+        """
 
-                title = props.get("title")
-                event_id = props.get("id")
-                link = props.get("link")
-                status = "closed" if props.get("closed") else "open"
+        events_raw = raw.get("events", [])
+        result: List[Event] = []
 
-                categories = []
-                for c in props.get("categories", []):
-                    t = c.get("title")
-                    if t:
-                        categories.append(t)
-
-                lat = None
-                lon = None
-                g_type = geom.get("type")
-
-                # GeoJSON Point -> [lon, lat]
-                if g_type == "Point" and isinstance(coords, list) and len(coords) >= 2:
-                    lon, lat = coords[0], coords[1]
-
-                # Keep polygon simple
-                result.append(NaturalEvent(
-                    type="natural_event",
-                    source="NASA EONET",
-                    event_id=event_id,
-                    title=title,
-                    status=status,
-                    time=fetch_time,
-                    event_time=props.get("date"),
-                    categories=categories,
-                    link=link,
-                    latitude=lat,
-                    longitude=lon,
-                    geometry_type=g_type
-                ))
-
-            return result
-
-        # CASE 2: Normal /events response (no bbox)
-        events = raw.get("events", [])
-        for ev in events:
-            event_id = ev.get("id")
-            title = ev.get("title")
-            link = ev.get("link")
-            status = "closed" if ev.get("closed") else "open"
-
-            categories = [c.get("title") for c in ev.get("categories", []) if c.get("title")]
-            geometries = ev.get("geometry", [])
-
-            if not geometries:
-                result.append(NaturalEvent(
-                    type="natural_event",
-                    source="NASA EONET",
-                    event_id=event_id,
-                    title=title,
-                    status=status,
-                    time=fetch_time,
-                    categories=categories,
-                    link=link
-                ))
+        for ev in events_raw:
+            ev_id = ev.get("id")
+            if not ev_id:
                 continue
 
-            for g in geometries:
-                g_type = g.get("type")
-                coords = g.get("coordinates")
-                event_time = g.get("date")
+            title = ev.get("title", "")
+            description = ev.get("description")
+            link = ev.get("link", "")
 
-                lat = None
-                lon = None
-                if g_type == "Point" and isinstance(coords, list) and len(coords) >= 2:
-                    lon, lat = coords[0], coords[1]
+            # Geometrileri işle
+            geometries = ev.get("geometry", [])
+            if not geometries:
+                continue
 
-                result.append(NaturalEvent(
-                    type="natural_event",
-                    source="NASA EONET",
-                    event_id=event_id,
-                    title=title,
-                    status=status,
-                    time=fetch_time,
-                    event_time=event_time,
-                    categories=categories,
-                    link=link,
-                    latitude=lat,
-                    longitude=lon,
-                    geometry_type=g_type
-                ))
+            # İlk geometri (başlangıç noktası)
+            first_geom = geometries[0]
+            first_date_str = first_geom.get("date")
+            coordinates = first_geom.get("coordinates", [])
+            geom_type = first_geom.get("type", "Point")
+
+            # Koordinatları çıkar
+            lon = None
+            lat = None
+            
+            if geom_type == "Point" and len(coordinates) >= 2:
+                lon = coordinates[0]
+                lat = coordinates[1]
+            elif geom_type in ["Polygon", "LineString"] and len(coordinates) > 0:
+                # İlk noktayı al
+                first_point = coordinates[0] if isinstance(coordinates[0], list) else coordinates
+                if len(first_point) >= 2:
+                    lon = first_point[0]
+                    lat = first_point[1]
+
+            # Tarihleri parse et
+            event_time = None
+            time_str = None
+            if first_date_str:
+                try:
+                    event_time = datetime.fromisoformat(first_date_str.replace("Z", "+00:00"))
+                    time_str = event_time.isoformat()
+                except:
+                    pass
+
+            # Son geometri (kapanış tarihi)
+            closed_date = None
+            if len(geometries) > 1:
+                last_geom = geometries[-1]
+                closed_date_str = last_geom.get("date")
+                if closed_date_str:
+                    try:
+                        closed_date = datetime.fromisoformat(closed_date_str.replace("Z", "+00:00"))
+                    except:
+                        pass
+
+            # Kategorileri çıkar
+            categories = ev.get("categories", [])
+            category_ids = []
+            category_titles = []
+            for cat in categories:
+                if isinstance(cat, dict):
+                    cid = cat.get("id", "")
+                    ctitle = cat.get("title", "")
+                    if cid:
+                        category_ids.append(cid)
+                    if ctitle:
+                        category_titles.append(ctitle)
+
+            # Status belirle
+            status = "closed" if closed_date else "open"
+
+            event: Event = {
+                "type": "natural_event",
+                "source": "NASA EONET",
+                "event_id": f"EONET_{ev_id}",
+                "title": title,
+                "description": description,
+                "time": time_str,
+                "event_time": time_str,
+                "latitude": lat,
+                "longitude": lon,
+                "categories": category_titles,
+                "category_ids": category_ids,
+                "category_titles": category_titles,
+                "closed": closed_date.isoformat() if closed_date else None,
+                "link": link,
+                "status": status,
+                "geometry_type": geom_type,
+            }
+
+            result.append(event)
 
         return result
-

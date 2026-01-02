@@ -56,3 +56,4 @@ if len(flood_events) == 0 and len(drought_events) == 0 and len(snow_events) == 0
     print("\n⚠️  Bu kategorilerde şu anda açık (open) durumda olay yok.")
     print("Bu normal bir durum - EONET sadece aktif/raporlanan olayları gösterir.")
 
+

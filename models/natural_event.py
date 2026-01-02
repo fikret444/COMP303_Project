@@ -61,3 +61,4 @@ class NaturalEvent:
             geometry_type=data_.get("geometry_type")
         )
 
+

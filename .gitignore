@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Data files (otomatik oluşturulan)
+data/*.json
+data/*.csv
+data/*.txt
+!data/.gitkeep
+
+# Log files
+logs/*.log
+logs/*.txt
+!logs/.gitkeep
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Project specific
+*.bak
+*.tmp
+*.cache
+
