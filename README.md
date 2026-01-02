@@ -43,7 +43,7 @@ COMP303_Project/
 │   └── cleaned_earthquake.py
 ├── processing/           # Efe - Data Processing
 │   ├── storage.py
-│   ├── data_processing.py
+│   ├── earthquake_processing.py
 │   └── analytics.py
 ├── pipeline/             # Fikret - Concurrency & Pipeline
 │   ├── data_source_manager.py

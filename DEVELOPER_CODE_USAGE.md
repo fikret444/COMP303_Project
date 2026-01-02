@@ -176,7 +176,7 @@ return Weather(
 )
 ```
 
-#### 2.3 `processing/data_processing.py` (Efe'nin Kodu)
+#### 2.3 `processing/earthquake_processing.py` (Efe'nin Kodu)
 ```python
 # Satır 3: Deprem modelleri import ediliyor
 from models import RawEarthquake, CleanedEarthquake
@@ -215,7 +215,7 @@ from .natural_event import NaturalEvent
 
 ### Dosyaları:
 - `processing/storage.py` - Veri saklama ve loglama
-- `processing/data_processing.py` - Veri temizleme ve dönüştürme
+- `processing/earthquake_processing.py` - Veri temizleme ve dönüştürme
 - `processing/analytics.py` - Veri analizi ve istatistikler
 - `pipeline/fetch_wildfires.py` - Yangın verisi işleme
 - `pipeline/fetch_storms.py` - Fırtına verisi işleme
@@ -244,7 +244,7 @@ log_message("Data source'lar baslatiliyor...", "INFO")
 # Satır 12-17: Processing modülleri import ediliyor
 from processing import (
     log_message,
-    clean_usgs_earthquake_events,  # Efe'nin data_processing.py'den
+    clean_usgs_earthquake_events,  # Efe'nin earthquake_processing.py'den
     save_events_to_json,  # Efe'nin storage.py'den
     compute_basic_stats  # Efe'nin analytics.py'den
 )
@@ -332,7 +332,7 @@ raw = src.fetch_raw()
 events = src.parse(raw)
 ```
 
-#### 3.7 `processing/data_processing.py` (Efe'nin Kendi Dosyası)
+#### 3.7 `processing/earthquake_processing.py` (Efe'nin Kendi Dosyası)
 ```python
 # Satır 2: Kendi storage modülünü kullanıyor
 from .storage import log_message
