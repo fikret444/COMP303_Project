@@ -1,7 +1,9 @@
 import csv
 import json
+import glob
+import os
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
 # Project root'u bul (src klasörünün bir üstü)
@@ -14,6 +16,49 @@ LOGS_DIR = ROOT_DIR / "logs"
 # Create if folders don't exist
 DATA_DIR.mkdir(exist_ok=True)
 LOGS_DIR.mkdir(exist_ok=True)
+
+
+def cleanup_old_files():
+    """
+    Eski dosyaları temizle:
+    - earthquakes_*.json dosyalarından en son 5'ini tut, diğerlerini sil
+    - weather_all.json 10 MB'dan büyükse temizle
+    - app.log 5 MB'dan büyükse temizle
+    """
+    # Eski earthquake dosyalarını temizle (en son 5'ini tut)
+    earthquake_pattern = str(DATA_DIR / "earthquakes_*.json")
+    earthquake_files = glob.glob(earthquake_pattern)
+    if len(earthquake_files) > 5:
+        # En son oluşturulan 5 dosyayı tut
+        earthquake_files.sort(key=os.path.getctime, reverse=True)
+        for old_file in earthquake_files[5:]:
+            try:
+                os.remove(old_file)
+                log_message(f"Eski dosya temizlendi: {os.path.basename(old_file)}", "INFO")
+            except Exception as e:
+                log_message(f"Eski dosya silinemedi {old_file}: {e}", "WARNING")
+    
+    # weather_all.json boyut kontrolü (10 MB'dan büyükse temizle)
+    weather_file = DATA_DIR / "weather_all.json"
+    if weather_file.exists():
+        size_mb = weather_file.stat().st_size / (1024 * 1024)
+        if size_mb > 10:
+            try:
+                weather_file.unlink()
+                log_message(f"weather_all.json temizlendi (boyut: {size_mb:.2f} MB)", "INFO")
+            except Exception as e:
+                log_message(f"weather_all.json silinemedi: {e}", "WARNING")
+    
+    # app.log boyut kontrolü (5 MB'dan büyükse temizle)
+    log_file = LOGS_DIR / "app.log"
+    if log_file.exists():
+        size_mb = log_file.stat().st_size / (1024 * 1024)
+        if size_mb > 5:
+            try:
+                log_file.unlink()
+                log_message(f"app.log temizlendi (boyut: {size_mb:.2f} MB)", "INFO")
+            except Exception as e:
+                log_message(f"app.log silinemedi: {e}", "WARNING")
 
 
 def save_events_to_csv(events, filename="events.csv", append=True):

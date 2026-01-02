@@ -9,6 +9,7 @@ import os
 import glob
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from processing.storage import cleanup_old_files
 
 # Scraping modülü - artık BeautifulSoup4 ile de çalışır
 try:
@@ -1213,6 +1214,12 @@ def api_eonet():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
+    # Başlangıçta eski dosyaları temizle
+    try:
+        cleanup_old_files()
+    except Exception as e:
+        print(f"Temizleme hatası (devam ediliyor): {e}")
+    
     print("\n" + "="*60)
     print("  🌍 SDEWS WEB DASHBOARD")
     print("="*60)

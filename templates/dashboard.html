@@ -947,43 +947,6 @@
             border-bottom: 14px solid #8e44ad;
         }
         
-        /* Kuraklık - Çizgiler */
-        .icon-drought {
-            width: 16px;
-            height: 16px;
-            background: repeating-linear-gradient(
-                90deg,
-                #95a5a6 0px,
-                #95a5a6 2px,
-                transparent 2px,
-                transparent 4px
-            );
-        }
-        
-        /* Kar - Yıldız şekli */
-        .icon-snow {
-            width: 16px;
-            height: 16px;
-            position: relative;
-        }
-        .icon-snow::before,
-        .icon-snow::after {
-            content: '';
-            position: absolute;
-            width: 2px;
-            height: 16px;
-            background: #3498db;
-            left: 50%;
-            top: 0;
-            transform: translateX(-50%);
-        }
-        .icon-snow::after {
-            width: 16px;
-            height: 2px;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-        }
         
         /* Hava Durumu - Dikdörtgen (termometre) */
         .icon-weather {
@@ -1075,20 +1038,6 @@
                             <label for="filter-volcanoes">
                                 <span class="category-icon icon-volcano"></span>
                                 <span>Volkanlar</span>
-                            </label>
-                        </div>
-                        <div class="category-filter-item active">
-                            <input type="checkbox" id="filter-droughts" checked onchange="updateMapFilters()">
-                            <label for="filter-droughts">
-                                <span class="category-icon icon-drought"></span>
-                                <span>Kuraklık</span>
-                            </label>
-                        </div>
-                        <div class="category-filter-item active">
-                            <input type="checkbox" id="filter-snow" checked onchange="updateMapFilters()">
-                            <label for="filter-snow">
-                                <span class="category-icon icon-snow"></span>
-                                <span>Kar</span>
                             </label>
                         </div>
                         <div class="category-filter-item active">
@@ -1271,8 +1220,6 @@
             floods: true,
             storms: true,
             volcanoes: true,
-            droughts: true,
-            snow: true,
             weather: true
         };
 
@@ -1320,8 +1267,6 @@
             if (catStr.includes('flood') || catStr.includes('sel')) return '#3498db';  // Mavi
             if (catStr.includes('storm') || catStr.includes('fırtına')) return '#f39c12';  // Turuncu
             if (catStr.includes('volcano') || catStr.includes('volkan')) return '#8e44ad';  // Mor
-            if (catStr.includes('drought') || catStr.includes('kuraklık')) return '#d35400';  // Kahverengi
-            if (catStr.includes('snow') || catStr.includes('kar')) return '#ecf0f1';  // Açık gri
             return '#9b59b6';  // Varsayılan mor
         }
 
@@ -1333,8 +1278,6 @@
             if (catStr.includes('flood') || catStr.includes('sel')) return '<span class="category-icon icon-flood"></span>';
             if (catStr.includes('storm') || catStr.includes('fırtına')) return '<span class="category-icon icon-storm"></span>';
             if (catStr.includes('volcano') || catStr.includes('volkan')) return '<span class="category-icon icon-volcano"></span>';
-            if (catStr.includes('drought') || catStr.includes('kuraklık')) return '<span class="category-icon icon-drought"></span>';
-            if (catStr.includes('snow') || catStr.includes('kar')) return '<span class="category-icon icon-snow"></span>';
             return '<span class="category-icon icon-earthquake"></span>';
         }
 
@@ -1450,7 +1393,23 @@
                 
                 // Popup'ı en üstteki circle'a bağla
                 const topCircle = circleLayers[0];
-                const statusBadge = firstEvent.status === 'open' 
+                // Status belirleme: Sadece bugün gelen veriler AKTİF, diğerleri SONA ERDİ
+                let isEventOpen = false;
+                if (firstEvent.event_time || firstEvent.time) {
+                    const eventDate = new Date(firstEvent.event_time || firstEvent.time);
+                    const now = new Date();
+                    
+                    // Tarihleri sadece gün bazında karşılaştır (saat, dakika, saniye önemli değil)
+                    const eventDay = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate());
+                    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                    
+                    // Sadece bugün gelen veriler AKTİF
+                    isEventOpen = eventDay.getTime() === today.getTime();
+                } else {
+                    // Tarih bilgisi yoksa, closed alanına bak
+                    isEventOpen = firstEvent.status === 'open' || (!firstEvent.closed && firstEvent.status !== 'closed');
+                }
+                const statusBadge = isEventOpen 
                     ? '<span style="background: #e74c3c; color: white; padding: 3px 8px; border-radius: 3px; font-size: 0.8em;" title="Olay hala devam ediyor">AKTİF</span>'
                     : '<span style="background: #95a5a6; color: white; padding: 3px 8px; border-radius: 3px; font-size: 0.8em;" title="Olay sona ermiş">SONA ERDİ</span>';
                 
@@ -1497,7 +1456,23 @@
                 addEONETSingleMarker(firstEvent, [centerLat, centerLng], color, icon);
                 
                 // Popup'ı polygon'a bağla
-                const statusBadge = firstEvent.status === 'open' 
+                // Status belirleme: Sadece bugün gelen veriler AKTİF, diğerleri SONA ERDİ
+                let isEventOpen = false;
+                if (firstEvent.event_time || firstEvent.time) {
+                    const eventDate = new Date(firstEvent.event_time || firstEvent.time);
+                    const now = new Date();
+                    
+                    // Tarihleri sadece gün bazında karşılaştır (saat, dakika, saniye önemli değil)
+                    const eventDay = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate());
+                    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                    
+                    // Sadece bugün gelen veriler AKTİF
+                    isEventOpen = eventDay.getTime() === today.getTime();
+                } else {
+                    // Tarih bilgisi yoksa, closed alanına bak
+                    isEventOpen = firstEvent.status === 'open' || (!firstEvent.closed && firstEvent.status !== 'closed');
+                }
+                const statusBadge = isEventOpen 
                     ? '<span style="background: #e74c3c; color: white; padding: 3px 8px; border-radius: 3px; font-size: 0.8em;" title="Olay hala devam ediyor">AKTİF</span>'
                     : '<span style="background: #95a5a6; color: white; padding: 3px 8px; border-radius: 3px; font-size: 0.8em;" title="Olay sona ermiş">SONA ERDİ</span>';
                 
@@ -1667,59 +1642,6 @@
                 `;
             }
             
-            if (catStr.includes('drought') || catStr.includes('kuraklık')) {
-                // Kuraklık - Çizgiler (küçültülmüş)
-                return `
-                    <div style="
-                        width: 28px;
-                        height: 28px;
-                        background: repeating-linear-gradient(
-                            90deg,
-                            ${color} 0px,
-                            ${color} 2px,
-                            transparent 2px,
-                            transparent 4px
-                        );
-                        border: 2px solid white;
-                        box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-                    "></div>
-                `;
-            }
-            
-            if (catStr.includes('snow') || catStr.includes('kar')) {
-                // Kar - Artı işareti (küçültülmüş)
-                return `
-                    <div style="
-                        width: 28px;
-                        height: 28px;
-                        background: ${color};
-                        border: 2px solid white;
-                        border-radius: 3px;
-                        box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-                        position: relative;
-                    ">
-                        <div style="
-                            position: absolute;
-                            width: 3px;
-                            height: 20px;
-                            background: white;
-                            left: 50%;
-                            top: 4px;
-                            transform: translateX(-50%);
-                        "></div>
-                        <div style="
-                            position: absolute;
-                            width: 20px;
-                            height: 3px;
-                            background: white;
-                            left: 4px;
-                            top: 50%;
-                            transform: translateY(-50%);
-                        "></div>
-                    </div>
-                `;
-            }
-            
             // Varsayılan - Daire (deprem) (küçültülmüş)
             return `
                 <div style="
@@ -1757,7 +1679,23 @@
                 icon: eonetIcon
             }).addTo(map);
 
-            const statusBadge = event.status === 'open' 
+            // Status belirleme: Sadece bugün gelen veriler AKTİF, diğerleri SONA ERDİ
+            let isEventOpen = false;
+            if (event.event_time || event.time) {
+                const eventDate = new Date(event.event_time || event.time);
+                const now = new Date();
+                
+                // Tarihleri sadece gün bazında karşılaştır (saat, dakika, saniye önemli değil)
+                const eventDay = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate());
+                const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                
+                // Sadece bugün gelen veriler AKTİF
+                isEventOpen = eventDay.getTime() === today.getTime();
+            } else {
+                // Tarih bilgisi yoksa, closed alanına bak
+                isEventOpen = event.status === 'open' || (!event.closed && event.status !== 'closed');
+            }
+            const statusBadge = isEventOpen 
                 ? '<span style="background: #e74c3c; color: white; padding: 3px 8px; border-radius: 3px; font-size: 0.8em;" title="Olay hala devam ediyor">AKTİF</span>'
                 : '<span style="background: #95a5a6; color: white; padding: 3px 8px; border-radius: 3px; font-size: 0.8em;" title="Olay sona ermiş">SONA ERDİ</span>';
 
@@ -1774,10 +1712,10 @@
                         <strong>Kategori:</strong> ${event.categories && event.categories.length > 0 ? (typeof event.categories[0] === 'object' ? event.categories.map(cat => cat.title || cat.id || 'Bilinmeyen').join(', ') : event.categories.join(', ')) : 'Bilinmeyen'}
                     </div>
                     ` : ''}
-                    ${event.event_time ? `
+                    ${(event.event_time || event.time) ? `
                     <div style="margin-bottom: 10px; font-size: 0.9em; color: #666;">
                         <strong>Olay Zamanı:</strong><br>
-                        ${new Date(event.event_time).toLocaleString('tr-TR')}
+                        ${new Date(event.event_time || event.time).toLocaleString('tr-TR')}
                     </div>
                     ` : ''}
                     ${event.link ? `
@@ -2001,7 +1939,7 @@
             }).addTo(map);
 
             const city = wildfire.city || 'Bilinmeyen';
-            const time = wildfire.time ? new Date(wildfire.time).toLocaleString('tr-TR') : 'Bilinmiyor';
+            const time = (wildfire.event_time || wildfire.time) ? new Date(wildfire.event_time || wildfire.time).toLocaleString('tr-TR') : 'Bilinmiyor';
             
             marker.bindPopup(`
                 <div style="min-width: 200px;">
@@ -2066,7 +2004,7 @@
             }).addTo(map);
 
             const city = storm.city || 'Bilinmeyen';
-            const time = storm.time ? new Date(storm.time).toLocaleString('tr-TR') : 'Bilinmiyor';
+            const time = (storm.event_time || storm.time) ? new Date(storm.event_time || storm.time).toLocaleString('tr-TR') : 'Bilinmiyor';
             
             marker.bindPopup(`
                 <div style="min-width: 200px;">
@@ -2128,7 +2066,7 @@
             }).addTo(map);
 
             const location = flood.location || 'Bilinmeyen';
-            const time = flood.time ? new Date(flood.time).toLocaleString('tr-TR') : 'Bilinmiyor';
+            const time = (flood.event_time || flood.time) ? new Date(flood.event_time || flood.time).toLocaleString('tr-TR') : 'Bilinmiyor';
             const discharge = flood.river_discharge !== undefined ? flood.river_discharge.toFixed(2) : 'N/A';
             
             marker.bindPopup(`
@@ -2183,19 +2121,25 @@
 
             const time = volcano.event_time || volcano.time ? new Date(volcano.event_time || volcano.time).toLocaleString('tr-TR') : 'Bilinmiyor';
             
-            // Status belirleme: closed alanı varsa ve null değilse kapalı, aksi halde açık
-            // Ama tarih çok eskiyse (30 günden fazla) ve closed yoksa, muhtemelen sona ermiş
+            // Status belirleme: Sadece bugün gelen veriler AKTİF, diğerleri SONA ERDİ
             let status = volcano.status || 'unknown';
-            let isOpen = status === 'open' || (!volcano.closed && status !== 'closed');
-            if (isOpen && (volcano.event_time || volcano.time)) {
+            let isOpen = false;
+            if (volcano.event_time || volcano.time) {
                 const eventDate = new Date(volcano.event_time || volcano.time);
                 const now = new Date();
-                const daysDiff = (now - eventDate) / (1000 * 60 * 60 * 24);
-                // 30 günden eski ve closed bilgisi yoksa, muhtemelen sona ermiş
-                if (daysDiff > 30 && !volcano.closed) {
-                    isOpen = false;
+                
+                // Tarihleri sadece gün bazında karşılaştır (saat, dakika, saniye önemli değil)
+                const eventDay = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate());
+                const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                
+                // Sadece bugün gelen veriler AKTİF
+                isOpen = eventDay.getTime() === today.getTime();
+                if (!isOpen) {
                     status = 'closed';
                 }
+            } else {
+                // Tarih bilgisi yoksa, closed alanına bak
+                isOpen = status === 'open' || (!volcano.closed && status !== 'closed');
             }
             
             marker.bindPopup(`
@@ -2821,8 +2765,6 @@
             activeFilters.floods = document.getElementById('filter-floods').checked;
             activeFilters.storms = document.getElementById('filter-storms').checked;
             activeFilters.volcanoes = document.getElementById('filter-volcanoes').checked;
-            activeFilters.droughts = document.getElementById('filter-droughts').checked;
-            activeFilters.snow = document.getElementById('filter-snow').checked;
             activeFilters.weather = document.getElementById('filter-weather').checked;
             
             // Checkbox'ların görünümünü güncelle
@@ -2868,8 +2810,6 @@
             if (categoriesStr.includes('flood') || categoriesStr.includes('sel')) return 'floods';
             if (categoriesStr.includes('storm') || categoriesStr.includes('fırtına') || categoriesStr.includes('severe')) return 'storms';
             if (categoriesStr.includes('volcano') || categoriesStr.includes('volkan')) return 'volcanoes';
-            if (categoriesStr.includes('drought') || categoriesStr.includes('kuraklık')) return 'droughts';
-            if (categoriesStr.includes('snow') || categoriesStr.includes('kar')) return 'snow';
             return 'other';
         }
         
@@ -2958,8 +2898,7 @@
                     }
                     // Diğer kategoriler için normal filtreleme
                     return activeFilters[category] || (category === 'other' && (
-                        activeFilters.wildfires || activeFilters.floods || activeFilters.storms || 
-                        activeFilters.droughts || activeFilters.snow
+                        activeFilters.wildfires || activeFilters.floods || activeFilters.storms
                     ));
                 });
                 
@@ -2976,21 +2915,32 @@
                     const color = getEONETCategoryColor(event.categories);
                     const icon = getEONETCategoryIcon(event.categories);
                     
-                    // Status belirleme: closed alanı varsa ve null değilse kapalı, aksi halde açık
-                    // Ama tarih çok eskiyse (30 günden fazla) ve closed yoksa, muhtemelen sona ermiş
-                    let isOpen = event.status === 'open' || (!event.closed && !event.status);
-                    if (isOpen && event.event_time) {
-                        const eventDate = new Date(event.event_time);
-                        const now = new Date();
-                        const daysDiff = (now - eventDate) / (1000 * 60 * 60 * 24);
-                        // 30 günden eski ve closed bilgisi yoksa, muhtemelen sona ermiş
-                        if (daysDiff > 30 && !event.closed) {
-                            isOpen = false;
-                        }
+                    // Sadece geçmiş olayları göster (bugün gelen verileri gösterme)
+                    // Tarih bilgisi olmayan olayları da atla
+                    if (!event.event_time && !event.time) {
+                        return; // Tarih bilgisi yoksa gösterilme
+                    }
+                    
+                    const eventDate = new Date(event.event_time || event.time);
+                    const now = new Date();
+                    
+                    // Geçersiz tarih kontrolü
+                    if (isNaN(eventDate.getTime())) {
+                        return; // Geçersiz tarih ise gösterilme
+                    }
+                    
+                    // Tarihleri sadece gün bazında karşılaştır
+                    const eventDay = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate());
+                    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                    
+                    // Sadece bugünden önceki olayları göster (bugün gelen verileri atla)
+                    const isPastEvent = eventDay.getTime() < today.getTime();
+                    if (!isPastEvent) {
+                        return;
                     }
                     
                     const item = document.createElement('div');
-                    item.className = 'alert-item' + (isOpen ? ' high' : '');
+                    item.className = 'alert-item';
                     item.onclick = () => {
                         if (event.latitude && event.longitude) {
                             map.setView([event.latitude, event.longitude], 8);
@@ -3071,22 +3021,13 @@
                         }
                     }
                     
-                    // Durum açıklaması
-                    const statusText = isOpen ? 'AKTİF' : 'SONA ERDİ';
-                    const statusTooltip = isOpen ? 'Olay hala devam ediyor' : 'Olay sona ermiş';
-                    
                     item.innerHTML = `
                         <div class="alert-header">
                             <span class="alert-title">${icon} ${event.title || 'Doğal Afet'}</span>
-                            <span class="alert-date" 
-                                  style="background: ${isOpen ? '#e74c3c' : '#95a5a6'}; color: white; padding: 2px 8px; border-radius: 3px; font-size: 0.75em; cursor: help;" 
-                                  title="${statusTooltip}">
-                                ${statusText}
-                            </span>
                         </div>
                         <div class="alert-message">
                             <strong>Kategori:</strong> ${categoriesText}
-                            ${event.event_time ? `<br><strong>Zaman:</strong> ${new Date(event.event_time).toLocaleString('tr-TR')}` : ''}
+                            ${(event.event_time || event.time) ? `<br><strong>Zaman:</strong> ${new Date(event.event_time || event.time).toLocaleString('tr-TR')}` : ''}
                             ${event.risk_level ? `<br><strong>Risk Seviyesi:</strong> ${event.risk_level.toUpperCase()}` : ''}
                         </div>
                     `;
@@ -3117,6 +3058,8 @@
             stormMarkers = [];
             floodMarkers.forEach(marker => map.removeLayer(marker));
             floodMarkers = [];
+            volcanoMarkers.forEach(marker => map.removeLayer(marker));
+            volcanoMarkers = [];
             
             // Depremleri göster/gizle
             if (activeFilters.earthquakes && allEarthquakeData.length > 0) {
@@ -3210,8 +3153,7 @@
                     }
                     // Diğer kategoriler için normal filtreleme
                     return activeFilters[category] || (category === 'other' && (
-                        activeFilters.wildfires || activeFilters.floods || activeFilters.storms || 
-                        activeFilters.droughts || activeFilters.snow
+                        activeFilters.wildfires || activeFilters.floods || activeFilters.storms
                     ));
                 });
                 
