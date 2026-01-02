@@ -7,8 +7,10 @@ from datetime import datetime
 from pathlib import Path
 from typing import List, Dict, Any
 
+from zoneinfo import ZoneInfo
+
 from datasources.flood_openmeteo_source import OpenMeteoFloodSource
-from processing.storage import log_message  # app.log için
+from processing.storage import log_message
 
 
 # Sel / su taşkını riski yüksek bilinen şehirler (ABD + Kanada)
@@ -29,6 +31,11 @@ CITIES = [
 ]
 
 
+ROOT_DIR = Path(__file__).resolve().parent.parent
+DATA_DIR = ROOT_DIR / "data"
+DATA_DIR.mkdir(exist_ok=True)
+
+
 def fetch_flood_risk_for_all_cities() -> List[Dict[str, Any]]:
     """
     CITIES listesindeki her şehir için Open-Meteo Flood API'den
@@ -38,7 +45,6 @@ def fetch_flood_risk_for_all_cities() -> List[Dict[str, Any]]:
 
     for city_name, lat, lon in CITIES:
         print(f"🌊 {city_name} için flood_risk verisi çekiliyor...")
-        log_message(f"Flood: {city_name} için flood_risk verisi çekiliyor...")
 
         src = OpenMeteoFloodSource(
             latitude=lat,
@@ -51,169 +57,145 @@ def fetch_flood_risk_for_all_cities() -> List[Dict[str, Any]]:
         raw = src.fetch_raw()
         events = src.parse(raw)
         print(f"   → {city_name} için {len(events)} flood_risk event üretildi.")
-        log_message(
-            f"Flood: {city_name} için {len(events)} flood_risk event üretildi.",
-            level="INFO",
-        )
 
         all_events.extend(events)
 
     return all_events
 
 
-def filter_high_risk_events(events: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+def build_flood_payload(events: List[Dict[str, Any]]) -> Dict[str, Any]:
     """
-    risk_level'i 'high' olan flood_risk event'lerini filtreler.
-    """
-    return [
-        ev
-        for ev in events
-        if ev.get("type") == "flood_risk" and ev.get("risk_level") == "high"
-    ]
+    flood_regional_analysis.py ve eski flood_report/flood_alerts'in
+    beklediği formatta JSON payload üretir:
 
-
-def save_events_to_json(
-    all_events: List[Dict[str, Any]],
-    high_events: List[Dict[str, Any]],
-    filename: str = "flood_risk.json",
-) -> Path:
-    """
-    Tüm flood_risk event'leri ve high risk subset'ini
-    tek bir JSON dosyasına yazar (data/flood_risk.json).
-
-    Yapı:
     {
       "generated_at": "...",
-      "total_events": N,
-      "total_high_risk_events": M,
+      "total_events": ...,
+      "total_high_risk_events": ...,
       "events": [...],
       "high_risk_events": [...]
     }
     """
-    root_dir = Path(__file__).resolve().parent.parent
-    data_dir = root_dir / "data"
-    data_dir.mkdir(exist_ok=True)
+    # high risk event'leri ayır
+    high_events = [
+        ev for ev in events
+        if ev.get("risk_level") == "high"
+    ]
 
-    file_path = data_dir / filename
+    generated_at = datetime.now(ZoneInfo("Europe/Istanbul")).isoformat()
+    generated_at = generated_at.replace("T", " T", 1)
 
-    payload = {
-        "generated_at": datetime.now().strftime("%Y-%m-%d T%H:%M:%S"),
-        "total_events": len(all_events),
+    payload: Dict[str, Any] = {
+        "generated_at": generated_at,
+        "total_events": len(events),
         "total_high_risk_events": len(high_events),
-        "events": all_events,
+        "events": events,
         "high_risk_events": high_events,
     }
 
-    def default_serializer(obj):
-        if isinstance(obj, datetime):
-            # Örnek: "2025-12-31 T00:00:00"
-            return obj.strftime("%Y-%m-%d T%H:%M:%S")
-        raise TypeError(f"Type {type(obj)} is not JSON serializable")
+    return payload
+
+
+def save_flood_payload(payload: Dict[str, Any], filename: str = "flood_risk.json") -> Path:
+    """
+    Flood payload'ı data/ klasörüne tek, sabit isimli JSON dosyasına yazar.
+
+    NOT:
+    - Her çalıştırmada aynı dosya ÜZERİNE yazıyoruz.
+    - İstersen burada timestamp'li arşiv de ekleyebilirsin.
+    """
+    file_path = DATA_DIR / filename
 
     with file_path.open("w", encoding="utf-8") as f:
-        json.dump(payload, f, ensure_ascii=False, indent=2, default=default_serializer)
+        json.dump(payload, f, ensure_ascii=False, indent=2, default=str)
 
     return file_path
 
 
-def summarize_flood_risk(events: List[Dict[str, Any]]) -> None:
+def summarize_flood_risk(payload: Dict[str, Any]) -> None:
     """
-    Basit bir özet:
-    - Her şehir için kaç low/medium/high risk günü var?
-    - Maksimum river_discharge değeri nedir?
+    Terminale basit ama daha zengin bir flood özeti yazar:
+    - Toplam event
+    - High / Medium / Low sayıları
+    - Şehir bazlı low/medium/high dağılımı
     """
-    summary: Dict[str, Dict[str, Any]] = {}
+    events = payload.get("events", [])
+    generated_at = payload.get("generated_at", "unknown time")
+
+    # Risk seviyelerine göre ayır
+    high_events = [e for e in events if e.get("risk_level") == "high"]
+    medium_events = [e for e in events if e.get("risk_level") == "medium"]
+    low_events = [e for e in events if e.get("risk_level") == "low"]
+    unknown_events = [
+        e for e in events
+        if e.get("risk_level") not in ("low", "medium", "high")
+    ]
+
+    print("\n📊 Sel / su taşkını risk özeti:")
+    print(f"   Üretilme zamanı : {generated_at}")
+    print(f"   Toplam event    : {len(events)}")
+    print(f"   High risk       : {len(high_events)}")
+    print(f"   Medium risk     : {len(medium_events)}")
+    print(f"   Low risk        : {len(low_events)}")
+    if unknown_events:
+        print(f"   Unknown risk    : {len(unknown_events)}")
+
+    # Şehir bazlı dağılım
+    per_city: Dict[str, Dict[str, int]] = {}
 
     for ev in events:
         city = ev.get("location", "Unknown")
         risk = ev.get("risk_level", "unknown")
-        discharge = ev.get("river_discharge")
 
-        if city not in summary:
-            summary[city] = {
+        if city not in per_city:
+            per_city[city] = {
                 "low": 0,
                 "medium": 0,
                 "high": 0,
                 "unknown": 0,
-                "max_discharge": None,
             }
 
-        # risk sayacını arttır
-        if risk not in summary[city]:
-            summary[city]["unknown"] += 1
+        if risk not in per_city[city]:
+            per_city[city]["unknown"] += 1
         else:
-            summary[city][risk] += 1
+            per_city[city][risk] += 1
 
-        # max_discharge güncelle
-        if discharge is not None:
-            try:
-                d_val = float(discharge)
-            except (TypeError, ValueError):
-                d_val = None
-
-            if d_val is not None:
-                current_max = summary[city]["max_discharge"]
-                if current_max is None or d_val > current_max:
-                    summary[city]["max_discharge"] = d_val
-
-    print("\n📊 Sel / su taşkını risk özeti (ABD + Kanada şehirleri):")
-    log_message(
-        "Flood: ABD + Kanada şehirleri için flood_risk özeti oluşturuldu.",
-        level="INFO",
-    )
-
-    for city, info in summary.items():
-        print(f"\n➡ {city}:")
-        print(f"   low    : {info['low']}")
-        print(f"   medium : {info['medium']}")
-        print(f"   high   : {info['high']}")
-        if info["max_discharge"] is not None:
-            print(f"   max river_discharge: {info['max_discharge']} m³/s")
-        else:
-            print("   max river_discharge: veri yok")
-
-        # Aynı bilgiyi app.log'a da yaz
-        log_message(
-            (
-                f"Flood summary for {city} → "
-                f"low={info['low']}, medium={info['medium']}, "
-                f"high={info['high']}, max_discharge={info['max_discharge']}"
-            ),
-            level="INFO",
-        )
+    print("\n📍 Şehir bazlı flood_risk özeti:")
+    for city, info in per_city.items():
+        print(f"\n   • {city}:")
+        print(f"       low    : {info['low']}")
+        print(f"       medium : {info['medium']}")
+        print(f"       high   : {info['high']}")
+        print(f"       unknown: {info['unknown']}")
 
 
 def main():
     # 1) Bütün şehirler için flood_risk event'lerini çek
     events = fetch_flood_risk_for_all_cities()
     print(f"\n✅ Toplam {len(events)} flood_risk event üretildi.")
-    log_message(
-        f"Flood: Toplam {len(events)} flood_risk event üretildi ({len(CITIES)} şehir).",
-        level="INFO",
-    )
 
     if not events:
-        msg = "Flood: Hiç event gelmedi, JSON'a kaydedilmeyecek."
+        msg = "Hiç flood_risk event gelmedi, JSON'a kaydedilmeyecek."
         print(f"⚠ {msg}")
-        log_message(msg, level="WARNING")
+        log_message(f"Flood fetch: {msg}", level="WARNING")
         return
 
-    # 2) High risk event'leri filtrele
-    high_risk_events = filter_high_risk_events(events)
+    # 2) Payload hazırla
+    payload = build_flood_payload(events)
 
-    # 3) Tek bir dosyaya yaz (data/flood_risk.json)
-    file_path = save_events_to_json(events, high_risk_events, filename="flood_risk.json")
+    # 3) Sabit isimli dosyaya kaydet
+    file_path = save_flood_payload(payload, "flood_risk.json")
     print(f"💾 Flood verisi {file_path} dosyasına kaydedildi.")
+
     log_message(
-        f"Flood: Tüm flood_risk event'ler ve high risk subset {file_path} dosyasına kaydedildi.",
+        f"Flood fetch: {payload['total_events']} event, "
+        f"{payload['total_high_risk_events']} high risk gün kaydedildi.",
         level="INFO",
     )
 
-    # 4) Basit bir özet yazdır + logla
-    summarize_flood_risk(events)
+    # 4) Küçük özet
+    summarize_flood_risk(payload)
 
 
 if __name__ == "__main__":
     main()
-
-
