@@ -86,7 +86,8 @@ class RuntimeSystem:
                     self.pipeline.add_events(event)
                 
                 log_message(f"Added {len(events)} event batches to pipeline", "INFO")
-                self.pipeline.wait_for_completion()
+                # Timeout ile bekle (maksimum 60 saniye)
+                self.pipeline.wait_for_completion(timeout=60.0)
                 
                 results = self.pipeline.get_results()
                 self._display_results(results)
@@ -99,6 +100,10 @@ class RuntimeSystem:
             log_message(f"Error in fetch-process cycle: {str(e)}", "ERROR")
         
         finally:
+            # --once modunda consumer thread'leri hemen durdur
+            # Böylece sürekli log mesajları üretilmez
+            self.running = False
+            self.pipeline.stop_consumers()
             self.stop()
     
     def _run_continuous(self):

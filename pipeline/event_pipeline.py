@@ -267,10 +267,18 @@ class EventPipeline:
             return {'success': False, 'source': source_name, 'error': str(e)}
     
     def _process_volcano_events(self, events: List[Any], source_name: str) -> Dict[str, Any]:
-        """Process volcano events from EONET. Accepts Event dictionaries."""
+        """Process volcano events from EONET. Accepts Event dictionaries.
+        Efe'nin fetch_volcanoes.py modülündeki summarize fonksiyonunu kullanır."""
         try:
             if not events:
                 return {'success': False, 'source': source_name, 'error': 'No volcano events'}
+            
+            # Efe'nin fetch_volcanoes.py modülündeki özet fonksiyonunu kullan
+            try:
+                from pipeline.fetch_volcanoes import summarize_volcano_events
+                summarize_volcano_events(events)
+            except Exception as e:
+                log_message(f"Volcano özet yazdırma hatası (devam ediliyor): {str(e)}", "WARNING")
             
             filename = "volcanoes.json"
             save_events_to_json(events, filename)
@@ -462,8 +470,23 @@ class EventPipeline:
     
     def wait_for_completion(self, timeout: float = None):
         """Wait for all events in queue to be processed."""
+        import time
+        start_time = time.time()
+        
         try:
-            self.input_queue.join()
+            # Queue'nun tamamen boşalmasını bekle
+            # Timeout varsa kontrol et
+            if timeout is not None:
+                while self.input_queue.unfinished_tasks > 0:
+                    elapsed = time.time() - start_time
+                    if elapsed > timeout:
+                        log_message(f"Timeout waiting for completion after {timeout}s", "WARNING")
+                        break
+                    time.sleep(0.1)
+            else:
+                # Timeout yoksa normal bekle
+                self.input_queue.join()
+            
             log_message("All events processed", "INFO")
         except Exception as e:
             log_message(f"Error waiting for completion: {str(e)}", "ERROR")

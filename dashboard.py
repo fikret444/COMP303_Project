@@ -10,6 +10,7 @@ import glob
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from processing.storage import cleanup_old_files
+from processing.seismic_risk_analyzer import SeismicRiskAnalyzer, analyze_seismic_risk
 
 # Scraping modülü - artık BeautifulSoup4 ile de çalışır
 try:
@@ -1059,53 +1060,51 @@ def load_volcano_data():
         return []
 
 def load_flood_data():
-    """Flood risk verilerini yükle - Son 1 hafta filtresi uygula (tüm risk seviyeleri dahil)"""
-    flood_file = DATA_DIR / "flood_risk.json"
-    if not flood_file.exists():
+    """Flood risk verilerini yükle - Son 1 hafta filtresi uygula (tüm risk seviyeleri dahil)
+    Efe'nin flood_regional_analysis modülünü kullanarak veri yükleme"""
+    from processing.flood_regional_analysis import load_flood_data as load_flood_data_analysis
+    
+    # Efe'nin modülünü kullanarak veriyi yükle
+    payload = load_flood_data_analysis()
+    if payload is None:
         return []
     
-    try:
-        with open(flood_file, 'r', encoding='utf-8') as f:
-            data = json.load(f)
-            # Flood risk JSON'u object formatında, events array'ini döndür
-            if isinstance(data, dict):
-                events = data.get("events", [])
+    # Flood risk JSON'u object formatında, events array'ini döndür
+    if isinstance(payload, dict):
+        events = payload.get("events", [])
+    else:
+        events = payload if isinstance(payload, list) else []
+    
+    # Flood verilerindeki tarih formatı: "2025-12-30 T00:00:00" - özel parse gerekli
+    # Son 1 hafta filtresi uygula (tüm risk seviyeleri dahil)
+    one_week_ago = datetime.now() - timedelta(days=7)
+    filtered = []
+    
+    for event in events:
+        time_str = event.get('time')
+        if not time_str:
+            continue
+        
+        try:
+            # Flood verilerindeki özel format: "2025-12-30 T00:00:00"
+            if ' T' in str(time_str):
+                event_time = datetime.strptime(str(time_str), '%Y-%m-%d T%H:%M:%S')
+            elif 'T' in str(time_str):
+                time_str_clean = str(time_str).replace('Z', '+00:00')
+                event_time = datetime.fromisoformat(time_str_clean)
             else:
-                events = data if isinstance(data, list) else []
+                event_time = datetime.strptime(str(time_str), '%Y-%m-%d %H:%M:%S')
             
-            # Flood verilerindeki tarih formatı: "2025-12-30 T00:00:00" - özel parse gerekli
-            # Son 1 hafta filtresi uygula (tüm risk seviyeleri dahil)
-            one_week_ago = datetime.now() - timedelta(days=7)
-            filtered = []
+            if event_time.tzinfo:
+                event_time = event_time.astimezone().replace(tzinfo=None)
             
-            for event in events:
-                time_str = event.get('time')
-                if not time_str:
-                    continue
-                
-                try:
-                    # Flood verilerindeki özel format: "2025-12-30 T00:00:00"
-                    if ' T' in str(time_str):
-                        event_time = datetime.strptime(str(time_str), '%Y-%m-%d T%H:%M:%S')
-                    elif 'T' in str(time_str):
-                        time_str_clean = str(time_str).replace('Z', '+00:00')
-                        event_time = datetime.fromisoformat(time_str_clean)
-                    else:
-                        event_time = datetime.strptime(str(time_str), '%Y-%m-%d %H:%M:%S')
-                    
-                    if event_time.tzinfo:
-                        event_time = event_time.astimezone().replace(tzinfo=None)
-                    
-                    if event_time >= one_week_ago:
-                        filtered.append(event)
-                except Exception as e:
-                    print(f"Flood tarih parse hatası: {time_str}, {e}")
-                    continue
-            
-            return filtered
-    except Exception as e:
-        print(f"Error loading flood data: {e}")
-        return []
+            if event_time >= one_week_ago:
+                filtered.append(event)
+        except Exception as e:
+            print(f"Flood tarih parse hatası: {time_str}, {e}")
+            continue
+    
+    return filtered
 
 @app.route('/api/wildfires')
 def api_wildfires():
@@ -1151,6 +1150,119 @@ def api_floods():
         'low_risk_count': len([f for f in floods if f.get('risk_level') == 'low']),
         'timestamp': datetime.now().isoformat()
     })
+
+@app.route('/api/seismic-risk/faults')
+def api_seismic_risk_faults():
+    """Tüm fay hatlarının listesini döndür"""
+    try:
+        analyzer = SeismicRiskAnalyzer()
+        fault_lines = analyzer.get_all_fault_lines()
+        # Bbox bilgisini de ekle
+        for fault in fault_lines:
+            fault_id = fault['fault_id']
+            if fault_id in analyzer.fault_lines:
+                fault['bbox'] = analyzer.fault_lines[fault_id]['bbox']
+        return jsonify({
+            'fault_lines': fault_lines,
+            'count': len(fault_lines),
+            'timestamp': datetime.now().isoformat()
+        })
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/seismic-risk/fault/<fault_id>')
+def api_seismic_risk_fault(fault_id):
+    """Belirli bir fay hattı için sismik risk analizi"""
+    try:
+        result = analyze_seismic_risk(fault_id=fault_id)
+        return jsonify(result)
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/seismic-risk/region')
+def api_seismic_risk_region():
+    """Belirli bir bölge için sismik risk analizi"""
+    try:
+        lat = request.args.get('lat', type=float)
+        lon = request.args.get('lon', type=float)
+        radius = request.args.get('radius', default=100, type=float)
+        
+        if lat is None or lon is None:
+            return jsonify({
+                "error": "lat ve lon parametreleri gerekli",
+                "example": "/api/seismic-risk/region?lat=37.7749&lon=-122.4194&radius=100"
+            }), 400
+        
+        result = analyze_seismic_risk(latitude=lat, longitude=lon, radius_km=radius)
+        return jsonify(result)
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/seismic-risk/swarms')
+def api_seismic_risk_swarms():
+    """Deprem sürülerini (swarm) tespit et - birbirine yakın küçük depremler
+    Sadece haritada gösterilen (dashboard'dan gelen) deprem verilerini kullanır
+    Son 1 gün içindeki depremleri analiz eder (USGS'ten çekilen verilerle uyumlu)"""
+    try:
+        min_count = request.args.get('min_count', default=3, type=int)
+        max_magnitude = request.args.get('max_magnitude', default=5.0, type=float)
+        cluster_radius = request.args.get('cluster_radius', default=100, type=float)
+        min_days = request.args.get('min_days', default=0, type=int)
+        max_days = request.args.get('max_days', default=1, type=int)
+        
+        # Haritada gösterilen deprem verilerini al (dashboard'dan)
+        earthquakes = load_earthquake_data()
+        
+        # Eğer deprem verisi yoksa boş liste döndür
+        if not earthquakes:
+            return jsonify({
+                'swarms': [],
+                'count': 0,
+                'parameters': {
+                    'min_count': min_count,
+                    'max_magnitude': max_magnitude,
+                    'cluster_radius_km': cluster_radius,
+                    'min_days': min_days,
+                    'max_days': max_days
+                },
+                'timestamp': datetime.now().isoformat(),
+                'message': 'Haritada gösterilen deprem verisi bulunamadı'
+            })
+        
+        analyzer = SeismicRiskAnalyzer()
+        # Haritada gösterilen deprem verilerini kullanarak swarm tespiti yap
+        swarms = analyzer.detect_earthquake_swarms_from_data(
+            earthquakes=earthquakes,
+            min_count=min_count,
+            max_magnitude=max_magnitude,
+            cluster_radius_km=cluster_radius,
+            min_days=min_days,
+            max_days=max_days
+        )
+        
+        return jsonify({
+            'swarms': swarms,
+            'count': len(swarms),
+            'parameters': {
+                'min_count': min_count,
+                'max_magnitude': max_magnitude,
+                'cluster_radius_km': cluster_radius,
+                'min_days': min_days,
+                'max_days': max_days
+            },
+            'earthquakes_analyzed': len(earthquakes),
+            'timestamp': datetime.now().isoformat()
+        })
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/api/eonet')
 def api_eonet():
@@ -1210,6 +1322,33 @@ def api_eonet():
     except Exception as e:
         import traceback
         print(f"EONET API Error: {e}")
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/seismic-simulation/trigger', methods=['POST'])
+def api_seismic_simulation_trigger():
+    """Sismik Acil Durum Operatörü - Deprem simülasyonu başlat
+    Kullanıcı tarafından seçilen veya rastgele üretilen deprem için erken uyarı hesaplamaları yapar"""
+    from processing.seismic_simulation import simulate_earthquake
+    
+    try:
+        data = request.get_json() or {}
+        user_lat = data.get('user_latitude')
+        user_lon = data.get('user_longitude')
+        epicenter_lat = data.get('epicenter_latitude')
+        epicenter_lon = data.get('epicenter_longitude')
+        
+        # Simülasyonu çalıştır
+        result = simulate_earthquake(
+            user_lat=user_lat,
+            user_lon=user_lon,
+            epicenter_lat=epicenter_lat,
+            epicenter_lon=epicenter_lon
+        )
+        
+        return jsonify(result)
+    except Exception as e:
+        import traceback
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 

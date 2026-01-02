@@ -75,6 +75,119 @@
             color: #667eea;
         }
 
+        .simulation-btn {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .simulation-btn:hover {
+            background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.5);
+        }
+
+        .simulation-btn:active {
+            transform: translateY(0);
+        }
+
+        .simulation-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Deprem Uyarı Modal */
+        .earthquake-warning-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            animation: fadeIn 0.3s;
+        }
+
+        .earthquake-warning-modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .warning-content {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            animation: shake 0.5s;
+            text-align: center;
+        }
+
+        .warning-content h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .warning-content .warning-info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .warning-content .critical-actions {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .warning-content .critical-actions ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .warning-content .critical-actions li {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        .warning-timer {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+            20%, 40%, 60%, 80% { transform: translateX(10px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         .main-content {
             display: grid;
             grid-template-columns: 280px 1fr 350px;
@@ -939,6 +1052,26 @@
         }
         
         /* Volkanlar - Üçgen (dağ) */
+        .icon-seismic {
+            width: 20px;
+            height: 20px;
+            background: #9b59b6;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        
+        .icon-seismic::before {
+            content: '⚠';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12px;
+            color: white;
+        }
+
         .icon-volcano {
             width: 0;
             height: 0;
@@ -982,6 +1115,9 @@
             <h1>SDEWS - Smart Disaster Early Warning System</h1>
         </div>
         <div class="header-info">
+            <button class="simulation-btn" id="simulationBtn" onclick="startEarthquakeSimulation()">
+                Deprem Simülasyonu
+            </button>
             <div class="header-stat">
                 <div class="value" id="header-total">-</div>
                 <div class="label">Toplam Deprem</div>
@@ -1002,7 +1138,7 @@
                 <div class="sidebar-section-header" onclick="toggleSidebarSection('categories')">
                     <span>Afet Kategorileri</span>
                     <span class="toggle-icon">▼</span>
-                </div>
+                    </div>
                 <div class="sidebar-section-content expanded" id="categories-content">
                     <div class="category-filter-panel">
                         <div class="category-filter-item active">
@@ -1011,33 +1147,40 @@
                                 <span class="category-icon icon-earthquake"></span>
                                 <span>Depremler</span>
                             </label>
-                        </div>
+                </div>
                         <div class="category-filter-item active">
                             <input type="checkbox" id="filter-wildfires" checked onchange="updateMapFilters()">
                             <label for="filter-wildfires">
                                 <span class="category-icon icon-wildfire"></span>
                                 <span>Yangınlar</span>
                             </label>
-                        </div>
+                </div>
                         <div class="category-filter-item active">
                             <input type="checkbox" id="filter-floods" checked onchange="updateMapFilters()">
                             <label for="filter-floods">
                                 <span class="category-icon icon-flood"></span>
                                 <span>Seller</span>
                             </label>
-                        </div>
+            </div>
                         <div class="category-filter-item active">
                             <input type="checkbox" id="filter-storms" checked onchange="updateMapFilters()">
                             <label for="filter-storms">
                                 <span class="category-icon icon-storm"></span>
                                 <span>Fırtınalar</span>
                             </label>
-                        </div>
+                </div>
                         <div class="category-filter-item active">
                             <input type="checkbox" id="filter-volcanoes" checked onchange="updateMapFilters()">
                             <label for="filter-volcanoes">
                                 <span class="category-icon icon-volcano"></span>
                                 <span>Volkanlar</span>
+                            </label>
+            </div>
+                        <div class="category-filter-item active">
+                            <input type="checkbox" id="filter-seismic-risk" checked onchange="updateMapFilters()">
+                            <label for="filter-seismic-risk">
+                                <span class="category-icon icon-seismic"></span>
+                                <span>Sismik Risk</span>
                             </label>
                         </div>
                         <div class="category-filter-item active">
@@ -1062,21 +1205,21 @@
                     <span class="toggle-icon">▼</span>
                 </div>
                 <div class="sidebar-section-content expanded" id="legend-content">
-                    <div class="legend">
+            <div class="legend">
                         <h4 style="margin-bottom: 10px; font-size: 0.95em; color: #333;">Deprem Büyüklüğü</h4>
-                        <div class="legend-item">
-                            <div class="legend-color large"></div>
-                            <span>5.0+ (Büyük)</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-color medium"></div>
-                            <span>4.0 - 4.9 (Orta)</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-color small"></div>
-                            <span>2.5 - 3.9 (Küçük)</span>
-                        </div>
-                        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd;">
+                <div class="legend-item">
+                    <div class="legend-color large"></div>
+                    <span>5.0+ (Büyük)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color medium"></div>
+                    <span>4.0 - 4.9 (Orta)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color small"></div>
+                    <span>2.5 - 3.9 (Küçük)</span>
+                </div>
+                <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd;">
                             <h4 style="margin-bottom: 10px; font-size: 0.95em; color: #333;">Doğal Afetler (EONET)</h4>
                             <div class="legend-item">
                                 <div class="icon-wildfire" style="margin-right: 8px; display: inline-block;"></div>
@@ -1097,29 +1240,29 @@
                         </div>
                         <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd;">
                             <h4 style="margin-bottom: 10px; font-size: 0.95em; color: #333;">Hava Durumu</h4>
-                            <div class="legend-item">
-                                <div style="width: 15px; height: 15px; background: #e74c3c; border-radius: 3px; margin-right: 8px; display: inline-block;"></div>
-                                <span>25°C+ (Çok Sıcak)</span>
-                            </div>
-                            <div class="legend-item">
-                                <div style="width: 15px; height: 15px; background: #f39c12; border-radius: 3px; margin-right: 8px; display: inline-block;"></div>
-                                <span>20-24°C (Sıcak)</span>
-                            </div>
-                            <div class="legend-item">
-                                <div style="width: 15px; height: 15px; background: #f1c40f; border-radius: 3px; margin-right: 8px; display: inline-block;"></div>
-                                <span>15-19°C (Ilık)</span>
-                            </div>
-                            <div class="legend-item">
-                                <div style="width: 15px; height: 15px; background: #3498db; border-radius: 3px; margin-right: 8px; display: inline-block;"></div>
-                                <span>10-14°C (Serin)</span>
-                            </div>
-                            <div class="legend-item">
-                                <div style="width: 15px; height: 15px; background: #3498db; border-radius: 3px; margin-right: 8px; display: inline-block;"></div>
-                                <span>5-9°C (Soğuk)</span>
-                            </div>
-                            <div class="legend-item">
-                                <div style="width: 15px; height: 15px; background: #2c3e50; border-radius: 3px; margin-right: 8px; display: inline-block;"></div>
-                                <span>&lt;5°C (Çok Soğuk)</span>
+                    <div class="legend-item">
+                        <div style="width: 15px; height: 15px; background: #e74c3c; border-radius: 3px; margin-right: 8px; display: inline-block;"></div>
+                        <span>25°C+ (Çok Sıcak)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div style="width: 15px; height: 15px; background: #f39c12; border-radius: 3px; margin-right: 8px; display: inline-block;"></div>
+                        <span>20-24°C (Sıcak)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div style="width: 15px; height: 15px; background: #f1c40f; border-radius: 3px; margin-right: 8px; display: inline-block;"></div>
+                        <span>15-19°C (Ilık)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div style="width: 15px; height: 15px; background: #3498db; border-radius: 3px; margin-right: 8px; display: inline-block;"></div>
+                        <span>10-14°C (Serin)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div style="width: 15px; height: 15px; background: #3498db; border-radius: 3px; margin-right: 8px; display: inline-block;"></div>
+                        <span>5-9°C (Soğuk)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div style="width: 15px; height: 15px; background: #2c3e50; border-radius: 3px; margin-right: 8px; display: inline-block;"></div>
+                        <span>&lt;5°C (Çok Soğuk)</span>
                             </div>
                         </div>
                     </div>
@@ -1159,9 +1302,8 @@
             </div>
             <div class="filter-tabs">
                 <button class="filter-tab active" onclick="filterContent('earthquakes')">Depremler</button>
+                <button class="filter-tab" onclick="filterContent('weather')">Hava Durumu</button>
                 <button class="filter-tab" onclick="filterContent('eonet')">Doğal Afetler</button>
-                <button class="filter-tab" onclick="filterContent('alerts')">Mevcut Uyarılar</button>
-                <button class="filter-tab" onclick="filterContent('forecast')">İleriye Dönük</button>
                 <button class="filter-tab" onclick="filterContent('news')">Haberler</button>
             </div>
             <div class="earthquake-list" id="earthquakeList">
@@ -1171,6 +1313,9 @@
                 <div class="loading">Yükleniyor...</div>
             </div>
             <div class="alerts-list" id="forecastAlertsList" style="display: none;">
+                <div class="loading">Yükleniyor...</div>
+            </div>
+            <div class="alerts-list" id="weatherAlertsList" style="display: none;">
                 <div class="loading">Yükleniyor...</div>
             </div>
             <div class="news-list" id="newsList" style="display: none;">
@@ -1203,6 +1348,9 @@
         let stormMarkers = [];
         let floodMarkers = [];
         let volcanoMarkers = [];
+        let seismicRiskMarkers = [];
+        let seismicRiskLines = [];
+        let earthquakeSwarmMarkers = [];
         
         // Kategori filtreleme için veri saklama
         let allEarthquakeData = [];
@@ -1212,6 +1360,8 @@
         let allStormData = [];
         let allFloodData = [];
         let allVolcanoData = [];
+        let allSeismicRiskData = [];
+        let allEarthquakeSwarmData = [];
         
         // Aktif filtreler
         const activeFilters = {
@@ -1220,6 +1370,7 @@
             floods: true,
             storms: true,
             volcanoes: true,
+            'seismic-risk': true,
             weather: true
         };
 
@@ -1793,22 +1944,22 @@
             
             // Hava durumu için kare şekli (diğer ikonlarla uyumlu boyut)
             const weatherShapeHTML = `
-                <div style="
+                    <div style="
                     width: 28px;
                     height: 28px;
-                    background: ${color};
+                        background: ${color};
                     border: 2px solid white;
                     border-radius: 4px;
                     box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
                     font-size: 10px;
-                    font-weight: bold;
+                            font-weight: bold;
                     color: white;
                 ">
                     ${temp.toFixed(0)}°
-                </div>
+                    </div>
             `;
             
             const weatherIcon = L.divIcon({
@@ -1821,7 +1972,7 @@
 
             const marker = L.marker([weather.latitude, weather.longitude], {
                 icon: weatherIcon
-            }).addTo(map);
+            });
 
             // Bulut, yağış ve nem bilgilerini hazırla
             const clouds = weather.clouds || 0;
@@ -2165,7 +2316,7 @@
         function addEarthquakeMarker(eq) {
             const color = getMarkerColor(eq.magnitude);
             const size = getMarkerSize(eq.magnitude);
-            
+
             // Deprem için daire şekli (biraz büyütülmüş)
             const markerSize = Math.max(size * 2.5, 24); // Minimum 24px, büyüklüğe göre artar
             const shapeHTML = `
@@ -2396,7 +2547,7 @@
                     allWeatherData = rawWeatherData.filter(weather => {
                         const lat = weather.latitude;
                         const lon = weather.longitude;
-                        
+                    
                         // Koordinat varsa ve Amerika kıtaları içindeyse ekle
                         if (lat != null && lon != null) {
                             return (americasBbox.minLat <= lat && lat <= americasBbox.maxLat &&
@@ -2406,7 +2557,14 @@
                     });
                     
                     console.log('Hava durumu verisi yüklendi:', allWeatherData.length, 'şehir (Amerika kıtaları filtrelenmiş)');
-                    console.log('Hava durumu verisi örnek:', allWeatherData[0]);
+                    if (allWeatherData.length > 0) {
+                        console.log('Hava durumu verisi örnek:', allWeatherData[0]);
+                    }
+                    
+                    // Weather window'u güncelle (eğer açıksa)
+                    if (document.getElementById('weatherWindow') && document.getElementById('weatherWindow').classList.contains('active')) {
+                        loadWeatherWindowData();
+                    }
                     
                     // Filtreleme uygula (marker'lar eklenecek)
                     applyFilters();
@@ -2481,27 +2639,13 @@
                 fetch('/api/alerts/current').then(r => r.json()),
                 fetch('/api/alerts/forecast').then(r => r.json())
             ]).then(([currentData, forecastData]) => {
-                // Mevcut uyarılar - Hava Durumu ve Depremler olarak ayır
+                // Mevcut uyarılar - Sadece Depremler (Hava Durumu ayrı listeye taşındı)
                 const currentContainer = document.getElementById('alertsList');
                 if (currentData.alerts && currentData.alerts.length > 0) {
                     currentContainer.innerHTML = '';
                     
                     // Uyarıları türlerine göre ayır
-                    const weatherAlerts = currentData.alerts.filter(a => a.type === 'weather');
                     const earthquakeAlerts = currentData.alerts.filter(a => a.type === 'earthquake');
-                    
-                    // Hava Durumu bölümü
-                    if (weatherAlerts.length > 0) {
-                        const header = document.createElement('div');
-                        header.className = 'alert-section-header';
-                        header.textContent = 'Hava Durumu';
-                        currentContainer.appendChild(header);
-                        
-                        weatherAlerts.forEach(alert => {
-                            const item = createAlertItem(alert);
-                            currentContainer.appendChild(item);
-                        });
-                    }
                     
                     // Depremler bölümü
                     if (earthquakeAlerts.length > 0) {
@@ -2514,38 +2658,55 @@
                             const item = createAlertItem(alert);
                             currentContainer.appendChild(item);
                         });
-                    }
-                    
-                    if (weatherAlerts.length === 0 && earthquakeAlerts.length === 0) {
-                        currentContainer.innerHTML = '<div style="color: #999; text-align: center; padding: 40px;">Mevcut uyarı bulunamadı</div>';
+                    } else {
+                        currentContainer.innerHTML = '<div style="color: #999; text-align: center; padding: 40px;">Mevcut deprem uyarısı bulunamadı</div>';
                     }
                 } else {
                     currentContainer.innerHTML = '<div style="color: #999; text-align: center; padding: 40px;">Mevcut uyarı bulunamadı</div>';
                 }
                 
-                // İleriye dönük uyarılar - Sadece Hava Durumu (deprem tahmini yok)
-                const forecastContainer = document.getElementById('forecastAlertsList');
-                if (forecastData.alerts && forecastData.alerts.length > 0) {
-                    forecastContainer.innerHTML = '';
+                // Hava Durumu Listesi - Mevcut ve İleriye Dönük
+                const weatherContainer = document.getElementById('weatherAlertsList');
+                weatherContainer.innerHTML = '';
+                
+                // Mevcut Hava Durumu Uyarıları
+                const weatherAlerts = currentData.alerts ? currentData.alerts.filter(a => a.type === 'weather') : [];
+                if (weatherAlerts.length > 0) {
+                    const currentHeader = document.createElement('div');
+                    currentHeader.className = 'alert-section-header';
+                    currentHeader.style.marginTop = '0';
+                    currentHeader.textContent = 'Mevcut Uyarılar';
+                    weatherContainer.appendChild(currentHeader);
                     
-                    // İleriye dönük uyarılar sadece hava durumu
-                    const header = document.createElement('div');
-                    header.className = 'alert-section-header';
-                    header.textContent = 'Hava Durumu Tahminleri';
-                    forecastContainer.appendChild(header);
+                    weatherAlerts.forEach(alert => {
+                        const item = createAlertItem(alert);
+                        weatherContainer.appendChild(item);
+                    });
+                }
+                
+                // İleriye Dönük Hava Durumu Uyarıları
+                if (forecastData.alerts && forecastData.alerts.length > 0) {
+                    const forecastHeader = document.createElement('div');
+                    forecastHeader.className = 'alert-section-header';
+                    forecastHeader.style.marginTop = weatherAlerts.length > 0 ? '20px' : '0';
+                    forecastHeader.textContent = 'İleriye Dönük';
+                    weatherContainer.appendChild(forecastHeader);
                     
                     forecastData.alerts.forEach(alert => {
                         const item = createAlertItem(alert);
-                        forecastContainer.appendChild(item);
+                        weatherContainer.appendChild(item);
                     });
-                } else {
-                    forecastContainer.innerHTML = '<div style="color: #999; text-align: center; padding: 40px;">İleriye dönük uyarı bulunamadı</div>';
+                }
+                
+                // Eğer hiç hava durumu uyarısı yoksa
+                if (weatherAlerts.length === 0 && (!forecastData.alerts || forecastData.alerts.length === 0)) {
+                    weatherContainer.innerHTML = '<div style="color: #999; text-align: center; padding: 40px;">Hava durumu uyarısı bulunamadı</div>';
                 }
             }).catch(error => {
                 console.error('Alert yükleme hatası:', error);
                 document.getElementById('alertsList').innerHTML = 
                     '<div style="color: #999; text-align: center; padding: 40px;">Uyarılar yüklenemedi</div>';
-                document.getElementById('forecastAlertsList').innerHTML = 
+                document.getElementById('weatherAlertsList').innerHTML = 
                     '<div style="color: #999; text-align: center; padding: 40px;">Uyarılar yüklenemedi</div>';
             });
         }
@@ -2633,36 +2794,24 @@
             const alertsList = document.getElementById('alertsList');
             const newsList = document.getElementById('newsList');
             const forecastAlertsList = document.getElementById('forecastAlertsList');
+            const weatherAlertsList = document.getElementById('weatherAlertsList');
             
+            // Tüm listeleri gizle
+            earthquakeList.style.display = 'none';
+            eonetList.style.display = 'none';
+            alertsList.style.display = 'none';
+            forecastAlertsList.style.display = 'none';
+            newsList.style.display = 'none';
+            weatherAlertsList.style.display = 'none';
+            
+            // Seçilen filtreye göre göster
             if (filter === 'earthquakes') {
                 earthquakeList.style.display = 'block';
-                eonetList.style.display = 'none';
-                alertsList.style.display = 'none';
-                forecastAlertsList.style.display = 'none';
-                newsList.style.display = 'none';
+            } else if (filter === 'weather') {
+                weatherAlertsList.style.display = 'block';
             } else if (filter === 'eonet') {
-                earthquakeList.style.display = 'none';
                 eonetList.style.display = 'block';
-                alertsList.style.display = 'none';
-                forecastAlertsList.style.display = 'none';
-                newsList.style.display = 'none';
-            } else if (filter === 'alerts') {
-                earthquakeList.style.display = 'none';
-                eonetList.style.display = 'none';
-                alertsList.style.display = 'block';
-                forecastAlertsList.style.display = 'none';
-                newsList.style.display = 'none';
-            } else if (filter === 'forecast') {
-                earthquakeList.style.display = 'none';
-                eonetList.style.display = 'none';
-                alertsList.style.display = 'none';
-                forecastAlertsList.style.display = 'block';
-                newsList.style.display = 'none';
             } else if (filter === 'news') {
-                earthquakeList.style.display = 'none';
-                eonetList.style.display = 'none';
-                alertsList.style.display = 'none';
-                forecastAlertsList.style.display = 'none';
                 newsList.style.display = 'block';
             }
             
@@ -2670,14 +2819,11 @@
             if (earthquakeList.style.display === 'block') {
                 earthquakeList.scrollTop = 0;
             }
+            if (weatherAlertsList.style.display === 'block') {
+                weatherAlertsList.scrollTop = 0;
+            }
             if (eonetList.style.display === 'block') {
                 eonetList.scrollTop = 0;
-            }
-            if (alertsList.style.display === 'block') {
-                alertsList.scrollTop = 0;
-            }
-            if (forecastAlertsList.style.display === 'block') {
-                forecastAlertsList.scrollTop = 0;
             }
             if (newsList.style.display === 'block') {
                 newsList.scrollTop = 0;
@@ -2698,6 +2844,516 @@
             }
         }
 
+        // Sismik Risk Analizi - Fay Hatlarını Harita Üzerinde Göster
+        function loadSeismicRiskData() {
+            fetch('/api/seismic-risk/faults')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.fault_lines && data.fault_lines.length > 0) {
+                        allSeismicRiskData = data.fault_lines;
+                        // Her fay hattı için risk analizi yap ve haritaya ekle
+                        data.fault_lines.forEach(fault => {
+                            analyzeAndDisplayFault(fault.fault_id);
+                        });
+                    }
+                    // Sidebar'ı güncelle
+                    updateSeismicRiskSidebar();
+                })
+                .catch(error => {
+                    console.error('Fay hatları yüklenemedi:', error);
+                    updateSeismicRiskSidebar();
+                });
+            
+            // Deprem sürülerini (swarm) yükle
+            loadEarthquakeSwarms();
+        }
+        
+        // Seismic Risk verilerini sidebar'a ekle
+        function updateSeismicRiskSidebar(container = null) {
+            if (!container) {
+                container = document.getElementById('earthquakeList');
+            }
+            if (!container) return;
+            
+            // İleriye Dönük alt başlığını ekle (eğer yoksa)
+            let forecastHeader = container.querySelector('.forecast-header');
+            if (!forecastHeader) {
+                forecastHeader = document.createElement('div');
+                forecastHeader.className = 'alert-section-header forecast-header';
+                forecastHeader.style.marginTop = '20px';
+                forecastHeader.textContent = 'İleriye Dönük';
+                container.appendChild(forecastHeader);
+            }
+            
+            // Mevcut seismic risk item'larını temizle (yeniden eklemek için)
+            const existingItems = container.querySelectorAll('.seismic-risk-item, .swarm-item');
+            existingItems.forEach(item => {
+                if (item.parentElement === container) {
+                    container.removeChild(item);
+                }
+            });
+            
+            // Fay hatları verilerini ekle
+            if (allSeismicRiskData && allSeismicRiskData.length > 0) {
+                allSeismicRiskData.forEach(fault => {
+                    // Her fay hattı için risk analizi yap (eğer yapılmadıysa)
+                    fetch(`/api/seismic-risk/fault/${fault.fault_id}`)
+                        .then(response => response.json())
+                        .then(riskData => {
+                            if (!riskData.error && riskData.risk_level) {
+                                const item = document.createElement('div');
+                                item.className = 'seismic-risk-item alert-item';
+                                
+                                // Risk seviyesine göre renk
+                                let riskColor = '#27ae60'; // Düşük (yeşil)
+                                if (riskData.risk_level === 'YÜKSEK RİSKLİ') {
+                                    riskColor = '#e74c3c'; // Kırmızı
+                                } else if (riskData.risk_level === 'ORTA-YÜKSEK RİSKLİ') {
+                                    riskColor = '#f39c12'; // Turuncu
+                                } else if (riskData.risk_level === 'ORTA RİSKLİ') {
+                                    riskColor = '#f1c40f'; // Sarı
+                                }
+                                
+                                item.style.borderLeft = `4px solid ${riskColor}`;
+                                item.onclick = () => {
+                                    // Haritada fay hattını göster
+                                    analyzeAndDisplayFault(fault.fault_id);
+                                    map.setView([(fault.bbox.min_lat + fault.bbox.max_lat) / 2, 
+                                                (fault.bbox.min_lon + fault.bbox.max_lon) / 2], 6);
+                                };
+                                
+                                item.innerHTML = `
+                                    <div style="font-weight: bold; margin-bottom: 5px;">${fault.name}</div>
+                                    <div style="font-size: 0.9em; color: ${riskColor}; margin-bottom: 3px;">
+                                        ${riskData.risk_level}
+                                    </div>
+                                    <div style="font-size: 0.85em; color: #666;">
+                                        ${fault.region || 'Bilinmeyen Bölge'}
+                                    </div>
+                                    ${riskData.risk_score ? `<div style="font-size: 0.8em; color: #999; margin-top: 3px;">Risk Skoru: ${riskData.risk_score}/100</div>` : ''}
+                                `;
+                                
+                                // Header'dan sonra ekle
+                                if (forecastHeader.nextSibling) {
+                                    container.insertBefore(item, forecastHeader.nextSibling);
+                                } else {
+                                    container.appendChild(item);
+                                }
+                            }
+                        })
+                        .catch(error => {
+                            console.error(`Fay hattı analizi hatası (${fault.fault_id}):`, error);
+                        });
+                });
+            }
+            
+            // Deprem sürüleri verilerini ekle
+            if (allEarthquakeSwarmData && allEarthquakeSwarmData.length > 0) {
+                allEarthquakeSwarmData.forEach(swarm => {
+                    const item = document.createElement('div');
+                    item.className = 'swarm-item alert-item';
+                    item.style.borderLeft = '4px solid #f39c12'; // Turuncu
+                    item.onclick = () => {
+                        // Haritada swarm'ı göster
+                        map.setView([swarm.center_latitude, swarm.center_longitude], 8);
+                        // Swarm marker'ını bul ve popup aç
+                        earthquakeSwarmMarkers.forEach(swarmItem => {
+                            const lat = swarmItem.marker.getLatLng().lat;
+                            const lng = swarmItem.marker.getLatLng().lng;
+                            if (Math.abs(lat - swarm.center_latitude) < 0.1 && 
+                                Math.abs(lng - swarm.center_longitude) < 0.1) {
+                                swarmItem.marker.openPopup();
+                            }
+                        });
+                    };
+                    
+                    let riskLevel = 'Düşük Risk';
+                    if (swarm.risk_level === 'high') {
+                        riskLevel = 'Yüksek Risk';
+                    } else if (swarm.risk_level === 'medium') {
+                        riskLevel = 'Orta Risk';
+                    }
+                    
+                    item.innerHTML = `
+                        <div style="font-weight: bold; margin-bottom: 5px;">Deprem Sürüsü</div>
+                        <div style="font-size: 0.9em; color: #f39c12; margin-bottom: 3px;">
+                            ${riskLevel}
+                        </div>
+                        <div style="font-size: 0.85em; color: #666;">
+                            ${swarm.earthquake_count} deprem, Ortalama: M${swarm.avg_magnitude?.toFixed(1) || 'N/A'}
+                        </div>
+                        <div style="font-size: 0.8em; color: #999; margin-top: 3px;">
+                            Yarıçap: ${swarm.cluster_radius_km?.toFixed(0) || 'N/A'} km
+                        </div>
+                    `;
+                    
+                    // Header'dan sonra ekle
+                    if (forecastHeader.nextSibling) {
+                        container.insertBefore(item, forecastHeader.nextSibling);
+                    } else {
+                        container.appendChild(item);
+                    }
+                });
+            }
+            
+            // Eğer hiç veri yoksa mesaj göster
+            if ((!allSeismicRiskData || allSeismicRiskData.length === 0) && 
+                (!allEarthquakeSwarmData || allEarthquakeSwarmData.length === 0)) {
+                const noData = document.createElement('div');
+                noData.className = 'seismic-risk-item';
+                noData.style.cssText = 'color: #999; text-align: center; padding: 20px; font-size: 0.9em;';
+                noData.textContent = 'İleriye dönük analiz verisi bulunamadı';
+                if (forecastHeader.nextSibling) {
+                    container.insertBefore(noData, forecastHeader.nextSibling);
+                } else {
+                    container.appendChild(noData);
+                }
+            }
+        }
+        
+        // Deprem Sürülerini (Swarm) Yükle ve Göster
+        function loadEarthquakeSwarms() {
+            console.log('Deprem sürüleri yükleniyor...');
+            // Son 1 gün içindeki depremleri analiz et (USGS'ten çekilen verilerle uyumlu)
+            fetch('/api/seismic-risk/swarms?min_count=3&max_magnitude=5.0&cluster_radius=100&min_days=0&max_days=1')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Deprem sürüleri API yanıtı:', data);
+                    if (data.swarms && data.swarms.length > 0) {
+                        allEarthquakeSwarmData = data.swarms;
+                        console.log('Deprem sürüleri bulundu:', data.swarms.length);
+                        // Marker'ları applyFilters içinde eklenecek, burada sadece veriyi sakla
+                        // Sidebar'ı güncelle
+                        updateSeismicRiskSidebar();
+                        // Filtreleme uygula
+                        applyFilters();
+                    } else {
+                        console.log('Deprem sürüsü bulunamadı. Parametreler:', data.parameters || 'N/A');
+                        allEarthquakeSwarmData = [];
+                        updateSeismicRiskSidebar();
+                        applyFilters();
+                    }
+                })
+                .catch(error => {
+                    console.error('Deprem sürüleri yüklenemedi:', error);
+                    allEarthquakeSwarmData = [];
+                    updateSeismicRiskSidebar();
+                });
+        }
+        
+        function addEarthquakeSwarmMarker(swarm) {
+            const lat = swarm.center_latitude;
+            const lon = swarm.center_longitude;
+            
+            if (!lat || !lon) {
+                console.warn('Swarm marker eklenemedi - koordinat eksik:', swarm);
+                return null;
+            }
+            
+            // Risk seviyesine göre renk belirle
+            let riskColor = '#27ae60'; // Düşük (yeşil)
+            if (swarm.risk_level === 'YÜKSEK RİSKLİ') {
+                riskColor = '#e74c3c'; // Kırmızı
+            } else if (swarm.risk_level === 'ORTA-YÜKSEK RİSKLİ') {
+                riskColor = '#f39c12'; // Turuncu
+            } else if (swarm.risk_level === 'ORTA RİSKLİ') {
+                riskColor = '#f1c40f'; // Sarı
+            }
+            
+            // Marker ikonu - deprem sürüsü için özel ikon
+            const iconSize = swarm.earthquake_count > 15 ? 28 : swarm.earthquake_count > 10 ? 24 : 20;
+            const shapeHTML = `
+                <div style="
+                    width: ${iconSize}px;
+                    height: ${iconSize}px;
+                    background: ${riskColor};
+                    border: 3px solid white;
+                    border-radius: 50%;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: ${iconSize * 0.4}px;
+                    color: white;
+                    font-weight: bold;
+                    position: relative;
+                ">
+                    <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">⚡</span>
+                </div>
+            `;
+            
+            const swarmIcon = L.divIcon({
+                className: 'earthquake-swarm-marker',
+                html: shapeHTML,
+                iconSize: [iconSize, iconSize],
+                iconAnchor: [iconSize / 2, iconSize / 2],
+                popupAnchor: [0, -iconSize / 2]
+            });
+            
+            const marker = L.marker([lat, lon], {
+                icon: swarmIcon
+            });
+            
+            // Küme bölgesini circle olarak göster
+            const clusterRadius = swarm.cluster_radius_km * 1000; // km'den metreye çevir
+            const circle = L.circle([lat, lon], {
+                radius: clusterRadius,
+                color: riskColor,
+                fillColor: riskColor,
+                fillOpacity: 0.1,
+                weight: 2,
+                dashArray: '5, 5'
+            });
+            
+            // Popup içeriği
+            let popupHTML = `
+                <div style="min-width: 280px;">
+                    <h3 style="margin: 0 0 10px 0; color: ${riskColor}; font-size: 1.2em; border-bottom: 2px solid ${riskColor}; padding-bottom: 5px;">
+                        ⚡ Deprem Sürüsü (Swarm)
+                    </h3>
+                    
+                    <div style="background: ${riskColor}15; padding: 10px; border-radius: 5px; margin: 10px 0;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <strong>Risk Seviyesi:</strong>
+                            <span style="color: ${riskColor}; font-weight: bold;">${swarm.risk_level}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <strong>Risk Skoru:</strong>
+                            <span style="color: ${riskColor}; font-weight: bold;">${swarm.risk_score}/100</span>
+                        </div>
+                        <div style="width: 100%; height: 6px; background: #ddd; border-radius: 3px; overflow: hidden;">
+                            <div style="width: ${swarm.risk_score}%; height: 100%; background: ${riskColor};"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: #f8f9fa; padding: 8px; border-radius: 5px; margin: 10px 0; font-size: 0.9em;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
+                            <span><strong>Deprem Sayısı:</strong></span>
+                            <strong style="color: ${riskColor};">${swarm.earthquake_count} adet</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
+                            <span>Ortalama Büyüklük:</span>
+                            <strong>M${swarm.avg_magnitude.toFixed(1)}</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
+                            <span>Maksimum Büyüklük:</span>
+                            <strong>M${swarm.max_magnitude.toFixed(1)}</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
+                            <span>Minimum Büyüklük:</span>
+                            <strong>M${swarm.min_magnitude.toFixed(1)}</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
+                            <span>Zaman Aralığı:</span>
+                            <strong>${swarm.time_span_days} gün</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Küme Yarıçapı:</span>
+                            <strong>${swarm.cluster_radius_km} km</strong>
+                        </div>
+                    </div>
+            `;
+            
+            if (swarm.earthquakes && swarm.earthquakes.length > 0) {
+                popupHTML += `
+                    <div style="margin-top: 10px;">
+                        <strong style="font-size: 0.9em;">Son Depremler:</strong>
+                        <div style="max-height: 120px; overflow-y: auto; margin-top: 5px;">
+                `;
+                swarm.earthquakes.slice(0, 5).forEach(eq => {
+                    const eqDate = new Date(eq.timestamp).toLocaleDateString('tr-TR');
+                    popupHTML += `
+                        <div style="padding: 4px; background: #f8f9fa; border-radius: 3px; margin-bottom: 3px; font-size: 0.8em;">
+                            <strong>M${eq.magnitude.toFixed(1)}</strong> - ${eqDate} - ${eq.location || 'Bilinmeyen'}
+                        </div>
+                    `;
+                });
+                popupHTML += `</div></div>`;
+            }
+            
+            popupHTML += `
+                    <div style="margin-top: 10px; padding: 8px; background: #fff3cd; border-left: 3px solid #ffc107; border-radius: 3px; font-size: 0.75em; color: #856404;">
+                        <strong>Uyarı:</strong> ${swarm.disclaimer || 'Bu analiz istatistiksel verilere dayalı bir olasılık değerlendirmesidir; kesin bir tarih veya zaman bildirmez. Lütfen resmi kurumların (AFAD, USGS vb.) açıklamalarını takip edin.'}
+                    </div>
+                </div>
+            `;
+            
+            marker.bindPopup(popupHTML);
+            
+            marker.on('click', function() {
+                map.setView([lat, lon], 8);
+            });
+            
+            // Marker'ı direkt ekleme, applyFilters içinde eklenecek
+            return {marker: marker, circle: circle};
+        }
+        
+        function analyzeAndDisplayFault(faultId) {
+            fetch(`/api/seismic-risk/fault/${faultId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.error && data.risk_level) {
+                        addSeismicRiskMarker(data);
+                    }
+                })
+                .catch(error => {
+                    console.error(`Fay hattı analizi hatası (${faultId}):`, error);
+                });
+        }
+        
+        function addSeismicRiskMarker(riskData) {
+            // Fay hattının merkez noktasını hesapla (bbox'tan)
+            const faultInfo = allSeismicRiskData.find(f => f.fault_id === riskData.fault_id);
+            if (!faultInfo || !faultInfo.bbox) {
+                return;
+            }
+            
+            const bbox = faultInfo.bbox;
+            const centerLat = (bbox.min_lat + bbox.max_lat) / 2;
+            const centerLon = (bbox.min_lon + bbox.max_lon) / 2;
+            
+            // Risk seviyesine göre renk belirle
+            let riskColor = '#27ae60'; // Düşük (yeşil)
+            if (riskData.risk_level === 'YÜKSEK RİSKLİ') {
+                riskColor = '#e74c3c'; // Kırmızı
+            } else if (riskData.risk_level === 'ORTA-YÜKSEK RİSKLİ') {
+                riskColor = '#f39c12'; // Turuncu
+            } else if (riskData.risk_level === 'ORTA RİSKLİ') {
+                riskColor = '#f1c40f'; // Sarı
+            }
+            
+            // Fay hattı çizgisini çiz (bbox'tan yaklaşık çizgi - diagonal)
+            const faultLine = [
+                [bbox.min_lat, bbox.min_lon],
+                [centerLat, centerLon],
+                [bbox.max_lat, bbox.max_lon]
+            ];
+            
+            const polyline = L.polyline(faultLine, {
+                color: riskColor,
+                weight: 4,
+                opacity: 0.7,
+                dashArray: '15, 8'
+            });
+            
+            // Marker ikonu - risk seviyesine göre
+            const iconSize = riskData.risk_score > 70 ? 30 : riskData.risk_score > 40 ? 24 : 20;
+            const shapeHTML = `
+                <div style="
+                    width: ${iconSize}px;
+                    height: ${iconSize}px;
+                    background: ${riskColor};
+                    border: 3px solid white;
+                    border-radius: 50%;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: ${iconSize * 0.5}px;
+                    color: white;
+                    font-weight: bold;
+                ">⚠</div>
+            `;
+            
+            const seismicIcon = L.divIcon({
+                className: 'seismic-risk-marker',
+                html: shapeHTML,
+                iconSize: [iconSize, iconSize],
+                iconAnchor: [iconSize / 2, iconSize / 2],
+                popupAnchor: [0, -iconSize / 2]
+            });
+            
+            const marker = L.marker([centerLat, centerLon], {
+                icon: seismicIcon
+            });
+            
+            // Popup içeriği
+            let popupHTML = `
+                <div style="min-width: 250px;">
+                    <h3 style="margin: 0 0 10px 0; color: ${riskColor}; font-size: 1.2em; border-bottom: 2px solid ${riskColor}; padding-bottom: 5px;">
+                        ${riskData.fault_name || 'Sismik Risk Analizi'}
+                    </h3>
+                    ${riskData.region ? `<p style="margin: 5px 0; color: #666; font-size: 0.9em;"><strong>Bölge:</strong> ${riskData.region}</p>` : ''}
+                    
+                    <div style="background: ${riskColor}15; padding: 10px; border-radius: 5px; margin: 10px 0;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <strong>Risk Seviyesi:</strong>
+                            <span style="color: ${riskColor}; font-weight: bold;">${riskData.risk_level}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <strong>Risk Skoru:</strong>
+                            <span style="color: ${riskColor}; font-weight: bold;">${riskData.risk_score}/100</span>
+                        </div>
+                        <div style="width: 100%; height: 6px; background: #ddd; border-radius: 3px; overflow: hidden;">
+                            <div style="width: ${riskData.risk_score}%; height: 100%; background: ${riskColor};"></div>
+                        </div>
+                    </div>
+                    
+                    <p style="margin: 5px 0; font-size: 0.9em; color: #666;">${riskData.risk_description}</p>
+            `;
+            
+            if (riskData.time_elapsed_years !== undefined) {
+                popupHTML += `
+                    <div style="background: #f8f9fa; padding: 8px; border-radius: 5px; margin: 10px 0; font-size: 0.85em;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
+                            <span>Son Depremden Geçen:</span>
+                            <strong>${riskData.time_elapsed_years} yıl</strong>
+                        </div>
+                        ${riskData.avg_recurrence_interval_years ? `
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Ortalama Aralık:</span>
+                                <strong>${riskData.avg_recurrence_interval_years} yıl</strong>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }
+            
+            if (riskData.recent_major_earthquakes && riskData.recent_major_earthquakes.length > 0) {
+                popupHTML += `
+                    <div style="margin-top: 10px;">
+                        <strong style="font-size: 0.9em;">Son Büyük Depremler:</strong>
+                        <div style="max-height: 100px; overflow-y: auto; margin-top: 5px;">
+                `;
+                riskData.recent_major_earthquakes.slice(0, 3).forEach(eq => {
+                    const eqDate = new Date(eq.timestamp).toLocaleDateString('tr-TR');
+                    popupHTML += `
+                        <div style="padding: 4px; background: #f8f9fa; border-radius: 3px; margin-bottom: 3px; font-size: 0.8em;">
+                            <strong>M${eq.magnitude.toFixed(1)}</strong> - ${eqDate}
+                        </div>
+                    `;
+                });
+                popupHTML += `</div></div>`;
+            }
+            
+            popupHTML += `
+                    <div style="margin-top: 10px; padding: 8px; background: #fff3cd; border-left: 3px solid #ffc107; border-radius: 3px; font-size: 0.75em; color: #856404;">
+                        <strong>Uyarı:</strong> ${riskData.disclaimer || 'Bu analiz istatistiksel verilere dayalı bir olasılık değerlendirmesidir; kesin bir tarih veya zaman bildirmez. Lütfen resmi kurumların (AFAD, USGS vb.) açıklamalarını takip edin.'}
+                    </div>
+                </div>
+            `;
+            
+            marker.bindPopup(popupHTML);
+            
+            marker.on('click', function() {
+                map.setView([centerLat, centerLon], 6);
+            });
+            
+            // Filtreleme kontrolü
+            if (activeFilters['seismic-risk']) {
+                marker.addTo(map);
+                polyline.addTo(map);
+            }
+            
+            seismicRiskMarkers.push(marker);
+            seismicRiskLines.push(polyline);
+        }
+
         function loadData() {
             fetch('/api/earthquakes')
                 .then(response => response.json())
@@ -2714,7 +3370,14 @@
 
                     // Deprem listesi - sağ sidebar'a ekle
                     const container = document.getElementById('earthquakeList');
-                    container.innerHTML = '<h2>Son Depremler</h2>';
+                    container.innerHTML = '';
+                    
+                    // Son Depremler alt başlığı
+                    const recentHeader = document.createElement('div');
+                    recentHeader.className = 'alert-section-header';
+                    recentHeader.style.marginTop = '0';
+                    recentHeader.textContent = 'Son Depremler';
+                    container.appendChild(recentHeader);
                     
                     if (data.earthquakes && data.earthquakes.length > 0) {
                         data.earthquakes.forEach((eq, index) => {
@@ -2745,7 +3408,16 @@
                             container.appendChild(item);
                         });
                     } else {
-                        container.innerHTML += '<div style="color: #999; text-align: center; padding: 40px;">Deprem verisi bulunamadı</div>';
+                        const noData = document.createElement('div');
+                        noData.style.cssText = 'color: #999; text-align: center; padding: 40px;';
+                        noData.textContent = 'Deprem verisi bulunamadı';
+                        container.appendChild(noData);
+                    }
+                    
+                    // İleriye Dönük alt başlığı - Seismic Risk verileri (eğer yüklendiyse)
+                    // loadSeismicRiskData() çağrıldığında otomatik güncellenecek
+                    if (allSeismicRiskData.length > 0 || allEarthquakeSwarmData.length > 0) {
+                        updateSeismicRiskSidebar(container);
                     }
                 })
                 .catch(error => {
@@ -2765,6 +3437,7 @@
             activeFilters.floods = document.getElementById('filter-floods').checked;
             activeFilters.storms = document.getElementById('filter-storms').checked;
             activeFilters.volcanoes = document.getElementById('filter-volcanoes').checked;
+            activeFilters['seismic-risk'] = document.getElementById('filter-seismic-risk').checked;
             activeFilters.weather = document.getElementById('filter-weather').checked;
             
             // Checkbox'ların görünümünü güncelle
@@ -3060,6 +3733,15 @@
             floodMarkers = [];
             volcanoMarkers.forEach(marker => map.removeLayer(marker));
             volcanoMarkers = [];
+            seismicRiskMarkers.forEach(marker => map.removeLayer(marker));
+            seismicRiskLines.forEach(line => map.removeLayer(line));
+            earthquakeSwarmMarkers.forEach(item => {
+                map.removeLayer(item.marker);
+                map.removeLayer(item.circle);
+            });
+            seismicRiskMarkers = [];
+            seismicRiskLines = [];
+            earthquakeSwarmMarkers = [];
             
             // Depremleri göster/gizle
             if (activeFilters.earthquakes && allEarthquakeData.length > 0) {
@@ -3071,35 +3753,23 @@
             }
             
             // Hava durumunu göster/gizle
-            if (activeFilters.weather) {
+            if (activeFilters.weather && allWeatherData.length > 0) {
                 console.log('Hava durumu filtresi aktif, veri sayısı:', allWeatherData.length);
-                if (Array.isArray(allWeatherData) && allWeatherData.length > 0) {
-                    let addedCount = 0;
-                    allWeatherData.forEach(weather => {
-                        if (weather.latitude && weather.longitude) {
-                            addWeatherMarker(weather);
+                let addedCount = 0;
+                allWeatherData.forEach(weather => {
+                    if (weather.latitude && weather.longitude) {
+                        const marker = addWeatherMarker(weather);
+                        if (marker) {
+                            marker.addTo(map);
                             addedCount++;
-                        } else {
-                            console.log('Koordinat eksik:', weather.location || 'Bilinmeyen', weather);
                         }
-                    });
-                    console.log('Hava durumu marker\'ları eklendi:', addedCount);
-                } else if (allWeatherData && allWeatherData.weather && Array.isArray(allWeatherData.weather)) {
-                    let addedCount = 0;
-                    allWeatherData.weather.forEach(weather => {
-                        if (weather.latitude && weather.longitude) {
-                            addWeatherMarker(weather);
-                            addedCount++;
-                        } else {
-                            console.log('Koordinat eksik:', weather.location || 'Bilinmeyen', weather);
-                        }
-                    });
-                    console.log('Hava durumu marker\'ları eklendi:', addedCount);
-                } else {
-                    console.log('Hava durumu verisi bulunamadı veya format hatalı');
-                }
-            } else {
-                console.log('Hava durumu filtresi kapalı');
+                    } else {
+                        console.log('Koordinat eksik:', weather.location || 'Bilinmeyen', weather);
+                    }
+                });
+                console.log('Hava durumu marker\'ları eklendi:', addedCount);
+            } else if (activeFilters.weather) {
+                console.log('Hava durumu filtresi aktif ama veri yok');
             }
             
             // Wildfire verilerini göster/gizle
@@ -3140,6 +3810,31 @@
                     }
                 });
                 console.log('Volcano marker\'ları eklendi:', volcanoMarkers.length);
+            }
+            
+            // Sismik Risk verilerini göster/gizle
+            if (activeFilters['seismic-risk']) {
+                if (allSeismicRiskData.length > 0) {
+                    allSeismicRiskData.forEach(fault => {
+                        analyzeAndDisplayFault(fault.fault_id);
+                    });
+                    console.log('Sismik risk marker\'ları eklendi:', seismicRiskMarkers.length);
+                }
+                
+                // Deprem sürülerini göster
+                if (allEarthquakeSwarmData.length > 0) {
+                    allEarthquakeSwarmData.forEach(swarm => {
+                        const swarmItem = addEarthquakeSwarmMarker(swarm);
+                        if (swarmItem) {
+                            swarmItem.marker.addTo(map);
+                            swarmItem.circle.addTo(map);
+                            earthquakeSwarmMarkers.push(swarmItem);
+                        }
+                    });
+                    console.log('Deprem sürüsü marker\'ları eklendi:', earthquakeSwarmMarkers.length);
+                } else {
+                    console.log('Deprem sürüsü verisi yok');
+                }
             }
             
             // EONET olaylarını filtrele ve göster
@@ -3195,6 +3890,618 @@
             }
         }
 
+        // Sismik Acil Durum Operatörü - Deprem Simülasyonu
+        let simulationWarningTimer = null;
+        let simulationData = null;
+        let simulatedEarthquakeMarker = null;
+        let warningEpicenterMarker = null;
+        let warningCircle = null;
+        let warningInfoPopup = null;
+        let sensorMarkers = []; // Tüm sensör marker'ları
+        let simulationStartTime = null; // Simülasyon başlangıç zamanı
+        let activeSensorMarker = null; // Aktif sensör marker'ı
+        let isWaitingForClick = false; // Haritada tıklama bekleniyor mu
+        let clickMarker = null; // Tıklama marker'ı
+
+        function startEarthquakeSimulation() {
+            const btn = document.getElementById('simulationBtn');
+            
+            if (isWaitingForClick) {
+                // Eğer zaten tıklama modundaysa, iptal et
+                cancelSimulationMode();
+                return;
+            }
+            
+            // Tıklama modunu aktif et
+            isWaitingForClick = true;
+            btn.disabled = true;
+            btn.textContent = 'Haritada bir yere tıklayın...';
+            btn.style.background = 'linear-gradient(135deg, #f39c12 0%, #e67e22 100%)';
+            
+            // Haritaya tıklama event'i ekle
+            map.once('click', onMapClickForSimulation);
+            
+            // Kullanıcıya bilgi ver
+            if (clickMarker) {
+                map.removeLayer(clickMarker);
+            }
+            
+            // Bilgi popup'ı göster
+            const infoPopup = L.popup()
+                .setLatLng(map.getCenter())
+                .setContent(`
+                    <div style="text-align: center; padding: 10px;">
+                        <strong>Deprem Merkez Üssü Seçin</strong><br>
+                        <span style="font-size: 0.9em; color: #666;">Haritada bir yere tıklayarak deprem merkez üssünü belirleyin</span>
+                    </div>
+                `)
+                .openOn(map);
+            
+            // 5 saniye sonra popup'ı kapat
+            setTimeout(() => {
+                map.closePopup(infoPopup);
+            }, 5000);
+        }
+        
+        function cancelSimulationMode() {
+            isWaitingForClick = false;
+            const btn = document.getElementById('simulationBtn');
+            btn.disabled = false;
+            btn.textContent = 'Deprem Simülasyonu';
+            btn.style.background = 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)';
+            map.off('click', onMapClickForSimulation);
+            
+            if (clickMarker) {
+                map.removeLayer(clickMarker);
+                clickMarker = null;
+            }
+        }
+        
+        function onMapClickForSimulation(e) {
+            if (!isWaitingForClick) return;
+            
+            const clickedLat = e.latlng.lat;
+            const clickedLon = e.latlng.lng;
+            
+            // Tıklama marker'ını göster
+            if (clickMarker) {
+                map.removeLayer(clickMarker);
+            }
+            
+            const clickIcon = L.divIcon({
+                className: 'click-marker',
+                html: `<div style="
+                    width: 20px;
+                    height: 20px;
+                    background: #e74c3c;
+                    border: 3px solid white;
+                    border-radius: 50%;
+                    box-shadow: 0 0 0 3px #e74c3c40;
+                "></div>`,
+                iconSize: [20, 20],
+                iconAnchor: [10, 10]
+            });
+            
+            clickMarker = L.marker([clickedLat, clickedLon], {
+                icon: clickIcon
+            }).addTo(map);
+            
+            // Tıklama modunu kapat
+            isWaitingForClick = false;
+            const btn = document.getElementById('simulationBtn');
+            btn.disabled = true;
+            btn.textContent = 'Simülasyon hazırlanıyor...';
+            btn.style.background = 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)';
+            
+            // Harita merkezini kullanıcı konumu olarak al
+            const mapCenter = map.getCenter();
+            const userLat = mapCenter.lat;
+            const userLon = mapCenter.lng;
+
+            console.log('Simülasyon başlatılıyor...', { epicenterLat: clickedLat, epicenterLon: clickedLon, userLat, userLon });
+            
+            fetch('/api/seismic-simulation/trigger', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    user_latitude: userLat,
+                    user_longitude: userLon,
+                    epicenter_latitude: clickedLat,
+                    epicenter_longitude: clickedLon
+                })
+            })
+            .then(response => {
+                console.log('API Response status:', response.status);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Simülasyon verisi alındı:', data);
+                
+                if (data.error) {
+                    console.error('API hatası:', data.error);
+                    alert('Hata: ' + data.error);
+                    cancelSimulationMode();
+                    return;
+                }
+
+                if (!data.wave_analysis || !data.epicenter) {
+                    console.error('Eksik veri:', data);
+                    alert('Simülasyon verisi eksik. Lütfen tekrar deneyin.');
+                    cancelSimulationMode();
+                    return;
+                }
+
+                simulationData = data;
+                simulationStartTime = new Date().getTime(); // Simülasyon başlangıç zamanını kaydet
+                
+                // Deprem merkez üssünü ve etkilenecek bölgeyi haritada işaretle
+                showEarthquakeWarningOnMap(data);
+                
+                // Erken uyarı süresini geri sayım yap
+                let timeLeft = Math.max(1, Math.ceil(data.wave_analysis.early_warning_time_seconds));
+                
+                // Geri sayım başlat
+                simulationWarningTimer = setInterval(() => {
+                    if (timeLeft > 0) {
+                        // Haritadaki timer'ı güncelle
+                        updateMapWarningTimer(timeLeft);
+                        timeLeft--;
+                    } else {
+                        clearInterval(simulationWarningTimer);
+                        console.log('Geri sayım bitti, deprem oluşuyor...');
+                        // Depremi haritada göster
+                        showSimulatedEarthquake(data);
+                        // Uyarı marker'larını kaldır
+                        removeWarningMarkers();
+                        btn.disabled = false;
+                        btn.textContent = 'Deprem Simülasyonu';
+                        btn.style.background = 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)';
+                    }
+                }, 1000);
+            })
+            .catch(error => {
+                console.error('Simülasyon hatası:', error);
+                alert('Simülasyon başlatılamadı: ' + error.message + '\n\nLütfen konsolu kontrol edin (F12)');
+                cancelSimulationMode();
+            });
+        }
+
+        function showEarthquakeWarningOnMap(data) {
+            console.log('Deprem uyarısı haritada gösteriliyor...', data);
+            
+            // Önceki uyarı marker'larını temizle
+            removeWarningMarkers();
+            
+            const epicenter = data.epicenter;
+            const magnitude = data.magnitude;
+            const distance = data.distance_km;
+            const sensor = data.sensor;
+            
+            // Büyüklüğe göre etkilenecek yarıçap hesapla (km) - ÖNCE HESAPLA
+            // Büyüklük arttıkça etkilenecek alan artar
+            const affectedRadius = Math.max(50, magnitude * 20); // Minimum 50km, büyüklük * 20
+            
+            // Önceki sensör marker'larını temizle
+            sensorMarkers.forEach(marker => map.removeLayer(marker));
+            sensorMarkers = [];
+            
+            // Detection yapan sensörleri belirle
+            const detectingSensorIds = data.detecting_sensors ? data.detecting_sensors.map(ds => ds.id) : [sensor.id];
+            
+            // Tüm sensörleri haritada göster
+            if (data.all_sensors) {
+                data.all_sensors.forEach(s => {
+                    const isActive = s.id === sensor.id; // Ana detection sensörü
+                    const isDetectingSensor = detectingSensorIds.includes(s.id); // Detection yapan diğer sensörler
+                    
+                    // Sensör durumuna göre renk belirle
+                    let sensorColor = '#3498db'; // Pasif - mavi
+                    let sensorSize = 30;
+                    if (isActive) {
+                        sensorColor = '#27ae60'; // Ana detection sensörü - yeşil
+                        sensorSize = 35;
+                    } else if (isDetectingSensor) {
+                        sensorColor = '#f39c12'; // Detection yapan diğer sensörler - turuncu
+                        sensorSize = 32;
+                    }
+                    
+                    const sensorIcon = L.divIcon({
+                        className: 'sensor-marker',
+                        html: `<div style="
+                            width: ${sensorSize}px;
+                            height: ${sensorSize}px;
+                            background: ${sensorColor};
+                            border: 3px solid white;
+                            border-radius: 50%;
+                            box-shadow: 0 0 0 3px ${sensorColor}40, 0 0 0 6px ${sensorColor}20;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            color: white;
+                            font-weight: bold;
+                            font-size: ${sensorSize === 35 ? 18 : 16}px;
+                            ${(isActive || isDetectingSensor) ? 'animation: pulse 1s infinite;' : ''}
+                        ">S</div>`,
+                        iconSize: [sensorSize, sensorSize],
+                        iconAnchor: [sensorSize / 2, sensorSize / 2]
+                    });
+                    
+                    const sensorMarker = L.marker([s.latitude, s.longitude], {
+                        icon: sensorIcon
+                    }).addTo(map);
+                    
+                    // Aktif sensör için uyarı popup'ını tekrar açılabilir yap
+                    if (isActive) {
+                        // Uyarı popup içeriğini sakla
+                        const warningPopupContent = `
+                            <div style="min-width: 300px;">
+                                <h3 style="color: #e74c3c; margin: 0 0 15px 0; text-align: center;">
+                                    DEPREM UYARISI
+                                </h3>
+                                <div style="background: #d4edda; padding: 8px; border-radius: 5px; margin-bottom: 10px; text-align: center; border: 1px solid #27ae60;">
+                                    <div style="font-size: 0.9em; color: #155724; font-weight: bold;">
+                                        [S] ${sensor.name}
+                                    </div>
+                                    <div style="font-size: 0.8em; color: #155724;">
+                                        Sensörden Detection
+                                    </div>
+                                </div>
+                                <div style="background: #fff3cd; padding: 10px; border-radius: 5px; margin-bottom: 10px; text-align: center;">
+                                    <div style="font-size: 2em; font-weight: bold; color: #e74c3c;" id="mapWarningTimer">
+                                        ${Math.ceil(data.wave_analysis.early_warning_time_seconds)} saniye
+                                    </div>
+                                    <div style="font-size: 0.9em; color: #856404;">S dalgası varış süresi</div>
+                                </div>
+                                <div style="margin-bottom: 10px;">
+                                    <strong>Büyüklük:</strong> M${magnitude} (${data.severity})<br>
+                                    <strong>Merkez Üssü Mesafesi:</strong> ${sensor.distance_to_epicenter_km} km<br>
+                                    <strong>P Dalgası Varış:</strong> ${data.wave_analysis.p_wave_arrival_time_seconds} saniye<br>
+                                    <strong>S Dalgası Varış:</strong> ${data.wave_analysis.s_wave_arrival_time_seconds} saniye<br>
+                                    <strong>Etkilenecek Yarıçap:</strong> ~${affectedRadius} km
+                                </div>
+                                <div style="background: #f8f9fa; padding: 10px; border-radius: 5px; margin-top: 10px;">
+                                    <strong>Hemen Harekete Geçin:</strong>
+                                    <ol style="margin: 10px 0; padding-left: 20px;">
+                                        ${data.critical_actions.map(action => `<li style="margin: 5px 0;">${action}</li>`).join('')}
+                                    </ol>
+                                </div>
+                            </div>
+                        `;
+                        
+                        // Marker'a tıklandığında popup'ı aç
+                        sensorMarker.on('click', function() {
+                            if (warningInfoPopup) {
+                                map.closePopup(warningInfoPopup);
+                            }
+                            warningInfoPopup = L.popup({
+                                maxWidth: 350,
+                                className: 'earthquake-warning-popup'
+                            })
+                            .setLatLng([s.latitude, s.longitude])
+                            .setContent(warningPopupContent)
+                            .openOn(map);
+                            
+                            // Timer'ı güncelle (simülasyon devam ediyorsa)
+                            if (simulationWarningTimer && simulationData) {
+                                // Kalan süreyi hesapla
+                                const elapsed = (new Date().getTime() - simulationStartTime) / 1000;
+                                const totalTime = simulationData.wave_analysis.early_warning_time_seconds;
+                                const remaining = Math.max(0, Math.ceil(totalTime - elapsed));
+                                
+                                const timerElement = document.getElementById('mapWarningTimer');
+                                if (timerElement) {
+                                    timerElement.textContent = remaining + ' saniye';
+                                }
+                            }
+                        });
+                        
+                        // Normal popup'ı da ekle (hover için)
+                        sensorMarker.bindPopup(`
+                            <div style="min-width: 200px;">
+                                <strong>${s.name}</strong><br>
+                                <span style="color: #27ae60; font-weight: bold;">✓ Ana Detection Sensörü</span><br>
+                                <span style="font-size: 0.9em; color: #666;">Mesafe: ${sensor.distance_to_epicenter_km} km</span><br>
+                                <span style="font-size: 0.85em; color: #999; margin-top: 5px; display: block;">Tıklayarak uyarı detaylarını görüntüleyin</span>
+                            </div>
+                        `);
+                    } else if (isDetectingSensor) {
+                        // Detection yapan diğer sensörler için popup
+                        const detectingSensorData = data.detecting_sensors.find(ds => ds.id === s.id);
+                        sensorMarker.bindPopup(`
+                            <div style="min-width: 200px;">
+                                <strong>${s.name}</strong><br>
+                                <span style="color: #f39c12; font-weight: bold;">Detection Yapıyor</span><br>
+                                <span style="font-size: 0.9em; color: #666;">Mesafe: ${detectingSensorData ? detectingSensorData.distance_to_epicenter_km : 'N/A'} km</span>
+                            </div>
+                        `);
+                    } else {
+                        // Pasif sensörler için normal popup
+                        sensorMarker.bindPopup(`
+                            <div style="min-width: 200px;">
+                                <strong>${s.name}</strong><br>
+                                <span style="color: #7f8c8d;">Pasif</span>
+                            </div>
+                        `);
+                    }
+                    
+                    sensorMarkers.push(sensorMarker);
+                });
+            }
+            
+            // Uyarı ikonu (sarı/turuncu, titreşimli)
+            const warningIcon = L.divIcon({
+                className: 'earthquake-warning-marker',
+                html: `<div style="
+                    width: 50px;
+                    height: 50px;
+                    background: #f39c12;
+                    border: 4px solid #e74c3c;
+                    border-radius: 50%;
+                    box-shadow: 0 0 0 4px rgba(231, 76, 60, 0.3), 0 0 0 8px rgba(231, 76, 60, 0.1);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-weight: bold;
+                    font-size: 24px;
+                    animation: pulse 1s infinite;
+                ">!</div>`,
+                iconSize: [50, 50],
+                iconAnchor: [25, 25]
+            });
+            
+            // Merkez üssü marker'ı
+            warningEpicenterMarker = L.marker([epicenter.latitude, epicenter.longitude], {
+                icon: warningIcon
+            }).addTo(map);
+            
+            // Etkilenecek bölgeyi göster (daire)
+            warningCircle = L.circle([epicenter.latitude, epicenter.longitude], {
+                radius: affectedRadius * 1000, // Metre cinsinden
+                color: '#e74c3c',
+                fillColor: '#f39c12',
+                fillOpacity: 0.3,
+                weight: 3,
+                dashArray: '10, 5'
+            }).addTo(map);
+            
+            // Bilgi popup'ı (sensör konumunda)
+            const warningTime = Math.ceil(data.wave_analysis.early_warning_time_seconds);
+            warningInfoPopup = L.popup({
+                maxWidth: 350,
+                className: 'earthquake-warning-popup'
+            })
+            .setLatLng([sensor.latitude, sensor.longitude])
+            .setContent(`
+                <div style="min-width: 300px;">
+                    <h3 style="color: #e74c3c; margin: 0 0 15px 0; text-align: center;">
+                        DEPREM UYARISI
+                    </h3>
+                    <div style="background: #d4edda; padding: 8px; border-radius: 5px; margin-bottom: 10px; text-align: center; border: 1px solid #27ae60;">
+                        <div style="font-size: 0.9em; color: #155724; font-weight: bold;">
+                            [S] ${sensor.name}
+                        </div>
+                        <div style="font-size: 0.8em; color: #155724;">
+                            Sensörden Detection
+                        </div>
+                    </div>
+                    <div style="background: #fff3cd; padding: 10px; border-radius: 5px; margin-bottom: 10px; text-align: center;">
+                        <div style="font-size: 2em; font-weight: bold; color: #e74c3c;" id="mapWarningTimer">
+                            ${warningTime} saniye
+                        </div>
+                        <div style="font-size: 0.9em; color: #856404;">S dalgası varış süresi</div>
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <strong>Büyüklük:</strong> M${magnitude} (${data.severity})<br>
+                        <strong>Merkez Üssü Mesafesi:</strong> ${sensor.distance_to_epicenter_km} km<br>
+                        <strong>P Dalgası Varış:</strong> ${data.wave_analysis.p_wave_arrival_time_seconds} saniye<br>
+                        <strong>S Dalgası Varış:</strong> ${data.wave_analysis.s_wave_arrival_time_seconds} saniye<br>
+                        <strong>Etkilenecek Yarıçap:</strong> ~${affectedRadius} km
+                    </div>
+                    <div style="background: #f8f9fa; padding: 10px; border-radius: 5px; margin-top: 10px;">
+                        <strong>Hemen Harekete Geçin:</strong>
+                        <ol style="margin: 10px 0; padding-left: 20px;">
+                            ${data.critical_actions.map(action => `<li style="margin: 5px 0;">${action}</li>`).join('')}
+                        </ol>
+                    </div>
+                </div>
+            `)
+            .openOn(map);
+            
+            // Haritayı hem deprem merkezine hem sensöre odakla (ikisini de göster)
+            const bounds = L.latLngBounds(
+                [[epicenter.latitude, epicenter.longitude], [sensor.latitude, sensor.longitude]]
+            );
+            map.fitBounds(bounds, { padding: [50, 50] });
+            
+            console.log('Uyarı haritada gösterildi');
+        }
+        
+        function updateMapWarningTimer(seconds) {
+            const timerElement = document.getElementById('mapWarningTimer');
+            if (timerElement) {
+                timerElement.textContent = seconds + ' saniye';
+            }
+        }
+        
+        function removeWarningMarkers() {
+            if (warningEpicenterMarker) {
+                map.removeLayer(warningEpicenterMarker);
+                warningEpicenterMarker = null;
+            }
+            if (warningCircle) {
+                map.removeLayer(warningCircle);
+                warningCircle = null;
+            }
+            if (warningInfoPopup) {
+                map.closePopup(warningInfoPopup);
+                warningInfoPopup = null;
+            }
+            // Sensör marker'larını kaldırma (kalıcı olarak gösterilebilir)
+            // sensorMarkers.forEach(marker => map.removeLayer(marker));
+            // sensorMarkers = [];
+        }
+
+        function showSimulatedEarthquake(data) {
+            console.log('Deprem haritada gösteriliyor...', data);
+            
+            // Önceki simüle edilmiş deprem marker'ını kaldır
+            if (simulatedEarthquakeMarker) {
+                map.removeLayer(simulatedEarthquakeMarker);
+                simulatedEarthquakeMarker = null;
+            }
+
+            // Deprem marker'ı oluştur
+            const epicenter = data.epicenter;
+            const magnitude = data.magnitude;
+            
+            if (!epicenter || !magnitude) {
+                console.error('Eksik deprem verisi:', data);
+                alert('Deprem verisi eksik!');
+                return;
+            }
+            
+            // Büyüklüğe göre renk belirle
+            let color = '#27ae60'; // Küçük
+            if (magnitude >= 7.0) {
+                color = '#e74c3c'; // Çok büyük
+            } else if (magnitude >= 6.0) {
+                color = '#f39c12'; // Büyük
+            } else if (magnitude >= 5.0) {
+                color = '#e67e22'; // Orta-büyük
+            }
+
+            // Özel ikon oluştur (simüle edilmiş deprem için)
+            const simulationIcon = L.divIcon({
+                className: 'earthquake-marker simulation',
+                html: `<div style="
+                    width: ${Math.max(30, magnitude * 5)}px;
+                    height: ${Math.max(30, magnitude * 5)}px;
+                    background: ${color};
+                    border: 3px solid white;
+                    border-radius: 50%;
+                    box-shadow: 0 0 0 3px ${color}40, 0 0 0 6px ${color}20;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-weight: bold;
+                    font-size: ${Math.max(12, magnitude * 1.5)}px;
+                    animation: pulse 2s infinite;
+                ">${magnitude.toFixed(1)}</div>`,
+                iconSize: [Math.max(30, magnitude * 5), Math.max(30, magnitude * 5)],
+                iconAnchor: [Math.max(15, magnitude * 2.5), Math.max(15, magnitude * 2.5)]
+            });
+
+            simulatedEarthquakeMarker = L.marker([epicenter.latitude, epicenter.longitude], {
+                icon: simulationIcon
+            }).addTo(map);
+
+            // Popup ekle
+            simulatedEarthquakeMarker.bindPopup(`
+                <div style="min-width: 250px;">
+                    <h3 style="color: ${color}; margin: 0 0 10px 0;">Simüle Edilmiş Deprem</h3>
+                    <div><strong>Büyüklük:</strong> M${magnitude} (${data.severity})</div>
+                    <div><strong>Konum:</strong> ${epicenter.latitude.toFixed(4)}, ${epicenter.longitude.toFixed(4)}</div>
+                    <div><strong>Mesafe:</strong> ${data.distance_km} km</div>
+                    <div><strong>P Dalgası Varış:</strong> ${data.wave_analysis.p_wave_arrival_time_seconds} saniye</div>
+                    <div><strong>S Dalgası Varış:</strong> ${data.wave_analysis.s_wave_arrival_time_seconds} saniye</div>
+                    <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #ddd; color: #666; font-size: 0.9em;">
+                        Bu bir simülasyondur. Gerçek bir deprem değildir.
+                    </div>
+                </div>
+            `).openPopup();
+
+            // Haritayı deprem merkezine odakla
+            map.setView([epicenter.latitude, epicenter.longitude], 8);
+        }
+
+        // Sabit sensör konumları (24 sensör)
+        const SENSOR_LOCATIONS = [
+            // Kuzey Amerika - Doğu
+            { id: 'sensor_1', name: 'New York Sensörü', latitude: 40.7, longitude: -74.0 },
+            { id: 'sensor_2', name: 'Montreal Sensörü', latitude: 45.5, longitude: -73.5 },
+            { id: 'sensor_3', name: 'Boston Sensörü', latitude: 42.3, longitude: -71.0 },
+            { id: 'sensor_4', name: 'Miami Sensörü', latitude: 25.7, longitude: -80.2 },
+            { id: 'sensor_5', name: 'Atlanta Sensörü', latitude: 33.7, longitude: -84.4 },
+            // Kuzey Amerika - Merkez
+            { id: 'sensor_6', name: 'Chicago Sensörü', latitude: 41.8, longitude: -87.6 },
+            { id: 'sensor_7', name: 'Dallas Sensörü', latitude: 32.7, longitude: -96.8 },
+            { id: 'sensor_8', name: 'Denver Sensörü', latitude: 39.7, longitude: -104.9 },
+            { id: 'sensor_9', name: 'Kansas City Sensörü', latitude: 39.1, longitude: -94.5 },
+            // Kuzey Amerika - Batı
+            { id: 'sensor_10', name: 'Los Angeles Sensörü', latitude: 34.0, longitude: -118.2 },
+            { id: 'sensor_11', name: 'San Francisco Sensörü', latitude: 37.7, longitude: -122.4 },
+            { id: 'sensor_12', name: 'Seattle Sensörü', latitude: 47.6, longitude: -122.3 },
+            { id: 'sensor_13', name: 'Phoenix Sensörü', latitude: 33.4, longitude: -112.0 },
+            { id: 'sensor_14', name: 'Alaska Sensörü', latitude: 61.2, longitude: -149.8 },
+            // Meksika ve Orta Amerika
+            { id: 'sensor_15', name: 'Mexico City Sensörü', latitude: 19.4, longitude: -99.1 },
+            { id: 'sensor_16', name: 'Guatemala Sensörü', latitude: 14.6, longitude: -90.5 },
+            // Güney Amerika - Kuzey
+            { id: 'sensor_17', name: 'Bogota Sensörü', latitude: 4.7, longitude: -74.0 },
+            { id: 'sensor_18', name: 'Caracas Sensörü', latitude: 10.5, longitude: -66.9 },
+            // Güney Amerika - Merkez
+            { id: 'sensor_19', name: 'Brasilia Sensörü', latitude: -15.8, longitude: -47.8 },
+            { id: 'sensor_20', name: 'Sao Paulo Sensörü', latitude: -23.5, longitude: -46.6 },
+            { id: 'sensor_21', name: 'Lima Sensörü', latitude: -12.0, longitude: -77.0 },
+            // Güney Amerika - Güney
+            { id: 'sensor_22', name: 'Buenos Aires Sensörü', latitude: -34.6, longitude: -58.4 },
+            { id: 'sensor_23', name: 'Santiago Sensörü', latitude: -33.4, longitude: -70.6 },
+            { id: 'sensor_24', name: 'Montevideo Sensörü', latitude: -34.9, longitude: -56.1 }
+        ];
+
+        // Sensörleri haritada göster
+        function showAllSensors() {
+            // Önceki sensör marker'larını temizle (eğer varsa)
+            sensorMarkers.forEach(marker => {
+                if (map.hasLayer(marker)) {
+                    map.removeLayer(marker);
+                }
+            });
+            sensorMarkers = [];
+            
+            SENSOR_LOCATIONS.forEach(s => {
+                const sensorIcon = L.divIcon({
+                    className: 'sensor-marker',
+                    html: `<div style="
+                        width: 30px;
+                        height: 30px;
+                        background: #3498db;
+                        border: 2px solid white;
+                        border-radius: 50%;
+                        box-shadow: 0 0 0 2px #3498db40;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: white;
+                        font-weight: bold;
+                        font-size: 16px;
+                    ">S</div>`,
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 15]
+                });
+                
+                const sensorMarker = L.marker([s.latitude, s.longitude], {
+                    icon: sensorIcon
+                }).addTo(map);
+                
+                sensorMarker.bindPopup(`
+                    <div style="min-width: 200px;">
+                        <strong>${s.name}</strong><br>
+                        <span style="color: #7f8c8d; font-size: 0.9em;">Pasif</span>
+                    </div>
+                `);
+                
+                sensorMarkers.push(sensorMarker);
+                });
+        }
+
         // Sayfa yüklendiğinde veriyi çek
         loadData();
         loadWeatherData();
@@ -3203,10 +4510,12 @@
         loadStormData();
         loadFloodData();
         loadVolcanoData();
+        loadSeismicRiskData();
         loadAlerts();
         loadNews();
         updateDate();
         initDraggable();
+        showAllSensors(); // Sensörleri başta göster
 
         // Her 30 saniyede bir otomatik yenile
         setInterval(() => {
@@ -3217,6 +4526,7 @@
             loadStormData();
             loadFloodData();
             loadVolcanoData();
+            loadSeismicRiskData();
             loadAlerts();
             loadNews();
             // Eğer weather window açıksa, içeriğini de güncelle
