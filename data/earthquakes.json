@@ -1,0 +1,12 @@
+[
+  {
+    "id": 34,
+    "event_type": "earthquake",
+    "timestamp": "2025-12-23T00:09:20.568000",
+    "location": "10 km SE of Kéfalos, Greece",
+    "magnitude": 4.1,
+    "latitude": 36.6698,
+    "longitude": 27.0258,
+    "source": "USGS"
+  }
+]
