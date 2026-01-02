@@ -81,7 +81,7 @@ COMP303_Project/
 
 ### Requirements
 
-- Python 3.8 or higher
+- Python 3.9 or higher (required for zoneinfo module)
 - OpenWeather API key (optional, for weather data)
 - USGS API key not required (free public API)
 - NASA EONET API (free, no key required)

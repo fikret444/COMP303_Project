@@ -12312,3 +12312,590 @@ queue
 2026-01-03T02:42:51.199280+03:00 [INFO] Haritada gösterilen 39 depremden 37 deprem analiz ediliyor (min_count: 3, max_magnitude: 5.0, radius: 100.0km)
 2026-01-03T02:42:51.200775+03:00 [INFO] Toplam 3 deprem sürüsü tespit edildi (haritada gösterilen depremlerden)
 2026-01-03T02:42:51.246252+03:00 [INFO] İlk swarm: 6 deprem, risk: ORTA RİSKLİ, merkez: (60.56, -139.90)
+2026-01-03T02:43:26.072258+03:00 [INFO] Starting concurrent fetch from 36 sources
+2026-01-03T02:43:26.073061+03:00 [INFO] Fetching data from OpenWeatherSource...
+.
+2026-01-03T02:43:26.073528+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:43:26.073263+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:43:26.074972+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:43:26.074373+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:43:26.075643+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:43:26.076714+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:43:26.076214+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:43:26.079151+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:43:26.080155+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:43:26.080644+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:43:26.081156+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:43:26.081507+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:43:26.082302+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:43:26.084294+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:43:26.085636+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:43:26.086150+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:43:26.086698+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:43:26.087617+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:43:26.088045+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:43:26.089342+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:43:26.090290+03:00 [INFO] Fetching data from EONETSource...
+2026-01-03T02:43:26.091061+03:00 [INFO] Fetching data from EONETWildfireSource...
+2026-01-03T02:43:26.091831+03:00 [INFO] Fetching data from EONETStormSource...
+2026-01-03T02:43:26.092288+03:00 [INFO] Fetching data from EONETVolcanoSource...
+2026-01-03T02:43:26.092683+03:00 [INFO] Fetching data from OpenMeteoFloodSource...
+2026-01-03T02:43:26.093049+03:00 [INFO] Fetching data from OpenMeteoFloodSource...
+2026-01-03T02:43:26.094477+03:00 [INFO] Fetching data from OpenMeteoFloodSource...
+2026-01-03T02:43:26.095337+03:00 [INFO] Fetching data from OpenMeteoFloodSource...
+2026-01-03T02:43:26.096278+03:00 [INFO] Fetching data from OpenMeteoFloodSource...
+2026-01-03T02:43:26.096914+03:00 [INFO] Fetching data from OpenMeteoFloodSource...
+2026-01-03T02:43:26.097953+03:00 [INFO] Fetching data from OpenMeteoFloodSource...
+2026-01-03T02:43:26.098676+03:00 [INFO] Fetching data from OpenMeteoFloodSource...
+2026-01-03T02:43:26.099230+03:00 [INFO] Fetching data from OpenMeteoFloodSource...
+2026-01-03T02:43:26.099803+03:00 [INFO] Fetching data from OpenMeteoFloodSource...
+2026-01-03T02:43:29.565990+03:00 [INFO] Successfully fetched 10 items from OpenMeteoFloodSource
+2026-01-03T02:43:29.639833+03:00 [INFO] Successfully fetched 10 items from OpenMeteoFloodSource
+2026-01-03T02:43:29.689887+03:00 [INFO] Successfully fetched 10 items from OpenMeteoFloodSource
+2026-01-03T02:43:29.762316+03:00 [INFO] Successfully fetched 10 items from OpenMeteoFloodSource
+2026-01-03T02:43:29.763758+03:00 [INFO] Successfully fetched 10 items from OpenMeteoFloodSource
+2026-01-03T02:43:29.831312+03:00 [INFO] Successfully fetched 39 items from USGSEarthquakeSource
+2026-01-03T02:43:29.850457+03:00 [INFO] Successfully fetched 10 items from OpenMeteoFloodSource
+2026-01-03T02:43:30.186757+03:00 [INFO] Successfully fetched 10 items from OpenMeteoFloodSource
+2026-01-03T02:43:30.234004+03:00 [INFO] Successfully fetched 10 items from OpenMeteoFloodSource
+2026-01-03T02:43:30.312702+03:00 [INFO] Successfully fetched 10 items from EONETVolcanoSource
+2026-01-03T02:43:30.315473+03:00 [INFO] Successfully fetched 10 items from OpenMeteoFloodSource
+2026-01-03T02:43:30.457084+03:00 [INFO] Successfully fetched 10 items from OpenMeteoFloodSource
+2026-01-03T02:43:31.349353+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:43:31.461361+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:43:31.581915+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:43:31.616039+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:43:31.676247+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:43:31.728418+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:43:31.736451+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:43:31.844713+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:43:31.858432+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:43:32.045613+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:43:32.196812+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:43:32.227680+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:43:32.244246+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:43:32.248766+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:43:32.259883+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:43:32.263754+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:43:32.267109+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:43:32.276791+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:43:32.282843+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:43:32.285801+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:43:32.292178+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:43:32.501963+03:00 [INFO] Successfully fetched 35 items from EONETStormSource
+2026-01-03T02:43:32.709748+03:00 [INFO] Successfully fetched 28 items from EONETSource
+2026-01-03T02:43:36.941181+03:00 [INFO] Successfully fetched 1709 items from EONETWildfireSource
+2026-01-03T02:43:36.941829+03:00 [INFO] All fetch operations completed
+2026-01-03T02:43:36.942434+03:00 [INFO] Added events from OpenMeteoFloodSource to processing queue
+2026-01-03T02:43:36.942493+03:00 [INFO] Worker 2 processing event from OpenMeteoFloodSource
+2026-01-03T02:43:36.942652+03:00 [INFO] Added events from OpenMeteoFloodSource to processing queue
+2026-01-03T02:43:36.943399+03:00 [INFO] Worker 1 processing event from OpenMeteoFloodSource
+2026-01-03T02:43:36.943634+03:00 [INFO] Added events from OpenMeteoFloodSource to processing queue
+2026-01-03T02:43:36.943812+03:00 [INFO] Worker 0 processing event from OpenMeteoFloodSource
+2026-01-03T02:43:36.944143+03:00 [INFO] Added events from OpenMeteoFloodSource to processing queue
+2026-01-03T02:43:36.945289+03:00 [INFO] Worker 2 processing event from OpenMeteoFloodSource
+2026-01-03T02:43:36.945696+03:00 [INFO] Worker 1 processing event from OpenMeteoFloodSource
+2026-01-03T02:43:36.945625+03:00 [INFO] Added events from OpenMeteoFloodSource to processing queue
+2026-01-03T02:43:36.946437+03:00 [INFO] Added events from USGSEarthquakeSource to processing queue
+2026-01-03T02:43:36.946504+03:00 [INFO] Worker 0 processing event from USGSEarthquakeSource
+2026-01-03T02:43:36.946905+03:00 [INFO] Added events from OpenMeteoFloodSource to processing queue
+2026-01-03T02:43:36.946953+03:00 [INFO] Worker 2 processing event from OpenMeteoFloodSource
+2026-01-03T02:43:36.947115+03:00 [INFO] USGS'ten temizlenen event sayısı: 39
+2026-01-03T02:43:36.947392+03:00 [INFO] Worker 1 processing event from OpenMeteoFloodSource
+2026-01-03T02:43:36.947323+03:00 [INFO] Added events from OpenMeteoFloodSource to processing queue
+2026-01-03T02:43:36.948181+03:00 [INFO] Added events from OpenMeteoFloodSource to processing queue
+2026-01-03T02:43:36.949333+03:00 [INFO] Added events from EONETVolcanoSource to processing queue
+2026-01-03T02:43:36.949519+03:00 [INFO] Worker 1 processing event from EONETVolcanoSource
+2026-01-03T02:43:36.950027+03:00 [INFO] Worker 0 processing event from OpenMeteoFloodSource
+2026-01-03T02:43:36.949945+03:00 [INFO] Added events from OpenMeteoFloodSource to processing queue
+2026-01-03T02:43:36.950878+03:00 [INFO] Added events from OpenMeteoFloodSource to processing queue
+2026-01-03T02:43:36.950944+03:00 [INFO] Worker 2 processing event from OpenMeteoFloodSource
+2026-01-03T02:43:36.951348+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:43:36.951410+03:00 [INFO] Worker 1 processing event from OpenWeatherSource
+2026-01-03T02:43:36.951727+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:43:36.951784+03:00 [INFO] Worker 0 processing event from OpenWeatherSource
+2026-01-03T02:43:36.952256+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:43:36.952466+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:43:36.952628+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:43:36.952784+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:43:36.952921+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:43:36.953078+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:43:36.953215+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:43:36.953364+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:43:36.953499+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:43:36.953723+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:43:36.953858+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:43:36.953988+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:43:37.024958+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:43:37.025229+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:43:37.025425+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:43:37.026069+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:43:37.026598+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:43:37.028058+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:43:37.030567+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:43:37.032048+03:00 [INFO] Added events from EONETStormSource to processing queue
+2026-01-03T02:43:37.033659+03:00 [INFO] Added events from EONETSource to processing queue
+2026-01-03T02:43:37.035239+03:00 [INFO] Added events from EONETWildfireSource to processing queue
+2026-01-03T02:43:37.036448+03:00 [INFO] Cycle 241: Added 36 event batches
+2026-01-03T02:43:37.038047+03:00 [INFO] ============================================================
+2026-01-03T02:43:37.038776+03:00 [INFO] PROCESSING RESULTS
+2026-01-03T02:43:37.040531+03:00 [INFO] ============================================================
+2026-01-03T02:43:37.041963+03:00 [INFO] Result #1 - OpenWeatherSource: SUCCESS
+2026-01-03T02:43:37.043220+03:00 [INFO]   Events processed: 41
+2026-01-03T02:43:37.044214+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:43:37.046967+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.048870+03:00 [INFO] Result #2 - OpenWeatherSource: SUCCESS
+2026-01-03T02:43:37.050976+03:00 [INFO]   Events processed: 41
+2026-01-03T02:43:37.052674+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:43:37.054620+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.055979+03:00 [INFO] Result #3 - OpenWeatherSource: SUCCESS
+2026-01-03T02:43:37.056517+03:00 [INFO]   Events processed: 41
+2026-01-03T02:43:37.058093+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:43:37.060203+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.062248+03:00 [INFO] Result #4 - OpenWeatherSource: SUCCESS
+2026-01-03T02:43:37.063887+03:00 [INFO]   Events processed: 41
+2026-01-03T02:43:37.064604+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:43:37.065158+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.068436+03:00 [INFO] Result #5 - OpenWeatherSource: SUCCESS
+2026-01-03T02:43:37.070026+03:00 [INFO]   Events processed: 41
+2026-01-03T02:43:37.071001+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:43:37.071830+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.073055+03:00 [INFO] Result #6 - OpenWeatherSource: SUCCESS
+2026-01-03T02:43:37.074495+03:00 [INFO]   Events processed: 41
+2026-01-03T02:43:37.076206+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:43:37.076851+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.077453+03:00 [INFO] Result #7 - OpenWeatherSource: SUCCESS
+2026-01-03T02:43:37.078427+03:00 [INFO]   Events processed: 41
+2026-01-03T02:43:37.079972+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:43:37.081501+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.083081+03:00 [INFO] Result #8 - OpenWeatherSource: SUCCESS
+2026-01-03T02:43:37.084323+03:00 [INFO]   Events processed: 41
+2026-01-03T02:43:37.085896+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:43:37.086617+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.088145+03:00 [INFO] Result #9 - OpenWeatherSource: SUCCESS
+2026-01-03T02:43:37.089824+03:00 [INFO]   Events processed: 41
+2026-01-03T02:43:37.091409+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:43:37.092356+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.093872+03:00 [INFO] Result #10 - OpenWeatherSource: SUCCESS
+2026-01-03T02:43:37.095815+03:00 [INFO]   Events processed: 41
+2026-01-03T02:43:37.097204+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:43:37.098254+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.099587+03:00 [INFO] Result #11 - OpenWeatherSource: SUCCESS
+2026-01-03T02:43:37.101008+03:00 [INFO]   Events processed: 41
+2026-01-03T02:43:37.102620+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:43:37.103337+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.104947+03:00 [INFO] Result #12 - OpenWeatherSource: SUCCESS
+2026-01-03T02:43:37.106369+03:00 [INFO]   Events processed: 41
+2026-01-03T02:43:37.107380+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:43:37.108748+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.109665+03:00 [INFO] Result #13 - OpenWeatherSource: SUCCESS
+2026-01-03T02:43:37.111178+03:00 [INFO]   Events processed: 41
+2026-01-03T02:43:37.112735+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:43:37.114164+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.115642+03:00 [INFO] Result #14 - OpenWeatherSource: SUCCESS
+2026-01-03T02:43:37.117066+03:00 [INFO]   Events processed: 41
+2026-01-03T02:43:37.118603+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:43:37.120058+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.120585+03:00 [INFO] Result #15 - OpenWeatherSource: SUCCESS
+2026-01-03T02:43:37.121987+03:00 [INFO]   Events processed: 41
+2026-01-03T02:43:37.123514+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:43:37.125305+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.126275+03:00 [INFO] Result #16 - OpenWeatherSource: SUCCESS
+2026-01-03T02:43:37.127815+03:00 [INFO]   Events processed: 41
+2026-01-03T02:43:37.129143+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:43:37.130657+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.131530+03:00 [INFO] Result #17 - OpenWeatherSource: SUCCESS
+2026-01-03T02:43:37.133090+03:00 [INFO]   Events processed: 41
+2026-01-03T02:43:37.134904+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:43:37.136074+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.136619+03:00 [INFO] Result #18 - OpenWeatherSource: SUCCESS
+2026-01-03T02:43:37.137347+03:00 [INFO]   Events processed: 41
+2026-01-03T02:43:37.138964+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:43:37.140498+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.142036+03:00 [INFO] Result #19 - OpenWeatherSource: SUCCESS
+2026-01-03T02:43:37.142729+03:00 [INFO]   Events processed: 41
+2026-01-03T02:43:37.144170+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:43:37.145686+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.147254+03:00 [INFO] Result #20 - OpenWeatherSource: SUCCESS
+2026-01-03T02:43:37.147979+03:00 [INFO]   Events processed: 41
+2026-01-03T02:43:37.148675+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:43:37.150271+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.154454+03:00 [INFO] Result #21 - EONETWildfireSource: SUCCESS
+2026-01-03T02:43:37.156228+03:00 [INFO]   Events processed: 1709
+2026-01-03T02:43:37.158028+03:00 [INFO]   Saved to: wildfires.json
+2026-01-03T02:43:37.159700+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.160521+03:00 [INFO] Result #22 - OpenWeatherSource: SUCCESS
+2026-01-03T02:43:37.161084+03:00 [INFO]   Events processed: 41
+2026-01-03T02:43:37.162976+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:43:37.164842+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.167192+03:00 [INFO] Result #23 - OpenMeteoFloodSource: SUCCESS
+2026-01-03T02:43:37.168195+03:00 [INFO]   Events processed: 10
+2026-01-03T02:43:37.169692+03:00 [INFO]   Saved to: flood_risk.json
+2026-01-03T02:43:37.171216+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.172955+03:00 [INFO] Result #24 - OpenMeteoFloodSource: SUCCESS
+2026-01-03T02:43:37.173882+03:00 [INFO]   Events processed: 10
+2026-01-03T02:43:37.175005+03:00 [INFO]   Saved to: flood_risk.json
+2026-01-03T02:43:37.176497+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.177998+03:00 [INFO] Result #25 - OpenMeteoFloodSource: SUCCESS
+2026-01-03T02:43:37.179820+03:00 [INFO]   Events processed: 10
+2026-01-03T02:43:37.181435+03:00 [INFO]   Saved to: flood_risk.json
+2026-01-03T02:43:37.183050+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.187905+03:00 [INFO] Result #26 - OpenMeteoFloodSource: SUCCESS
+2026-01-03T02:43:37.187982+03:00 [INFO] Worker 2 processing event from OpenWeatherSource
+2026-01-03T02:43:37.188280+03:00 [INFO]   Events processed: 10
+2026-01-03T02:43:37.188639+03:00 [INFO]   Saved to: flood_risk.json
+2026-01-03T02:43:37.188829+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.189004+03:00 [INFO] Result #27 - OpenMeteoFloodSource: SUCCESS
+2026-01-03T02:43:37.189152+03:00 [INFO]   Events processed: 10
+2026-01-03T02:43:37.189317+03:00 [INFO]   Saved to: flood_risk.json
+2026-01-03T02:43:37.189482+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.189621+03:00 [INFO] Result #28 - OpenMeteoFloodSource: SUCCESS
+2026-01-03T02:43:37.189753+03:00 [INFO]   Events processed: 10
+2026-01-03T02:43:37.189880+03:00 [INFO]   Saved to: flood_risk.json
+2026-01-03T02:43:37.190005+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.190127+03:00 [INFO] Result #29 - OpenMeteoFloodSource: SUCCESS
+2026-01-03T02:43:37.190250+03:00 [INFO]   Events processed: 10
+2026-01-03T02:43:37.190375+03:00 [INFO]   Saved to: flood_risk.json
+2026-01-03T02:43:37.190496+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.190623+03:00 [INFO] Result #30 - USGSEarthquakeSource: SUCCESS
+2026-01-03T02:43:37.190747+03:00 [INFO]   Events processed: 39
+2026-01-03T02:43:37.190872+03:00 [INFO]   Statistics:
+2026-01-03T02:43:37.190993+03:00 [INFO]     - Total events: 39
+2026-01-03T02:43:37.191118+03:00 [INFO]     - Max magnitude: 6.50
+2026-01-03T02:43:37.191240+03:00 [INFO]     - Avg magnitude: 3.40
+2026-01-03T02:43:37.191407+03:00 [INFO]   Saved to: earthquakes_1767397416.json
+2026-01-03T02:43:37.191801+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.191995+03:00 [INFO] Result #31 - OpenMeteoFloodSource: SUCCESS
+2026-01-03T02:43:37.192197+03:00 [INFO]   Events processed: 10
+2026-01-03T02:43:37.192381+03:00 [INFO]   Saved to: flood_risk.json
+2026-01-03T02:43:37.192537+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.192682+03:00 [INFO] Result #32 - EONETVolcanoSource: SUCCESS
+2026-01-03T02:43:37.192824+03:00 [INFO]   Events processed: 10
+2026-01-03T02:43:37.193012+03:00 [INFO]   Saved to: volcanoes.json
+2026-01-03T02:43:37.193149+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.193299+03:00 [INFO] Result #33 - OpenMeteoFloodSource: SUCCESS
+2026-01-03T02:43:37.193430+03:00 [INFO]   Events processed: 10
+2026-01-03T02:43:37.193558+03:00 [INFO]   Saved to: flood_risk.json
+2026-01-03T02:43:37.193681+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.193804+03:00 [INFO] Result #34 - OpenMeteoFloodSource: SUCCESS
+2026-01-03T02:43:37.193926+03:00 [INFO]   Events processed: 10
+2026-01-03T02:43:37.194052+03:00 [INFO]   Saved to: flood_risk.json
+2026-01-03T02:43:37.194175+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:43:37.404601+03:00 [INFO] Worker 1 processing event from OpenWeatherSource
+2026-01-03T02:43:37.622659+03:00 [INFO] Worker 0 processing event from OpenWeatherSource
+2026-01-03T02:43:37.839389+03:00 [INFO] Worker 2 processing event from OpenWeatherSource
+2026-01-03T02:43:38.056789+03:00 [INFO] Worker 1 processing event from OpenWeatherSource
+2026-01-03T02:43:38.275908+03:00 [INFO] Worker 0 processing event from OpenWeatherSource
+2026-01-03T02:43:38.496171+03:00 [INFO] Worker 2 processing event from OpenWeatherSource
+2026-01-03T02:43:38.720769+03:00 [INFO] Worker 1 processing event from OpenWeatherSource
+2026-01-03T02:43:38.940042+03:00 [INFO] Worker 0 processing event from OpenWeatherSource
+2026-01-03T02:43:39.166292+03:00 [INFO] Worker 2 processing event from OpenWeatherSource
+2026-01-03T02:43:39.390186+03:00 [INFO] Worker 1 processing event from OpenWeatherSource
+2026-01-03T02:43:39.621095+03:00 [INFO] Worker 0 processing event from OpenWeatherSource
+2026-01-03T02:43:39.889228+03:00 [INFO] Worker 2 processing event from OpenWeatherSource
+2026-01-03T02:43:40.130301+03:00 [INFO] Worker 1 processing event from OpenWeatherSource
+2026-01-03T02:43:40.377744+03:00 [INFO] Worker 0 processing event from OpenWeatherSource
+2026-01-03T02:43:40.615883+03:00 [INFO] Worker 2 processing event from OpenWeatherSource
+2026-01-03T02:43:40.851805+03:00 [INFO] Worker 1 processing event from OpenWeatherSource
+2026-01-03T02:43:41.090889+03:00 [INFO] Worker 0 processing event from OpenWeatherSource
+2026-01-03T02:43:41.333649+03:00 [INFO] Worker 2 processing event from OpenWeatherSource
+2026-01-03T02:43:41.598131+03:00 [INFO] Worker 1 processing event from EONETStormSource
+2026-01-03T02:43:41.851137+03:00 [INFO] Worker 0 processing event from EONETSource
+2026-01-03T02:43:41.851218+03:00 [INFO] Worker 1 processing event from EONETWildfireSource
+2026-01-03T02:45:37.195123+03:00 [INFO] Starting concurrent fetch from 36 sources
+2026-01-03T02:45:37.195918+03:00 [INFO] Fetching data from USGSEarthquakeSource...
+2026-01-03T02:45:37.196308+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:45:37.196143+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:45:37.196669+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:45:37.197291+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:45:37.197773+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:45:37.199292+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:45:37.201150+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:45:37.202044+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:45:37.202796+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:45:37.203313+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:45:37.203918+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:45:37.204991+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:45:37.206170+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:45:37.207840+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:45:37.209149+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:45:37.210047+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:45:37.209664+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:45:37.210936+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:45:37.212022+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:45:37.211608+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:45:37.213413+03:00 [INFO] Fetching data from OpenWeatherSource...
+2026-01-03T02:45:37.214224+03:00 [INFO] Fetching data from EONETSource...
+2026-01-03T02:45:37.215691+03:00 [INFO] Fetching data from EONETWildfireSource...
+2026-01-03T02:45:37.216193+03:00 [INFO] Fetching data from EONETStormSource...
+2026-01-03T02:45:37.217539+03:00 [INFO] Fetching data from EONETVolcanoSource...
+2026-01-03T02:45:37.219163+03:00 [INFO] Fetching data from OpenMeteoFloodSource...
+2026-01-03T02:45:37.219868+03:00 [INFO] Fetching data from OpenMeteoFloodSource...
+2026-01-03T02:45:37.220705+03:00 [INFO] Fetching data from OpenMeteoFloodSource...
+2026-01-03T02:45:37.222806+03:00 [INFO] Fetching data from OpenMeteoFloodSource...
+2026-01-03T02:45:37.221975+03:00 [INFO] Fetching data from OpenMeteoFloodSource...
+2026-01-03T02:45:37.223447+03:00 [INFO] Fetching data from OpenMeteoFloodSource...
+2026-01-03T02:45:37.223678+03:00 [INFO] Fetching data from OpenMeteoFloodSource...
+2026-01-03T02:45:37.224221+03:00 [INFO] Fetching data from OpenMeteoFloodSource...
+2026-01-03T02:45:37.225632+03:00 [INFO] Fetching data from OpenMeteoFloodSource...
+2026-01-03T02:45:37.226216+03:00 [INFO] Fetching data from OpenMeteoFloodSource...
+2026-01-03T02:45:40.403470+03:00 [INFO] Successfully fetched 10 items from OpenMeteoFloodSource
+2026-01-03T02:45:40.490070+03:00 [INFO] Successfully fetched 10 items from OpenMeteoFloodSource
+2026-01-03T02:45:40.498792+03:00 [INFO] Successfully fetched 10 items from OpenMeteoFloodSource
+2026-01-03T02:45:40.561995+03:00 [INFO] Successfully fetched 10 items from OpenMeteoFloodSource
+2026-01-03T02:45:41.506045+03:00 [INFO] Successfully fetched 10 items from OpenMeteoFloodSource
+2026-01-03T02:45:41.537767+03:00 [INFO] Successfully fetched 28 items from EONETSource
+2026-01-03T02:45:41.552827+03:00 [INFO] Successfully fetched 10 items from OpenMeteoFloodSource
+2026-01-03T02:45:41.581159+03:00 [INFO] Successfully fetched 10 items from OpenMeteoFloodSource
+2026-01-03T02:45:41.597304+03:00 [INFO] Successfully fetched 10 items from OpenMeteoFloodSource
+2026-01-03T02:45:41.656323+03:00 [INFO] Successfully fetched 10 items from OpenMeteoFloodSource
+2026-01-03T02:45:41.658477+03:00 [INFO] Successfully fetched 39 items from USGSEarthquakeSource
+2026-01-03T02:45:41.793187+03:00 [INFO] Successfully fetched 10 items from OpenMeteoFloodSource
+2026-01-03T02:45:42.123124+03:00 [INFO] Successfully fetched 10 items from EONETVolcanoSource
+2026-01-03T02:45:42.473922+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:45:42.548992+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:45:42.563764+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:45:42.652282+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:45:42.655176+03:00 [INFO] Successfully fetched 35 items from EONETStormSource
+2026-01-03T02:45:42.668588+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:45:42.730582+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:45:42.780004+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:45:42.811797+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:45:42.849640+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:45:42.903702+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:45:43.243913+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:45:43.286923+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:45:43.292137+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:45:43.310746+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:45:43.313940+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:45:43.324141+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:45:43.343864+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:45:43.348176+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:45:43.361528+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:45:43.368801+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:45:43.375596+03:00 [INFO] Successfully fetched 41 items from OpenWeatherSource
+2026-01-03T02:45:44.469325+03:00 [INFO] Successfully fetched 1709 items from EONETWildfireSource
+2026-01-03T02:45:44.470008+03:00 [INFO] All fetch operations completed
+2026-01-03T02:45:44.470711+03:00 [INFO] Added events from OpenMeteoFloodSource to processing queue
+2026-01-03T02:45:44.470775+03:00 [INFO] Worker 2 processing event from OpenMeteoFloodSource
+2026-01-03T02:45:44.470926+03:00 [INFO] Added events from OpenMeteoFloodSource to processing queue
+2026-01-03T02:45:44.470995+03:00 [INFO] Worker 0 processing event from OpenMeteoFloodSource
+2026-01-03T02:45:44.471314+03:00 [INFO] Added events from OpenMeteoFloodSource to processing queue
+2026-01-03T02:45:44.471950+03:00 [INFO] Worker 1 processing event from OpenMeteoFloodSource
+2026-01-03T02:45:44.472348+03:00 [INFO] Added events from OpenMeteoFloodSource to processing queue
+2026-01-03T02:45:44.473456+03:00 [INFO] Added events from OpenMeteoFloodSource to processing queue
+2026-01-03T02:45:44.473514+03:00 [INFO] Worker 0 processing event from OpenMeteoFloodSource
+2026-01-03T02:45:44.473873+03:00 [INFO] Worker 1 processing event from EONETSource
+queue
+2026-01-03T02:45:44.474392+03:00 [INFO] Added events from OpenMeteoFloodSource to processing queue
+2026-01-03T02:45:44.474458+03:00 [INFO] Worker 2 processing event from OpenMeteoFloodSource
+2026-01-03T02:45:44.475347+03:00 [INFO] Added events from OpenMeteoFloodSource to processing queue
+2026-01-03T02:45:44.475619+03:00 [INFO] Worker 0 processing event from OpenMeteoFloodSource
+2026-01-03T02:45:44.475906+03:00 [INFO] Added events from OpenMeteoFloodSource to processing queue
+2026-01-03T02:45:44.475966+03:00 [INFO] Worker 1 processing event from OpenMeteoFloodSource
+2026-01-03T02:45:44.476209+03:00 [INFO] Added events from OpenMeteoFloodSource to processing queue
+2026-01-03T02:45:44.476299+03:00 [INFO] Worker 2 processing event from OpenMeteoFloodSource
+2026-01-03T02:45:44.476986+03:00 [INFO] Added events from USGSEarthquakeSource to processing queue
+2026-01-03T02:45:44.477263+03:00 [INFO] Worker 0 processing event from USGSEarthquakeSource
+2026-01-03T02:45:44.477586+03:00 [INFO] Added events from OpenMeteoFloodSource to processing queue
+2026-01-03T02:45:44.477673+03:00 [INFO] Worker 1 processing event from OpenMeteoFloodSource
+2026-01-03T02:45:44.478066+03:00 [INFO] USGS'ten temizlenen event sayısı: 39
+2026-01-03T02:45:44.478202+03:00 [INFO] Added events from EONETVolcanoSource to processing queue
+2026-01-03T02:45:44.478272+03:00 [INFO] Worker 2 processing event from EONETVolcanoSource
+2026-01-03T02:45:44.479126+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:45:44.479539+03:00 [INFO] Worker 1 processing event from OpenWeatherSource
+2026-01-03T02:45:44.479958+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:45:44.480023+03:00 [INFO] Worker 0 processing event from OpenWeatherSource
+2026-01-03T02:45:44.480246+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:45:44.480524+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:45:44.480779+03:00 [INFO] Added events from EONETStormSource to processing queue
+2026-01-03T02:45:44.481004+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:45:44.481162+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:45:44.481320+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:45:44.481456+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:45:44.481588+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:45:44.481722+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:45:44.481859+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:45:44.481992+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:45:44.482118+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:45:44.482244+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:45:44.482373+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:45:44.482523+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:45:44.482654+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:45:44.482782+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:45:44.482918+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:45:44.483048+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:45:44.483173+03:00 [INFO] Added events from OpenWeatherSource to processing queue
+2026-01-03T02:45:44.483301+03:00 [INFO] Added events from EONETWildfireSource to processing queue
+2026-01-03T02:45:44.483427+03:00 [INFO] Cycle 242: Added 36 event batches
+2026-01-03T02:45:44.483610+03:00 [INFO] ============================================================
+2026-01-03T02:45:44.483756+03:00 [INFO] PROCESSING RESULTS
+2026-01-03T02:45:44.483901+03:00 [INFO] ============================================================
+2026-01-03T02:45:44.484031+03:00 [INFO] Result #1 - OpenWeatherSource: SUCCESS
+2026-01-03T02:45:44.484159+03:00 [INFO]   Events processed: 41
+2026-01-03T02:45:44.484284+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:45:44.484658+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.485027+03:00 [INFO] Result #2 - OpenWeatherSource: SUCCESS
+2026-01-03T02:45:44.485261+03:00 [INFO]   Events processed: 41
+2026-01-03T02:45:44.485448+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:45:44.485605+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.485746+03:00 [INFO] Result #3 - OpenWeatherSource: SUCCESS
+2026-01-03T02:45:44.485884+03:00 [INFO]   Events processed: 41
+2026-01-03T02:45:44.486018+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:45:44.486146+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.486272+03:00 [INFO] Result #4 - OpenWeatherSource: SUCCESS
+2026-01-03T02:45:44.486398+03:00 [INFO]   Events processed: 41
+2026-01-03T02:45:44.486526+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:45:44.486647+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.486770+03:00 [INFO] Result #5 - OpenWeatherSource: SUCCESS
+2026-01-03T02:45:44.486898+03:00 [INFO]   Events processed: 41
+2026-01-03T02:45:44.487025+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:45:44.487149+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.487281+03:00 [INFO] Result #6 - OpenWeatherSource: SUCCESS
+2026-01-03T02:45:44.487405+03:00 [INFO]   Events processed: 41
+2026-01-03T02:45:44.487526+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:45:44.487647+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.487770+03:00 [INFO] Result #7 - OpenWeatherSource: SUCCESS
+2026-01-03T02:45:44.487894+03:00 [INFO]   Events processed: 41
+2026-01-03T02:45:44.488040+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:45:44.488169+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.488342+03:00 [INFO] Result #8 - OpenWeatherSource: SUCCESS
+2026-01-03T02:45:44.488492+03:00 [INFO]   Events processed: 41
+2026-01-03T02:45:44.488622+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:45:44.488762+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.488893+03:00 [INFO] Result #9 - OpenWeatherSource: SUCCESS
+2026-01-03T02:45:44.489022+03:00 [INFO]   Events processed: 41
+2026-01-03T02:45:44.489149+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:45:44.489275+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.489404+03:00 [INFO] Result #10 - OpenWeatherSource: SUCCESS
+2026-01-03T02:45:44.489531+03:00 [INFO]   Events processed: 41
+2026-01-03T02:45:44.489661+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:45:44.489787+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.489922+03:00 [INFO] Result #11 - OpenWeatherSource: SUCCESS
+2026-01-03T02:45:44.490057+03:00 [INFO]   Events processed: 41
+2026-01-03T02:45:44.569503+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:45:44.569841+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.570418+03:00 [INFO] Result #12 - OpenWeatherSource: SUCCESS
+2026-01-03T02:45:44.571828+03:00 [INFO]   Events processed: 41
+2026-01-03T02:45:44.572502+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:45:44.574306+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.576628+03:00 [INFO] Result #13 - OpenWeatherSource: SUCCESS
+2026-01-03T02:45:44.577444+03:00 [INFO]   Events processed: 41
+2026-01-03T02:45:44.578887+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:45:44.579917+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.581832+03:00 [INFO] Result #14 - OpenWeatherSource: SUCCESS
+2026-01-03T02:45:44.583667+03:00 [INFO]   Events processed: 41
+2026-01-03T02:45:44.585478+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:45:44.587942+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.590060+03:00 [INFO] Result #15 - OpenWeatherSource: SUCCESS
+2026-01-03T02:45:44.591899+03:00 [INFO]   Events processed: 41
+2026-01-03T02:45:44.593382+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:45:44.595310+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.596389+03:00 [INFO] Result #16 - OpenWeatherSource: SUCCESS
+2026-01-03T02:45:44.598378+03:00 [INFO]   Events processed: 41
+2026-01-03T02:45:44.599914+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:45:44.601732+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.603597+03:00 [INFO] Result #17 - OpenWeatherSource: SUCCESS
+2026-01-03T02:45:44.605024+03:00 [INFO]   Events processed: 41
+2026-01-03T02:45:44.606420+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:45:44.608388+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.610025+03:00 [INFO] Result #18 - OpenWeatherSource: SUCCESS
+2026-01-03T02:45:44.611470+03:00 [INFO]   Events processed: 41
+2026-01-03T02:45:44.612409+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:45:44.613300+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.614672+03:00 [INFO] Result #19 - OpenWeatherSource: SUCCESS
+2026-01-03T02:45:44.616452+03:00 [INFO]   Events processed: 41
+2026-01-03T02:45:44.618103+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:45:44.618870+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.620507+03:00 [INFO] Result #20 - OpenWeatherSource: SUCCESS
+2026-01-03T02:45:44.622148+03:00 [INFO]   Events processed: 41
+2026-01-03T02:45:44.624020+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:45:44.625010+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.626583+03:00 [INFO] Result #21 - EONETStormSource: SUCCESS
+2026-01-03T02:45:44.628290+03:00 [INFO]   Events processed: 35
+2026-01-03T02:45:44.630021+03:00 [INFO]   Saved to: storms.json
+2026-01-03T02:45:44.631885+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.632641+03:00 [INFO] Result #22 - OpenWeatherSource: SUCCESS
+2026-01-03T02:45:44.634096+03:00 [INFO]   Events processed: 41
+2026-01-03T02:45:44.634926+03:00 [INFO]   Saved to: weather_all.json
+2026-01-03T02:45:44.636631+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.638169+03:00 [INFO] Result #23 - EONETSource: SUCCESS
+2026-01-03T02:45:44.639786+03:00 [INFO]   Events processed: 23
+2026-01-03T02:45:44.640549+03:00 [INFO]   Saved to: eonet_events.json
+2026-01-03T02:45:44.642353+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.644150+03:00 [INFO] Result #24 - EONETWildfireSource: SUCCESS
+2026-01-03T02:45:44.645466+03:00 [INFO]   Events processed: 1709
+2026-01-03T02:45:44.646471+03:00 [INFO]   Saved to: wildfires.json
+2026-01-03T02:45:44.647061+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.648394+03:00 [INFO] Result #25 - OpenMeteoFloodSource: SUCCESS
+2026-01-03T02:45:44.650266+03:00 [INFO]   Events processed: 10
+2026-01-03T02:45:44.651963+03:00 [INFO]   Saved to: flood_risk.json
+2026-01-03T02:45:44.652951+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.653680+03:00 [INFO] Result #26 - OpenMeteoFloodSource: SUCCESS
+2026-01-03T02:45:44.654794+03:00 [INFO]   Events processed: 10
+2026-01-03T02:45:44.656436+03:00 [INFO]   Saved to: flood_risk.json
+2026-01-03T02:45:44.658074+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.658762+03:00 [INFO] Result #27 - OpenMeteoFloodSource: SUCCESS
+2026-01-03T02:45:44.660589+03:00 [INFO]   Events processed: 10
+2026-01-03T02:45:44.662335+03:00 [INFO]   Saved to: flood_risk.json
+2026-01-03T02:45:44.663107+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.664826+03:00 [INFO] Result #28 - OpenMeteoFloodSource: SUCCESS
+2026-01-03T02:45:44.665371+03:00 [INFO]   Events processed: 10
+2026-01-03T02:45:44.667133+03:00 [INFO]   Saved to: flood_risk.json
+2026-01-03T02:45:44.668760+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.670189+03:00 [INFO] Result #29 - OpenMeteoFloodSource: SUCCESS
+2026-01-03T02:45:44.670513+03:00 [INFO]   Events processed: 10
+2026-01-03T02:45:44.671289+03:00 [INFO]   Saved to: flood_risk.json
+2026-01-03T02:45:44.672960+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.674414+03:00 [INFO] Result #30 - EONETSource: SUCCESS
+2026-01-03T02:45:44.675970+03:00 [INFO]   Events processed: 23
+2026-01-03T02:45:44.676991+03:00 [INFO]   Saved to: eonet_events.json
+2026-01-03T02:45:44.678540+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.680621+03:00 [INFO] Result #31 - OpenMeteoFloodSource: SUCCESS
+2026-01-03T02:45:44.681599+03:00 [INFO]   Events processed: 10
+2026-01-03T02:45:44.682804+03:00 [INFO]   Saved to: flood_risk.json
+2026-01-03T02:45:44.683342+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.684676+03:00 [INFO] Result #32 - OpenMeteoFloodSource: SUCCESS
+2026-01-03T02:45:44.686382+03:00 [INFO]   Events processed: 10
+2026-01-03T02:45:44.687123+03:00 [INFO]   Saved to: flood_risk.json
+2026-01-03T02:45:44.688795+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.689551+03:00 [INFO] Result #33 - OpenMeteoFloodSource: SUCCESS
+2026-01-03T02:45:44.691256+03:00 [INFO]   Events processed: 10
+2026-01-03T02:45:44.693058+03:00 [INFO]   Saved to: flood_risk.json
+2026-01-03T02:45:44.694586+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.695353+03:00 [INFO] Result #34 - OpenMeteoFloodSource: SUCCESS
+2026-01-03T02:45:44.697185+03:00 [INFO]   Events processed: 10
+2026-01-03T02:45:44.698937+03:00 [INFO]   Saved to: flood_risk.json
+2026-01-03T02:45:44.700660+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.701466+03:00 [INFO] Result #35 - OpenMeteoFloodSource: SUCCESS
+2026-01-03T02:45:44.703066+03:00 [INFO]   Events processed: 10
+2026-01-03T02:45:44.705100+03:00 [INFO]   Saved to: flood_risk.json
+2026-01-03T02:45:44.706728+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.707327+03:00 [INFO] Result #36 - USGSEarthquakeSource: SUCCESS
+2026-01-03T02:45:44.708544+03:00 [INFO]   Events processed: 39
+2026-01-03T02:45:44.709935+03:00 [INFO]   Statistics:
+2026-01-03T02:45:44.711240+03:00 [INFO]     - Total events: 39
+2026-01-03T02:45:44.712886+03:00 [INFO]     - Max magnitude: 6.50
+2026-01-03T02:45:44.713404+03:00 [INFO]     - Avg magnitude: 3.40
+2026-01-03T02:45:44.713944+03:00 [INFO]   Saved to: earthquakes_1767397544.json
+2026-01-03T02:45:44.715808+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.717461+03:00 [INFO] Result #37 - EONETVolcanoSource: SUCCESS
+2026-01-03T02:45:44.719142+03:00 [INFO]   Events processed: 10
+2026-01-03T02:45:44.720145+03:00 [INFO]   Saved to: volcanoes.json
+2026-01-03T02:45:44.721687+03:00 [INFO] ------------------------------------------------------------
+2026-01-03T02:45:44.752221+03:00 [INFO] Worker 2 processing event from OpenWeatherSource
+2026-01-03T02:45:44.991247+03:00 [INFO] Worker 1 processing event from OpenWeatherSource
+2026-01-03T02:45:45.230713+03:00 [INFO] Worker 0 processing event from EONETStormSource
+2026-01-03T02:45:45.479931+03:00 [INFO] Worker 2 processing event from OpenWeatherSource
+2026-01-03T02:45:45.480041+03:00 [INFO] Worker 0 processing event from OpenWeatherSource
+2026-01-03T02:45:46.442666+03:00 [INFO] Worker 1 processing event from OpenWeatherSource
+2026-01-03T02:45:46.442922+03:00 [INFO] Worker 0 processing event from OpenWeatherSource
+2026-01-03T02:45:47.291007+03:00 [INFO] Worker 1 processing event from OpenWeatherSource
+2026-01-03T02:45:47.290941+03:00 [INFO] Worker 0 processing event from OpenWeatherSource
+2026-01-03T02:45:47.291060+03:00 [INFO] Worker 2 processing event from OpenWeatherSource
+2026-01-03T02:45:48.030304+03:00 [INFO] Worker 1 processing event from OpenWeatherSource
+2026-01-03T02:45:48.030416+03:00 [INFO] Worker 0 processing event from OpenWeatherSource
+2026-01-03T02:45:48.030501+03:00 [INFO] Worker 2 processing event from OpenWeatherSource
+2026-01-03T02:45:48.803261+03:00 [INFO] Worker 1 processing event from OpenWeatherSource
+2026-01-03T02:45:49.760807+03:00 [INFO] Worker 1 processing event from EONETWildfireSource
+2026-01-03T02:45:49.760749+03:00 [INFO] Worker 2 processing event from OpenWeatherSource

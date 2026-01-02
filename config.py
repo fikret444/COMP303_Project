@@ -12,17 +12,3 @@ USGS_EARTHQUAKE_URL = (
 
 OPENWEATHER_URL = "https://api.openweathermap.org/data/2.5/weather"
 
-# =========================
-# DEFAULT SETTINGS
-# =========================
-DEFAULT_CITY = "Istanbul"
-
-# =========================
-# TURKEY BOUNDING BOX
-# =========================
-TURKEY_MIN_LAT = 35.5
-TURKEY_MAX_LAT = 42.5
-TURKEY_MIN_LON = 25.0
-TURKEY_MAX_LON = 45.0
-
-
