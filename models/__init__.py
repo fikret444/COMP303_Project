@@ -1,9 +1,3 @@
-"""
-Core Data Models
-Erdem Kaya - Core System & Data Models
-"""
-
-from .raw_earthquake import RawEarthquake
-from .cleaned_earthquake import CleanedEarthquake
-
-__all__ = ['RawEarthquake', 'CleanedEarthquake']
+from .weather import Weather
+from .earthquake import RawEarthquake, CleanedEarthquake
+from .natural_event import NaturalEvent

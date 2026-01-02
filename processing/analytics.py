@@ -72,13 +72,23 @@ def compute_basic_stats(events):
     """
     Event listesi için basit istatistikler döndürür:
     kaç event, max/min/ortalama magnitude gibi.
+    
+    Accepts both objects (with magnitude attribute) and dictionaries.
     """
     if not events:
         return None
 
     magnitudes = []
     for e in events:
-        mag = e.get("magnitude")
+        # Handle objects with magnitude attribute
+        if hasattr(e, 'magnitude'):
+            mag = e.magnitude
+        # Handle dictionaries
+        elif isinstance(e, dict):
+            mag = e.get("magnitude")
+        else:
+            continue
+            
         if isinstance(mag, (int, float)):
             magnitudes.append(mag)
 

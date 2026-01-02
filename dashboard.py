@@ -3,13 +3,28 @@ SDEWS Web Dashboard
 Tarayıcıda görsel deprem takip sistemi
 """
 
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 import json
 import os
 import glob
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from datasources.scraping.scrape_news import scrape_all_risk_headlines
+
+# Scraping modülü - artık BeautifulSoup4 ile de çalışır
+try:
+    from datasources.scraping.scrape_news import scrape_all_risk_headlines
+    SCRAPING_AVAILABLE = True
+except ImportError as e:
+    SCRAPING_AVAILABLE = False
+    def scrape_all_risk_headlines():
+        return []
+
+# EONET modülü
+try:
+    from datasources.eonet_source import EONETSource
+    EONET_AVAILABLE = True
+except ImportError as e:
+    EONET_AVAILABLE = False
 
 app = Flask(__name__)
 
@@ -72,14 +87,28 @@ def load_weather_data():
         return []
 
 def load_forecast_data():
-    """Forecast (tahmin) verilerini yükle"""
+    """Forecast (tahmin) verilerini yükle - Sadece Amerika kıtaları"""
     weather_data = load_weather_data()
     # Sadece forecast tipindeki verileri filtrele
     forecasts = [item for item in weather_data if item.get('type') == 'weather_forecast']
     
+    # Amerika kıtaları filtresi: [minLon, minLat, maxLon, maxLat] = [-180, -60, -30, 85]
+    americas_bbox = {'min_lon': -180, 'min_lat': -60, 'max_lon': -30, 'max_lat': 85}
+    filtered_forecasts = []
+    
+    for forecast in forecasts:
+        lat = forecast.get('latitude')
+        lon = forecast.get('longitude')
+        
+        # Koordinat varsa ve Amerika kıtaları içindeyse ekle
+        if lat is not None and lon is not None:
+            if (americas_bbox['min_lat'] <= lat <= americas_bbox['max_lat'] and
+                americas_bbox['min_lon'] <= lon <= americas_bbox['max_lon']):
+                filtered_forecasts.append(forecast)
+    
     # Şehirlere göre grupla
     forecasts_by_city = {}
-    for forecast in forecasts:
+    for forecast in filtered_forecasts:
         city = forecast.get('location', 'Unknown')
         if city not in forecasts_by_city:
             forecasts_by_city[city] = []
@@ -92,10 +121,29 @@ def load_forecast_data():
     return forecasts_by_city
 
 def get_current_weather_data():
-    """Sadece anlık hava durumu verilerini yükle (forecast hariç)"""
+    """Sadece anlık hava durumu verilerini yükle (forecast hariç) - Sadece Amerika kıtaları"""
     weather_data = load_weather_data()
     # Sadece current weather tipindeki verileri filtrele
-    return [item for item in weather_data if item.get('type') == 'weather']
+    current_weather = [item for item in weather_data if item.get('type') == 'weather']
+    
+    # Amerika kıtaları filtresi: [minLon, minLat, maxLon, maxLat] = [-180, -60, -30, 85]
+    americas_bbox = {'min_lon': -180, 'min_lat': -60, 'max_lon': -30, 'max_lat': 85}
+    filtered_weather = []
+    
+    for item in current_weather:
+        lat = item.get('latitude')
+        lon = item.get('longitude')
+        
+        # Koordinat varsa ve Amerika kıtaları içindeyse ekle
+        if lat is not None and lon is not None:
+            if (americas_bbox['min_lat'] <= lat <= americas_bbox['max_lat'] and
+                americas_bbox['min_lon'] <= lon <= americas_bbox['max_lon']):
+                filtered_weather.append(item)
+        else:
+            # Koordinat yoksa atla (sadece Amerika kıtalarına odaklandığımız için)
+            pass
+    
+    return filtered_weather
 
 def calculate_statistics(earthquakes):
     """İstatistikleri hesapla"""
@@ -234,9 +282,228 @@ def api_news():
             'timestamp': datetime.now().isoformat()
         })
 
-def generate_current_alerts(earthquakes, current_weather_data):
-    """Mevcut durumdan kaynaklanan alert'ler oluştur (current weather)"""
+def get_latest_event_date(events, event_type=None):
+    """Belirli bir event tipinin en yakın tarihini bul"""
+    if not events:
+        return None
+    
+    latest_date = None
+    for event in events:
+        # Event tipi kontrolü (storm, volcano için)
+        if event_type:
+            if event_type == 'storm':
+                # Storm kontrolü
+                categories = event.get('categories', [])
+                cat_str = ' '.join([str(c) for c in categories]).lower() if isinstance(categories, list) else str(categories).lower()
+                if 'storm' not in cat_str and 'severe' not in cat_str:
+                    continue
+            elif event_type == 'volcano':
+                # Volcano kontrolü
+                categories = event.get('categories', [])
+                cat_str = ' '.join([str(c) for c in categories]).lower() if isinstance(categories, list) else str(categories).lower()
+                if 'volcano' not in cat_str:
+                    continue
+        
+        time_str = event.get('event_time') or event.get('time') or event.get('timestamp')
+        if not time_str:
+            continue
+        
+        try:
+            if 'T' in str(time_str):
+                time_str_clean = str(time_str).replace('Z', '+00:00')
+                event_time = datetime.fromisoformat(time_str_clean)
+            elif ' ' in str(time_str) and 'T' not in str(time_str):
+                try:
+                    event_time = datetime.strptime(str(time_str), '%Y-%m-%d T%H:%M:%S')
+                except:
+                    event_time = datetime.strptime(str(time_str), '%Y-%m-%d %H:%M:%S')
+            else:
+                event_time = datetime.fromtimestamp(float(time_str))
+            
+            if event_time.tzinfo:
+                event_time = event_time.astimezone().replace(tzinfo=None)
+            
+            if latest_date is None or event_time > latest_date:
+                latest_date = event_time
+        except:
+            continue
+    
+    return latest_date
+
+def filter_events_from_latest(events, event_type=None):
+    """En yakın event tarihinden itibaren tüm event'leri filtrele"""
+    if not events:
+        return []
+    
+    # En yakın event tarihini bul
+    latest_date = get_latest_event_date(events, event_type)
+    
+    if latest_date is None:
+        # Eğer en yakın tarih bulunamazsa, son 1 hafta filtresi uygula
+        return filter_last_one_week(events)
+    
+    filtered = []
+    
+    for event in events:
+        # Event tipi kontrolü
+        if event_type:
+            if event_type == 'storm':
+                categories = event.get('categories', [])
+                cat_str = ' '.join([str(c) for c in categories]).lower() if isinstance(categories, list) else str(categories).lower()
+                if 'storm' not in cat_str and 'severe' not in cat_str:
+                    continue
+            elif event_type == 'volcano':
+                categories = event.get('categories', [])
+                cat_str = ' '.join([str(c) for c in categories]).lower() if isinstance(categories, list) else str(categories).lower()
+                if 'volcano' not in cat_str:
+                    continue
+        
+        time_str = event.get('event_time') or event.get('time') or event.get('timestamp')
+        if not time_str:
+            continue
+        
+        try:
+            if 'T' in str(time_str):
+                time_str_clean = str(time_str).replace('Z', '+00:00')
+                event_time = datetime.fromisoformat(time_str_clean)
+            elif ' ' in str(time_str) and 'T' not in str(time_str):
+                try:
+                    event_time = datetime.strptime(str(time_str), '%Y-%m-%d T%H:%M:%S')
+                except:
+                    event_time = datetime.strptime(str(time_str), '%Y-%m-%d %H:%M:%S')
+            else:
+                event_time = datetime.fromtimestamp(float(time_str))
+            
+            if event_time.tzinfo:
+                event_time = event_time.astimezone().replace(tzinfo=None)
+            
+            # En yakın tarihten itibaren tüm event'leri ekle
+            if event_time >= latest_date:
+                filtered.append(event)
+        except Exception as e:
+            continue
+    
+    return filtered
+
+def filter_last_one_week(events):
+    """Son 1 hafta içindeki event'leri filtrele"""
+    if not events:
+        return []
+    
+    one_week_ago = datetime.now() - timedelta(days=7)
+    filtered = []
+    
+    for event in events:
+        # Tarih field'ını bul (time, timestamp, event_time, etc.)
+        # Öncelik sırası: event_time > time > timestamp
+        # EONET verilerinde event_time gerçek event zamanı, time ise güncelleme zamanı olabilir
+        event_time = None
+        time_str = event.get('event_time') or event.get('time') or event.get('timestamp')
+        
+        # Eğer time field'ı yoksa, event'i atla (filtreleme yapamayız)
+        if not time_str:
+            continue
+        
+        try:
+            # Farklı tarih formatlarını parse et
+            if 'T' in str(time_str):
+                # ISO format: "2025-12-26T19:00:00+00:00" veya "2025-12-26T19:00:00Z"
+                time_str_clean = str(time_str).replace('Z', '+00:00')
+                try:
+                    event_time = datetime.fromisoformat(time_str_clean)
+                except ValueError:
+                    # ISO format parse edilemezse, basit format dene
+                    try:
+                        event_time = datetime.strptime(str(time_str).split('T')[0], '%Y-%m-%d')
+                    except:
+                        event_time = None
+            elif ' ' in str(time_str) and 'T' not in str(time_str):
+                # Space format: "2025-12-30 T00:00:00" veya "2025-12-30 00:00:00"
+                try:
+                    event_time = datetime.strptime(str(time_str), '%Y-%m-%d T%H:%M:%S')
+                except:
+                    try:
+                        event_time = datetime.strptime(str(time_str), '%Y-%m-%d %H:%M:%S')
+                    except:
+                        event_time = None
+            else:
+                # Unix timestamp veya diğer formatlar
+                try:
+                    event_time = datetime.fromtimestamp(float(time_str))
+                except:
+                    event_time = None
+            
+            # Eğer tarih parse edilemediyse, event'i atla
+            if not event_time:
+                continue
+            
+            # UTC'den local time'a çevir (eğer timezone bilgisi varsa)
+            if event_time.tzinfo:
+                # Timezone-aware datetime'ı local time'a çevir, sonra naive yap
+                event_time = event_time.astimezone().replace(tzinfo=None)
+            
+            # Son 1 hafta içindeyse ekle
+            if event_time >= one_week_ago:
+                filtered.append(event)
+            # Debug: 3 Aralık tarihli kayıtları logla (filtrelenmiş olmalı)
+            elif '2025-12-03' in str(time_str):
+                print(f"DEBUG: 3 Aralık tarihli kayıt filtrelendi (geçerli) - Orijinal: {time_str}, Parsed: {event_time}, 1 hafta önce: {one_week_ago}, Fark: {(one_week_ago - event_time).days} gün")
+        except Exception as e:
+            # Parse edilemezse event'i atla
+            print(f"Tarih parse hatası: {time_str}, {e}")
+            continue
+    
+    return filtered
+
+def load_eonet_data():
+    """EONET doğal afet verilerini yükle - Pipeline'dan oluşturulan JSON dosyasından"""
+    if not EONET_AVAILABLE:
+        return []
+    
+    # Önce pipeline'dan oluşturulan JSON dosyasını kontrol et
+    eonet_file = DATA_DIR / "eonet_events.json"
+    if eonet_file.exists():
+        try:
+            with open(eonet_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                # Eğer liste değilse listeye çevir
+                if not isinstance(data, list):
+                    data = [data] if data else []
+                
+                # Volkan verilerini ayrı filtrele (en yakın volkan tarihinden itibaren)
+                volcano_data = filter_events_from_latest(data, event_type='volcano')
+                # Diğer veriler için son 1 hafta filtresi
+                other_data = filter_last_one_week([e for e in data if not any('volcano' in str(c).lower() for c in (e.get('categories', []) if isinstance(e.get('categories'), list) else [e.get('categories')]))])
+                
+                # Birleştir
+                return volcano_data + other_data
+        except Exception as e:
+            print(f"EONET JSON dosyası okuma hatası: {e}")
+    
+    # JSON dosyası yoksa veya okunamazsa, API'den çek (fallback)
+    # Not: Pipeline çalıştığında JSON dosyası oluşturulacak
+    try:
+        # Pipeline'da bbox filtresi zaten uygulanıyor, burada da uygulayalım
+        americas_bbox = [-180, -60, -30, 85]
+        src = EONETSource(status="open", days=30, limit=100, bbox=americas_bbox)
+        events = src.fetch_and_parse()
+        events_dict = [e.toDictionary() for e in events]
+        # Volkan verilerini ayrı filtrele
+        volcano_data = filter_events_from_latest(events_dict, event_type='volcano')
+        # Diğer veriler için son 1 hafta filtresi
+        other_data = filter_last_one_week([e for e in events_dict if not any('volcano' in str(c).lower() for c in (e.get('categories', []) if isinstance(e.get('categories'), list) else [e.get('categories')]))])
+        return volcano_data + other_data
+    except Exception as e:
+        print(f"EONET veri yükleme hatası: {e}")
+        return []
+
+def generate_current_alerts(earthquakes, current_weather_data, eonet_events=None):
+    """Mevcut durumdan kaynaklanan alert'ler oluştur (current weather + EONET)"""
     alerts = []
+    
+    # EONET verileri yoksa yükle
+    if eonet_events is None:
+        eonet_events = load_eonet_data()
     
     # Deprem alert'leri (magnitude >= 5.0)
     for eq in earthquakes:
@@ -421,6 +688,48 @@ def generate_current_alerts(earthquakes, current_weather_data):
                 'data': weather
             })
     
+    # EONET doğal afet alert'leri (sadece açık olanlar)
+    for event in eonet_events:
+        if event.get('status') == 'open':
+            categories = event.get('categories', [])
+            title = event.get('title', 'Doğal Afet')
+            event_time = event.get('event_time', event.get('time', datetime.now().isoformat()))
+            
+            # Kategoriye göre severity belirle
+            severity = 'high'  # Varsayılan olarak yüksek öncelik
+            category_str = ','.join(categories).lower() if categories else ''
+            
+            # Yangın ve volkan için yüksek öncelik
+            if 'wildfire' in category_str or 'fire' in category_str or 'yangın' in category_str:
+                severity = 'high'
+            elif 'volcano' in category_str or 'volkan' in category_str:
+                severity = 'high'
+            elif 'storm' in category_str or 'fırtına' in category_str or 'severe' in category_str:
+                severity = 'high'
+            elif 'flood' in category_str or 'sel' in category_str:
+                severity = 'high'
+            else:
+                severity = 'medium'
+            
+            # Konum bilgisi
+            location = 'Bilinmeyen Konum'
+            if event.get('latitude') and event.get('longitude'):
+                location = f"Koordinat: {event.get('latitude'):.4f}, {event.get('longitude'):.4f}"
+            
+            # Kategori metni
+            category_text = ', '.join(categories) if categories else 'Doğal Afet'
+            
+            alerts.append({
+                'type': 'natural_event',
+                'category': 'current',
+                'severity': severity,
+                'title': f'Doğal Afet Uyarısı: {title}',
+                'message': f'{category_text} - {title}. Durum: AÇIK. {location}',
+                'location': location,
+                'timestamp': event_time,
+                'data': event
+            })
+    
     # Tarihe göre sırala (en yeni önce)
     alerts.sort(key=lambda x: x.get('timestamp', ''), reverse=True)
     return alerts
@@ -589,9 +898,10 @@ def api_alerts():
     """Tüm alert'leri JSON olarak döndür (current + forecast)"""
     earthquakes = load_earthquake_data()
     current_weather = get_current_weather_data()
+    eonet_events = load_eonet_data()
     forecasts = load_forecast_data()
     
-    current_alerts = generate_current_alerts(earthquakes, current_weather)
+    current_alerts = generate_current_alerts(earthquakes, current_weather, eonet_events)
     forecast_alerts = generate_forecast_alerts(forecasts)
     
     all_alerts = current_alerts + forecast_alerts
@@ -612,7 +922,8 @@ def api_alerts_current():
     """Sadece mevcut durumdan kaynaklanan alert'leri döndür"""
     earthquakes = load_earthquake_data()
     current_weather = get_current_weather_data()
-    alerts = generate_current_alerts(earthquakes, current_weather)
+    eonet_events = load_eonet_data()
+    alerts = generate_current_alerts(earthquakes, current_weather, eonet_events)
     
     return jsonify({
         'alerts': alerts,
@@ -633,6 +944,273 @@ def api_alerts_forecast():
         'high_severity': len([a for a in alerts if a.get('severity') == 'high']),
         'timestamp': datetime.now().isoformat()
     })
+
+def load_wildfire_data():
+    """Wildfire verilerini yükle - Son 1 hafta filtresi uygula"""
+    wildfire_file = DATA_DIR / "wildfires.json"
+    if not wildfire_file.exists():
+        return []
+    
+    try:
+        with open(wildfire_file, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            # Eğer liste değilse listeye çevir
+            if not isinstance(data, list):
+                data = [data] if data else []
+            
+            # Son 1 hafta filtresi uygula
+            return filter_last_one_week(data)
+    except Exception as e:
+        print(f"Error loading wildfire data: {e}")
+        return []
+
+def filter_events_from_latest(events, event_type=None):
+    """En yakın event tarihinden itibaren tüm event'leri filtrele"""
+    if not events:
+        return []
+    
+    # En yakın event tarihini bul
+    latest_date = get_latest_event_date(events, event_type)
+    
+    if latest_date is None:
+        # Eğer en yakın tarih bulunamazsa, son 1 hafta filtresi uygula
+        return filter_last_one_week(events)
+    
+    filtered = []
+    
+    for event in events:
+        # Event tipi kontrolü
+        if event_type:
+            if event_type == 'storm':
+                categories = event.get('categories', [])
+                cat_str = ' '.join([str(c) for c in categories]).lower() if isinstance(categories, list) else str(categories).lower()
+                if 'storm' not in cat_str and 'severe' not in cat_str:
+                    continue
+            elif event_type == 'volcano':
+                categories = event.get('categories', [])
+                cat_str = ' '.join([str(c) for c in categories]).lower() if isinstance(categories, list) else str(categories).lower()
+                if 'volcano' not in cat_str:
+                    continue
+        
+        time_str = event.get('event_time') or event.get('time') or event.get('timestamp')
+        if not time_str:
+            continue
+        
+        try:
+            if 'T' in str(time_str):
+                time_str_clean = str(time_str).replace('Z', '+00:00')
+                event_time = datetime.fromisoformat(time_str_clean)
+            elif ' ' in str(time_str) and 'T' not in str(time_str):
+                try:
+                    event_time = datetime.strptime(str(time_str), '%Y-%m-%d T%H:%M:%S')
+                except:
+                    event_time = datetime.strptime(str(time_str), '%Y-%m-%d %H:%M:%S')
+            else:
+                event_time = datetime.fromtimestamp(float(time_str))
+            
+            if event_time.tzinfo:
+                event_time = event_time.astimezone().replace(tzinfo=None)
+            
+            # En yakın tarihten itibaren tüm event'leri ekle
+            if event_time >= latest_date:
+                filtered.append(event)
+        except Exception as e:
+            continue
+    
+    return filtered
+
+def load_storm_data():
+    """Storm verilerini yükle - En yakın fırtına tarihinden itibaren filtrele"""
+    storm_file = DATA_DIR / "storms.json"
+    if not storm_file.exists():
+        return []
+    
+    try:
+        with open(storm_file, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            # Eğer liste değilse listeye çevir
+            if not isinstance(data, list):
+                data = [data] if data else []
+            
+            # En yakın fırtına tarihinden itibaren filtrele
+            return filter_events_from_latest(data, event_type='storm')
+    except Exception as e:
+        print(f"Error loading storm data: {e}")
+        return []
+
+def load_volcano_data():
+    """Volcano verilerini yükle - En yakın volkan tarihinden itibaren filtrele"""
+    volcano_file = DATA_DIR / "volcanoes.json"
+    if not volcano_file.exists():
+        return []
+    
+    try:
+        with open(volcano_file, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            # Eğer liste değilse listeye çevir
+            if not isinstance(data, list):
+                data = [data] if data else []
+            
+            # En yakın volkan tarihinden itibaren filtrele
+            return filter_events_from_latest(data, event_type='volcano')
+    except Exception as e:
+        print(f"Error loading volcano data: {e}")
+        return []
+
+def load_flood_data():
+    """Flood risk verilerini yükle - Son 1 hafta filtresi uygula (tüm risk seviyeleri dahil)"""
+    flood_file = DATA_DIR / "flood_risk.json"
+    if not flood_file.exists():
+        return []
+    
+    try:
+        with open(flood_file, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            # Flood risk JSON'u object formatında, events array'ini döndür
+            if isinstance(data, dict):
+                events = data.get("events", [])
+            else:
+                events = data if isinstance(data, list) else []
+            
+            # Flood verilerindeki tarih formatı: "2025-12-30 T00:00:00" - özel parse gerekli
+            # Son 1 hafta filtresi uygula (tüm risk seviyeleri dahil)
+            one_week_ago = datetime.now() - timedelta(days=7)
+            filtered = []
+            
+            for event in events:
+                time_str = event.get('time')
+                if not time_str:
+                    continue
+                
+                try:
+                    # Flood verilerindeki özel format: "2025-12-30 T00:00:00"
+                    if ' T' in str(time_str):
+                        event_time = datetime.strptime(str(time_str), '%Y-%m-%d T%H:%M:%S')
+                    elif 'T' in str(time_str):
+                        time_str_clean = str(time_str).replace('Z', '+00:00')
+                        event_time = datetime.fromisoformat(time_str_clean)
+                    else:
+                        event_time = datetime.strptime(str(time_str), '%Y-%m-%d %H:%M:%S')
+                    
+                    if event_time.tzinfo:
+                        event_time = event_time.astimezone().replace(tzinfo=None)
+                    
+                    if event_time >= one_week_ago:
+                        filtered.append(event)
+                except Exception as e:
+                    print(f"Flood tarih parse hatası: {time_str}, {e}")
+                    continue
+            
+            return filtered
+    except Exception as e:
+        print(f"Error loading flood data: {e}")
+        return []
+
+@app.route('/api/wildfires')
+def api_wildfires():
+    """Wildfire verilerini döndür"""
+    wildfires = load_wildfire_data()
+    return jsonify({
+        'wildfires': wildfires,
+        'count': len(wildfires),
+        'timestamp': datetime.now().isoformat()
+    })
+
+@app.route('/api/storms')
+def api_storms():
+    """Storm verilerini döndür"""
+    storms = load_storm_data()
+    return jsonify({
+        'storms': storms,
+        'count': len(storms),
+        'timestamp': datetime.now().isoformat()
+    })
+
+@app.route('/api/volcanoes')
+def api_volcanoes():
+    """Volcano verilerini döndür"""
+    volcanoes = load_volcano_data()
+    return jsonify({
+        'volcanoes': volcanoes,
+        'count': len(volcanoes),
+        'timestamp': datetime.now().isoformat()
+    })
+
+@app.route('/api/floods')
+def api_floods():
+    """Flood risk verilerini döndür - Tüm risk seviyeleri (low, medium, high)"""
+    floods = load_flood_data()
+    # Tüm risk seviyelerini döndür (low, medium, high)
+    # Kullanıcı dashboard'da filtreleyebilir
+    return jsonify({
+        'floods': floods,
+        'count': len(floods),
+        'high_risk_count': len([f for f in floods if f.get('risk_level') == 'high']),
+        'medium_risk_count': len([f for f in floods if f.get('risk_level') == 'medium']),
+        'low_risk_count': len([f for f in floods if f.get('risk_level') == 'low']),
+        'timestamp': datetime.now().isoformat()
+    })
+
+@app.route('/api/eonet')
+def api_eonet():
+    """NASA EONET doğal afet verilerini döndür - Pipeline'dan oluşturulan JSON dosyasından veya API'den"""
+    if not EONET_AVAILABLE:
+        return jsonify({"error": "EONET module not available"}), 500
+    
+    # Önce pipeline'dan oluşturulan JSON dosyasını kontrol et
+    eonet_file = DATA_DIR / "eonet_events.json"
+    if eonet_file.exists():
+        try:
+            with open(eonet_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                # Eğer liste değilse listeye çevir
+                if not isinstance(data, list):
+                    return jsonify([data] if data else [])
+                return jsonify(data)
+        except Exception as e:
+            print(f"EONET JSON dosyası okuma hatası: {e}")
+    
+    # JSON dosyası yoksa veya okunamazsa, API'den çek (fallback)
+    # Varsayılan olarak Amerika kıtaları filtresi uygulanır (pipeline ile tutarlılık için)
+    try:
+        status = request.args.get("status", "open")
+        days = int(request.args.get("days", 30))
+        limit = int(request.args.get("limit", 100))
+
+        categories_str = request.args.get("categories", "")
+        category_ids = [c.strip() for c in categories_str.split(",") if c.strip()]
+
+        bbox_str = request.args.get("bbox", "")
+        bbox = None
+        if bbox_str:
+            parts = [p.strip() for p in bbox_str.split(",")]
+            if len(parts) == 4:
+                bbox = [float(x) for x in parts]
+        else:
+            # Bbox verilmezse, varsayılan olarak Amerika kıtaları filtresini uygula
+            # Pipeline ile tutarlılık için
+            bbox = [-180, -60, -30, 85]
+
+        src = EONETSource(status=status, days=days, limit=limit, category_ids=category_ids, bbox=bbox)
+        events = src.fetch_and_parse()
+        
+        # Iceberg kategorilerini filtrele (pipeline ile tutarlılık için)
+        filtered_events = []
+        for event in events:
+            event_dict = event.toDictionary() if hasattr(event, 'toDictionary') else event
+            categories = event_dict.get('categories', [])
+            if categories:
+                categories_str = ','.join(categories).lower()
+                if 'ice' in categories_str or 'iceberg' in categories_str or 'sea and lake ice' in categories_str:
+                    continue
+            filtered_events.append(event)
+        
+        return jsonify([e.toDictionary() if hasattr(e, 'toDictionary') else e for e in filtered_events])
+    except Exception as e:
+        import traceback
+        print(f"EONET API Error: {e}")
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     print("\n" + "="*60)

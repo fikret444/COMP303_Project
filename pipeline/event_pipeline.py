@@ -36,20 +36,29 @@ class EventPipeline:
         self.processors = {
             'USGSEarthquakeSource': self._process_earthquake_events,
             'OpenWeatherSource': self._process_weather_events,
+            'EONETSource': self._process_eonet_events,
+            'EONETWildfireSource': self._process_wildfire_events,
+            'EONETStormSource': self._process_storm_events,
+            'EONETVolcanoSource': self._process_volcano_events,
+            'OpenMeteoFloodSource': self._process_flood_events,
             'default': self._process_generic_events
         }
         
         log_message(f"EventPipeline initialized with {num_consumers} consumers", "INFO")
     
-    def _process_earthquake_events(self, events: List[Dict[str, Any]], source_name: str) -> Dict[str, Any]:
-        """Process earthquake events from USGS."""
+    def _process_earthquake_events(self, events: List[Any], source_name: str) -> Dict[str, Any]:
+        """Process earthquake events from USGS. Accepts RawEarthquake objects or dictionaries."""
         try:
+            # clean_usgs_earthquake_events now returns CleanedEarthquake objects
             cleaned_events = clean_usgs_earthquake_events(events)
             
             if cleaned_events:
                 filename = f"earthquakes_{int(time.time())}.json"
                 save_events_to_json(cleaned_events, filename)
-                stats = compute_basic_stats(cleaned_events)
+                
+                # Convert objects to dictionaries for stats computation if needed
+                stats_events = [ev.toDictionary() if hasattr(ev, 'toDictionary') else ev for ev in cleaned_events]
+                stats = compute_basic_stats(stats_events)
                 
                 return {
                     'success': True,
@@ -65,8 +74,8 @@ class EventPipeline:
             log_message(f"Error processing earthquake events: {str(e)}", "ERROR")
             return {'success': False, 'source': source_name, 'error': str(e)}
     
-    def _process_weather_events(self, events: List[Dict[str, Any]], source_name: str) -> Dict[str, Any]:
-        """Process weather events from OpenWeather."""
+    def _process_weather_events(self, events: List[Any], source_name: str) -> Dict[str, Any]:
+        """Process weather events from OpenWeather. Accepts Weather objects or dictionaries."""
         try:
             # events zaten bir liste, direkt kaydet
             if not events:
@@ -75,6 +84,7 @@ class EventPipeline:
             # Tüm weather verilerini tek bir dosyada topla
             from pathlib import Path
             from processing.storage import DATA_DIR
+            from models import Weather
             import json
             
             # Thread-safe birleştirme için lock kullan
@@ -88,7 +98,12 @@ class EventPipeline:
                         with open(weather_file, 'r', encoding='utf-8') as f:
                             existing_data = json.load(f)
                             if isinstance(existing_data, list):
-                                all_weather = existing_data
+                                # Convert dictionaries to Weather objects
+                                for item in existing_data:
+                                    if isinstance(item, dict):
+                                        all_weather.append(Weather.fromDict(item))
+                                    else:
+                                        all_weather.append(item)
                     except:
                         pass
                 
@@ -100,17 +115,21 @@ class EventPipeline:
                 
                 # Mevcut verileri ayır
                 for item in all_weather:
-                    if item.get('type') == 'weather_forecast':
+                    # Handle both objects and dictionaries
+                    item_dict = item.toDictionary() if hasattr(item, 'toDictionary') else item
+                    if item_dict.get('type') == 'weather_forecast':
                         forecast_list.append(item)
                     else:
-                        city = item.get('location')
+                        city = item_dict.get('location')
                         if city:
                             city_current_dict[city] = item
                 
                 # Yeni verileri işle
                 for event in events:
-                    event_type = event.get('type', 'weather')
-                    city = event.get('location')
+                    # Convert to dictionary for checking
+                    event_dict = event.toDictionary() if hasattr(event, 'toDictionary') else event
+                    event_type = event_dict.get('type', 'weather')
+                    city = event_dict.get('location')
                     
                     if event_type == 'weather_forecast':
                         # Forecast verilerini ekle
@@ -129,13 +148,184 @@ class EventPipeline:
                 'success': True,
                 'source': source_name,
                 'event_count': len(events),
-                'total_cities': len(all_weather),
-                'data': events[0] if events else None,
+                'total_cities': len(city_current_dict),
+                'data': events[0].toDictionary() if events and hasattr(events[0], 'toDictionary') else (events[0] if events else None),
                 'filename': 'weather_all.json'
             }
             
         except Exception as e:
             log_message(f"Error processing weather events: {str(e)}", "ERROR")
+            return {'success': False, 'source': source_name, 'error': str(e)}
+    
+    def _process_eonet_events(self, events: List[Any], source_name: str) -> Dict[str, Any]:
+        """Process EONET natural event data. Accepts NaturalEvent objects or dictionaries."""
+        try:
+            if not events:
+                return {'success': False, 'source': source_name, 'error': 'No EONET events'}
+            
+            # Iceberg ve Sea and Lake Ice kategorilerini filtrele
+            filtered_events = []
+            for event in events:
+                # Convert to dictionary for checking
+                event_dict = event.toDictionary() if hasattr(event, 'toDictionary') else event
+                categories = event_dict.get('categories', [])
+                
+                # Iceberg kategorilerini filtrele
+                if categories:
+                    categories_str = ','.join(categories).lower()
+                    if 'ice' in categories_str or 'iceberg' in categories_str or 'sea and lake ice' in categories_str:
+                        continue  # Bu event'i atla
+                
+                filtered_events.append(event)
+            
+            if filtered_events:
+                filename = "eonet_events.json"
+                save_events_to_json(filtered_events, filename)
+                
+                return {
+                    'success': True,
+                    'source': source_name,
+                    'event_count': len(filtered_events),
+                    'filtered_count': len(events) - len(filtered_events),
+                    'filename': filename
+                }
+            else:
+                return {'success': False, 'source': source_name, 'error': 'No valid events after filtering'}
+                
+        except Exception as e:
+            log_message(f"Error processing EONET events: {str(e)}", "ERROR")
+            return {'success': False, 'source': source_name, 'error': str(e)}
+    
+    def _process_wildfire_events(self, events: List[Any], source_name: str) -> Dict[str, Any]:
+        """Process wildfire events from EONET. Accepts Event dictionaries."""
+        try:
+            if not events:
+                return {'success': False, 'source': source_name, 'error': 'No wildfire events'}
+            
+            # Şehir atama işlemi için pipeline/fetch_wildfires.py'deki fonksiyonları kullan
+            from pipeline.fetch_wildfires import assign_city
+            
+            # Event'leri en yakın şehre ata
+            for ev in events:
+                if isinstance(ev, dict):
+                    lat = ev.get("latitude")
+                    lon = ev.get("longitude")
+                    city = assign_city(lat, lon)
+                    ev["city"] = city
+            
+            filename = "wildfires.json"
+            save_events_to_json(events, filename)
+            
+            return {
+                'success': True,
+                'source': source_name,
+                'event_count': len(events),
+                'filename': filename
+            }
+            
+        except Exception as e:
+            log_message(f"Error processing wildfire events: {str(e)}", "ERROR")
+            return {'success': False, 'source': source_name, 'error': str(e)}
+    
+    def _process_storm_events(self, events: List[Any], source_name: str) -> Dict[str, Any]:
+        """Process storm events from EONET. Accepts Event dictionaries."""
+        try:
+            if not events:
+                return {'success': False, 'source': source_name, 'error': 'No storm events'}
+            
+            # Şehir atama işlemi için pipeline/fetch_storms.py'deki fonksiyonları kullan
+            from pipeline.fetch_storms import assign_city
+            
+            # Event'leri en yakın şehre ata
+            for ev in events:
+                if isinstance(ev, dict):
+                    lat = ev.get("latitude")
+                    lon = ev.get("longitude")
+                    city = assign_city(lat, lon)
+                    ev["city"] = city
+            
+            filename = "storms.json"
+            save_events_to_json(events, filename)
+            
+            return {
+                'success': True,
+                'source': source_name,
+                'event_count': len(events),
+                'filename': filename
+            }
+            
+        except Exception as e:
+            log_message(f"Error processing storm events: {str(e)}", "ERROR")
+            return {'success': False, 'source': source_name, 'error': str(e)}
+    
+    def _process_volcano_events(self, events: List[Any], source_name: str) -> Dict[str, Any]:
+        """Process volcano events from EONET. Accepts Event dictionaries."""
+        try:
+            if not events:
+                return {'success': False, 'source': source_name, 'error': 'No volcano events'}
+            
+            filename = "volcanoes.json"
+            save_events_to_json(events, filename)
+            
+            return {
+                'success': True,
+                'source': source_name,
+                'event_count': len(events),
+                'filename': filename
+            }
+            
+        except Exception as e:
+            log_message(f"Error processing volcano events: {str(e)}", "ERROR")
+            return {'success': False, 'source': source_name, 'error': str(e)}
+    
+    def _process_flood_events(self, events: List[Any], source_name: str) -> Dict[str, Any]:
+        """Process flood risk events from OpenMeteo. Accepts Event dictionaries."""
+        try:
+            if not events:
+                return {'success': False, 'source': source_name, 'error': 'No flood events'}
+            
+            # High risk event'leri filtrele
+            high_risk_events = [
+                ev for ev in events
+                if isinstance(ev, dict) and ev.get("risk_level") == "high"
+            ]
+            
+            # Payload oluştur (fetch_flood.py formatına uygun)
+            from datetime import datetime
+            from pathlib import Path
+            from processing.storage import DATA_DIR
+            import json
+            
+            payload = {
+                "generated_at": datetime.now().strftime("%Y-%m-%d T%H:%M:%S"),
+                "total_events": len(events),
+                "total_high_risk_events": len(high_risk_events),
+                "events": events,
+                "high_risk_events": high_risk_events,
+            }
+            
+            # JSON'a kaydet (özel format)
+            filename = "flood_risk.json"
+            file_path = DATA_DIR / filename
+            
+            def default_serializer(obj):
+                if isinstance(obj, datetime):
+                    return obj.strftime("%Y-%m-%d T%H:%M:%S")
+                raise TypeError(f"Type {type(obj)} is not JSON serializable")
+            
+            with file_path.open("w", encoding="utf-8") as f:
+                json.dump(payload, f, ensure_ascii=False, indent=2, default=default_serializer)
+            
+            return {
+                'success': True,
+                'source': source_name,
+                'event_count': len(events),
+                'high_risk_count': len(high_risk_events),
+                'filename': filename
+            }
+            
+        except Exception as e:
+            log_message(f"Error processing flood events: {str(e)}", "ERROR")
             return {'success': False, 'source': source_name, 'error': str(e)}
     
     def _process_generic_events(self, events: Any, source_name: str) -> Dict[str, Any]:

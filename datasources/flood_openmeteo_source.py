@@ -132,3 +132,4 @@ if __name__ == "__main__":
     print(f"{len(events)} flood_risk event üretildi (New York).")
     for ev in events[:5]:
         print(ev)
+
