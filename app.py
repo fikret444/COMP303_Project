@@ -40,24 +40,30 @@ def api_weather():
 
 @app.get("/api/eonet")
 def api_eonet():
-    status = request.args.get("status", "all")
-    days = int(request.args.get("days", 365))
-    limit = int(request.args.get("limit", 50))
+    try:
+        status = request.args.get("status", "all")
+        days = int(request.args.get("days", 365))
+        limit = int(request.args.get("limit", 50))
 
-    categories_str = request.args.get("categories", "")
-    category_ids = [c.strip() for c in categories_str.split(",") if c.strip()]
+        categories_str = request.args.get("categories", "")
+        category_ids = [c.strip() for c in categories_str.split(",") if c.strip()]
 
-    bbox_str = request.args.get("bbox", "")
-    bbox = None
-    if bbox_str:
-        parts = [p.strip() for p in bbox_str.split(",")]
-        if len(parts) == 4:
-            bbox = [float(x) for x in parts]
+        bbox_str = request.args.get("bbox", "")
+        bbox = None
+        if bbox_str:
+            parts = [p.strip() for p in bbox_str.split(",")]
+            if len(parts) == 4:
+                bbox = [float(x) for x in parts]
 
-    src = EONETSource(status=status, days=days, limit=limit, category_ids=category_ids, bbox=bbox)
-    events = src.fetch_and_parse()
-    return jsonify([e.toDictionary() for e in events])
+        src = EONETSource(status=status, days=days, limit=limit, category_ids=category_ids, bbox=bbox)
+        events = src.fetch_and_parse()
+        return jsonify([e.toDictionary() for e in events])
+    except Exception as e:
+        import traceback
+        print(f"EONET API Error: {e}")
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5001)
+    app.run(debug=True, host="0.0.0.0", port=5000)

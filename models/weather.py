@@ -1,6 +1,6 @@
 class Weather:
 
-    def __init__(self, type, source, location, temperature, wind_speed, time,
+    def __init__(self, type, source, location, temperature, wind_speed, time, 
                  humidity=None, pressure=None, wind_direction=None, wind_gust=None,
                  clouds=None, precipitation=None, visibility=None,
                  weather_main=None, weather_description=None, weather_icon=None,
@@ -29,7 +29,7 @@ class Weather:
         self.feels_like = feels_like
         self.temp_min = temp_min
         self.temp_max = temp_max
-        self.forecast_time = forecast_time  # usually string
+        self.forecast_time = forecast_time  # For forecast data
 
     def __repr__(self):
         return f"type:{self.type}, source:{self.source}, location:{self.location}, temperature:{self.temperature}, wind_speed:{self.wind_speed}, time:{self.time}"
@@ -46,7 +46,8 @@ class Weather:
             "wind_speed": self.wind_speed,
             "time": time_val,
         }
-
+        
+        # Add optional fields if they exist
         if self.humidity is not None:
             result["humidity"] = self.humidity
         if self.pressure is not None:
@@ -83,11 +84,14 @@ class Weather:
             result["temp_max"] = self.temp_max
         if self.forecast_time is not None:
             result["forecast_time"] = self.forecast_time
-
+            
         return result
 
+    # c = class name (Weather)
+    # this function takes dictionary as argument
     @classmethod
-    def fromDict(c, data_: dict):
+    def fromDict(c, data_:dict):
+        """Create Weather object from dictionary."""
         return c(
             type=data_.get("type"),
             source=data_.get("source"),
@@ -114,3 +118,4 @@ class Weather:
             temp_max=data_.get("temp_max"),
             forecast_time=data_.get("forecast_time")
         )
+

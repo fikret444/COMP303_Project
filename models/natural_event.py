@@ -60,3 +60,5 @@ class NaturalEvent:
             longitude=data_.get("longitude"),
             geometry_type=data_.get("geometry_type")
         )
+
+

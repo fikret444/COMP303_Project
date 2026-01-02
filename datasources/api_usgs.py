@@ -1,35 +1,26 @@
-import requests
-from datetime import datetime
-from datasources.base_source import DataSource
+from datasources.usgs_earthquake import USGSEarthquakeSource
+
+# Whole Americas bounding box (minLon, minLat, maxLon, maxLat)
+AMERICA_BBOX = [-170.0, -56.0, -34.0, 72.0]
 
 
-class USGSEarthquakeSource(DataSource):
+def get_earthquakes(bbox=None):
+    if bbox is None:
+        bbox = AMERICA_BBOX
 
-    URL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson"
+    src = USGSEarthquakeSource(bbox=bbox)
+    return src.fetch_and_parse()
 
-    def fetch_raw(self):
-        response = requests.get(self.URL, timeout=10)
-        return response.json()
 
-    def parse(self, raw):
-        events = []
+if __name__ == "__main__":
+    quakes = get_earthquakes()
 
-        for item in raw.get("features", []):
-            props = item.get("properties", {})
-            coords = item.get("geometry", {}).get("coordinates", [])
+    print("First 10 earthquakes:")
+    for q in quakes[:10]:
+        print(q)
 
-            if not props or len(coords) < 2:
-                continue
-
-            events.append({
-                "type": "earthquake",
-                "source": "USGS",
-                "location": props.get("place"),
-                "magnitude": props.get("mag"),
-                "time": datetime.fromtimestamp(props["time"] / 1000),
-                "latitude": coords[1],
-                "longitude": coords[0],
-                "depth": coords[2] if len(coords) > 2 else None
-            })
-
-        return events
+    try:
+        as_dict = [q.toDictionary() for q in quakes[:5]]
+        print(as_dict)
+    except Exception:
+        print(quakes[:5])

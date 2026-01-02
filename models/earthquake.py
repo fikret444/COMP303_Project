@@ -89,3 +89,5 @@ class RawEarthquake:
 
     def isSignificant(self, t=5.0):
         return self.magnitude > t
+
+
