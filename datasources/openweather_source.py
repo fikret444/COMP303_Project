@@ -5,7 +5,6 @@ import os
 from datasources.base_source import DataSource, DataSourceError
 from models import Weather
 
-# config.py'den API key'i al, yoksa environment variable'dan dene
 try:
     from config import OPENWEATHER_API_KEY as CONFIG_API_KEY
 except ImportError:
@@ -17,28 +16,16 @@ class OpenWeatherSource(DataSource):
     FORECAST_URL = "https://api.openweathermap.org/data/2.5/forecast"  # 5 günlük, 3 saatlik tahmin
 
     def __init__(self, city="Istanbul", country_code=None, include_forecast=False):
-        """
-        Initialize OpenWeather Source.
-        
-        Args:
-            city: City name
-            country_code: Optional 2-letter country code (e.g., "US", "BR", "AR")
-                         If None, will try to infer from city name or use default
-            include_forecast: Whether to fetch 5-day forecast data
-        """
         self.city = city
         self.country_code = country_code
         self.include_forecast = include_forecast
-        # Önce config.py'den, sonra environment variable'dan, son olarak boş string
         self.api_key = CONFIG_API_KEY or os.getenv("OPENWEATHER_API_KEY", "")
 
     def fetch_raw(self):
         if not self.api_key:
             raise DataSourceError("OPENWEATHER_API_KEY is missing. Set it in config.py or as environment variable.")
 
-        # Ülke kodu belirlenmemişse, şehir adına göre tahmin et
         if not self.country_code:
-            # Amerika kıtalarındaki şehirler için varsayılan ülke kodları
             city_country_map = {
                 "New York": "US", "Los Angeles": "US", "Chicago": "US", "Houston": "US",
                 "Miami": "US", "San Francisco": "US", "Seattle": "US", "Denver": "US",
@@ -56,12 +43,10 @@ class OpenWeatherSource(DataSource):
         }
 
         try:
-            # Anlık hava durumu
             r = requests.get(self.BASE_URL, params=params, timeout=10)
             r.raise_for_status()
             current_data = r.json()
-            
-            # Forecast verisi de isteniyorsa çek
+
             forecast_data = None
             if self.include_forecast:
                 try:
@@ -69,7 +54,6 @@ class OpenWeatherSource(DataSource):
                     r_forecast.raise_for_status()
                     forecast_data = r_forecast.json()
                 except Exception as e:
-                    # Forecast başarısız olsa bile current data'yı döndür
                     pass
             
             return {

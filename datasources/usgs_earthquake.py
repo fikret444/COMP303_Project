@@ -8,12 +8,6 @@ class USGSEarthquakeSource(DataSource):
     URL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson"
 
     def __init__(self, bbox=None):
-        """
-        Initialize USGS Earthquake Source.
-        
-        Args:
-            bbox: Optional bounding box [minLon, minLat, maxLon, maxLat] to filter earthquakes
-        """
         self.bbox = bbox  # [minLon, minLat, maxLon, maxLat]
 
     def fetch_raw(self):
@@ -32,16 +26,14 @@ class USGSEarthquakeSource(DataSource):
             
             lat = coords[1]
             lon = coords[0]
-            
-            # Bbox filtresi varsa uygula
+
             if self.bbox and len(self.bbox) == 4:
                 min_lon, min_lat, max_lon, max_lat = self.bbox
                 if not (isinstance(lat, (int, float)) and isinstance(lon, (int, float))):
                     continue
                 if not (min_lat <= lat <= max_lat and min_lon <= lon <= max_lon):
-                    continue  # Bu deprem bbox dışında, atla
+                    continue
 
-            # Create RawEarthquake object instead of dictionary
             raw_eq = RawEarthquake(
                 type="earthquake",
                 source="USGS",
