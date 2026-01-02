@@ -28,7 +28,7 @@ class EONETWildfireSource(DataSource):
     # min_lon, max_lat, max_lon, min_lat
     # Not: Efe branch'inde sadece Kuzey Amerika için "-129.02,50.73,-58.71,12.89" kullanılıyordu
     # Şimdi tüm Amerika kıtaları için genişletildi: "-180,85,-30,-60"
-    DEFAULT_NA_BBOX = "-170,72,-34,-56"
+    DEFAULT_NA_BBOX = "-180,85,-30,-60"
 
     def __init__(
         self,

@@ -1,192 +1,169 @@
-from __future__ import annotations
-
 import requests
-import os
 from datetime import datetime
-from typing import List
+import os
 
 from datasources.base_source import DataSource, DataSourceError
+from models import Weather
 
-# --------------------------------------------------
-# TOP 100 CITIES IN THE AMERICAS (population-based)
-# --------------------------------------------------
+# config.py'den API key'i al, yoksa environment variable'dan dene
+try:
+    from config import OPENWEATHER_API_KEY as CONFIG_API_KEY
+except ImportError:
+    CONFIG_API_KEY = None
 
-AMERICAS_CITIES = [
-    # --- TOP 1–10 ---
-    ("São Paulo", "BR"),
-    ("Lima", "PE"),
-    ("Mexico City", "MX"),
-    ("New York", "US"),
-    ("Bogotá", "CO"),
-    ("Rio de Janeiro", "BR"),
-    ("Santiago", "CL"),
-    ("Los Angeles", "US"),
-    ("Buenos Aires", "AR"),
-    ("Toronto", "CA"),
-
-    # --- 11–20 ---
-    ("Brasília", "BR"),
-    ("Salvador", "BR"),
-    ("Chicago", "US"),
-    ("Fortaleza", "BR"),
-    ("Santo Domingo", "DO"),
-    ("Belo Horizonte", "BR"),
-    ("Medellín", "CO"),
-    ("Cali", "CO"),
-    ("Houston", "US"),
-    ("Guayaquil", "EC"),
-
-    # --- 21–30 ---
-    ("Manaus", "BR"),
-    ("Havana", "CU"),
-    ("Caracas", "VE"),
-    ("Curitiba", "BR"),
-    ("Ecatepec", "MX"),
-    ("Maracaibo", "VE"),
-    ("Montreal", "CA"),
-    ("Phoenix", "US"),
-    ("Recife", "BR"),
-    ("Quito", "EC"),
-
-    # --- 31–40 ---
-    ("Philadelphia", "US"),
-    ("Puebla", "MX"),
-    ("Guadalajara", "MX"),
-    ("San Antonio", "US"),
-    ("Goiânia", "BR"),
-    ("Porto Alegre", "BR"),
-    ("Belém", "BR"),
-    ("Ciudad Juárez", "MX"),
-    ("Córdoba", "AR"),
-    ("Tijuana", "MX"),
-
-    # --- 41–50 ---
-    ("Santa Cruz", "BO"),
-    ("San Diego", "US"),
-    ("Guarulhos", "BR"),
-    ("Dallas", "US"),
-    ("Montevideo", "UY"),
-    ("León", "MX"),
-    ("Rosario", "AR"),
-    ("Zapopan", "MX"),
-    ("Calgary", "CA"),
-    ("Monterrey", "MX"),
-
-    # --- 51–60 ---
-    ("Barranquilla", "CO"),
-    ("Nezahualcóyotl", "MX"),
-    ("Campinas", "BR"),
-    ("Barquisimeto", "VE"),
-    ("São Gonçalo", "BR"),
-    ("Tegucigalpa", "HN"),
-    ("São Luís", "BR"),
-    ("Managua", "NI"),
-    ("San Jose", "US"),
-    ("Maceió", "BR"),
-
-    # --- 61–70 ---
-    ("Arequipa", "PE"),
-    ("Naucalpan", "MX"),
-    ("Cartagena", "CO"),
-    ("Austin", "US"),
-    ("Valencia", "VE"),
-    ("Ottawa", "CA"),
-    ("Chihuahua", "MX"),
-    ("Edmonton", "CA"),
-    ("Guatemala City", "GT"),
-    ("Duque de Caxias", "BR"),
-
-    # --- 71–80 ---
-    ("Jacksonville", "US"),
-    ("Fort Worth", "US"),
-    ("Ciudad Guayana", "VE"),
-    ("Columbus", "US"),
-    ("Natal", "BR"),
-    ("Campo Grande", "BR"),
-    ("San Francisco", "US"),
-    ("Port-au-Prince", "HT"),
-    ("Charlotte", "US"),
-    ("Mérida", "MX"),
-
-    # --- 81–90 ---
-    ("Indianapolis", "US"),
-    ("Trujillo", "PE"),
-    ("El Alto", "BO"),
-    ("Hermosillo", "MX"),
-    ("Cancún", "MX"),
-    ("São Bernardo do Campo", "BR"),
-    ("Teresina", "BR"),
-    ("Nova Iguaçu", "BR"),
-    ("Saltillo", "MX"),
-    ("João Pessoa", "BR"),
-
-    # --- 91–100 ---
-    ("Aguascalientes", "MX"),
-    ("Culiacán", "MX"),
-    ("San Luis Potosí", "MX"),
-    ("La Paz", "BO"),
-    ("Mexicali", "MX"),
-    ("Chimalhuacán", "MX"),
-    ("Seattle", "US"),
-    ("Guadalupe", "MX"),
-    ("Acapulco", "MX"),
-    ("Mississauga", "CA"),
-]
-
-# --------------------------------------------------
-# OpenWeather Source
-# --------------------------------------------------
 
 class OpenWeatherSource(DataSource):
     BASE_URL = "https://api.openweathermap.org/data/2.5/weather"
+    FORECAST_URL = "https://api.openweathermap.org/data/2.5/forecast"  # 5 günlük, 3 saatlik tahmin
 
-    def __init__(self):
-        self.api_key = os.getenv("OPENWEATHER_API_KEY")
-        if not self.api_key:
-            raise DataSourceError(
-                "OPENWEATHER_API_KEY not found in environment variables."
-            )
+    def __init__(self, city="Istanbul", country_code=None, include_forecast=False):
+        """
+        Initialize OpenWeather Source.
+        
+        Args:
+            city: City name
+            country_code: Optional 2-letter country code (e.g., "US", "BR", "AR")
+                         If None, will try to infer from city name or use default
+            include_forecast: Whether to fetch 5-day forecast data
+        """
+        self.city = city
+        self.country_code = country_code
+        self.include_forecast = include_forecast
+        # Önce config.py'den, sonra environment variable'dan, son olarak boş string
+        self.api_key = CONFIG_API_KEY or os.getenv("OPENWEATHER_API_KEY", "")
 
     def fetch_raw(self):
-        results = []
+        if not self.api_key:
+            raise DataSourceError("OPENWEATHER_API_KEY is missing. Set it in config.py or as environment variable.")
 
-        for city, country in AMERICAS_CITIES:
-            params = {
-                "q": f"{city},{country}",
-                "appid": self.api_key,
-                "units": "metric",
+        # Ülke kodu belirlenmemişse, şehir adına göre tahmin et
+        if not self.country_code:
+            # Amerika kıtalarındaki şehirler için varsayılan ülke kodları
+            city_country_map = {
+                "New York": "US", "Los Angeles": "US", "Chicago": "US", "Houston": "US",
+                "Miami": "US", "San Francisco": "US", "Seattle": "US", "Denver": "US",
+                "Washington": "US", "Boston": "US", "Atlanta": "US", "Phoenix": "US",
+                "Dallas": "US", "Toronto": "CA", "Mexico City": "MX",
+                "São Paulo": "BR", "Buenos Aires": "AR", "Rio de Janeiro": "BR",
+                "Lima": "PE", "Bogotá": "CO", "Santiago": "CL"
             }
+            self.country_code = city_country_map.get(self.city, "US")
+        
+        params = {
+            "q": f"{self.city},{self.country_code}",
+            "appid": self.api_key,
+            "units": "metric",
+        }
 
-            try:
-                r = requests.get(self.BASE_URL, params=params, timeout=10)
-                r.raise_for_status()
-                results.append(r.json())
-            except Exception:
-                # Skip city if API fails (rate limit, typo, etc.)
-                continue
+        try:
+            # Anlık hava durumu
+            r = requests.get(self.BASE_URL, params=params, timeout=10)
+            r.raise_for_status()
+            current_data = r.json()
+            
+            # Forecast verisi de isteniyorsa çek
+            forecast_data = None
+            if self.include_forecast:
+                try:
+                    r_forecast = requests.get(self.FORECAST_URL, params=params, timeout=10)
+                    r_forecast.raise_for_status()
+                    forecast_data = r_forecast.json()
+                except Exception as e:
+                    # Forecast başarısız olsa bile current data'yı döndür
+                    pass
+            
+            return {
+                "current": current_data,
+                "forecast": forecast_data
+            }
+        except Exception as e:
+            raise DataSourceError(f"OpenWeather fetch failed: {e}")
 
-        return results
-
-    def parse(self, raw_list) -> List[dict]:
-        events = []
-
-        for raw in raw_list:
-            main = raw.get("main", {})
-            wind = raw.get("wind", {})
-            coord = raw.get("coord", {})
-            name = raw.get("name")
-
-            events.append({
-                "type": "weather",
-                "source": "OpenWeatherMap",
-                "location": name,
-                "temperature": main.get("temp"),
-                "humidity": main.get("humidity"),
-                "wind_speed": wind.get("speed"),
-                "pressure": main.get("pressure"),
-                "time": datetime.utcnow().isoformat(),
-                "latitude": coord.get("lat"),
-                "longitude": coord.get("lon"),
-            })
-
-        return events
+    def parse(self, raw):
+        # raw artık {"current": {...}, "forecast": {...}} formatında
+        current_data = raw.get("current", raw)  # Eski format desteği için
+        forecast_data = raw.get("forecast")
+        
+        main = current_data.get("main", {})
+        wind = current_data.get("wind", {})
+        coord = current_data.get("coord", {})
+        weather_list = current_data.get("weather", [{}])
+        weather_info = weather_list[0] if weather_list else {}
+        clouds = current_data.get("clouds", {})
+        sys_info = current_data.get("sys", {})
+        rain = current_data.get("rain", {})
+        snow = current_data.get("snow", {})
+        
+        # Yağış bilgisini al (1h veya 3h değeri varsa)
+        precipitation = 0
+        if rain:
+            precipitation = rain.get("1h", rain.get("3h", 0))
+        elif snow:
+            precipitation = snow.get("1h", snow.get("3h", 0))
+        
+        # Create Weather object for current weather
+        current_weather = Weather(
+            type="weather",
+            source="OpenWeatherMap",
+            location=self.city,
+            temperature=main.get("temp"),
+            wind_speed=wind.get("speed"),
+            time=datetime.now(),
+            feels_like=main.get("feels_like"),
+            temp_min=main.get("temp_min"),
+            temp_max=main.get("temp_max"),
+            humidity=main.get("humidity"),
+            pressure=main.get("pressure"),
+            wind_direction=wind.get("deg"),
+            wind_gust=wind.get("gust"),
+            clouds=clouds.get("all", 0),
+            precipitation=precipitation,
+            visibility=current_data.get("visibility"),
+            weather_main=weather_info.get("main", ""),
+            weather_description=weather_info.get("description", ""),
+            weather_icon=weather_info.get("icon", ""),
+            sunrise=sys_info.get("sunrise"),
+            sunset=sys_info.get("sunset"),
+            latitude=coord.get("lat"),
+            longitude=coord.get("lon")
+        )
+        
+        result = [current_weather]
+        
+        # Forecast verisi varsa parse et ve ekle
+        if forecast_data and forecast_data.get("list"):
+            for item in forecast_data.get("list", []):
+                item_main = item.get("main", {})
+                item_wind = item.get("wind", {})
+                item_weather = item.get("weather", [{}])[0] if item.get("weather") else {}
+                
+                # Forecast timestamp'ini datetime'a çevir
+                forecast_time = datetime.fromtimestamp(item.get("dt", 0))
+                
+                forecast_weather = Weather(
+                    type="weather_forecast",
+                    source="OpenWeatherMap",
+                    location=self.city,
+                    temperature=item_main.get("temp"),
+                    wind_speed=item_wind.get("speed"),
+                    time=datetime.now(),  # Current time when fetched
+                    forecast_time=forecast_time.isoformat(),
+                    feels_like=item_main.get("feels_like"),
+                    temp_min=item_main.get("temp_min"),
+                    temp_max=item_main.get("temp_max"),
+                    humidity=item_main.get("humidity"),
+                    pressure=item_main.get("pressure"),
+                    wind_direction=item_wind.get("deg"),
+                    wind_gust=item_wind.get("gust"),
+                    clouds=item.get("clouds", {}).get("all", 0),
+                    weather_main=item_weather.get("main", ""),
+                    weather_description=item_weather.get("description", ""),
+                    weather_icon=item_weather.get("icon", ""),
+                    precipitation=item.get("rain", {}).get("3h", 0) or item.get("snow", {}).get("3h", 0),
+                    latitude=coord.get("lat"),
+                    longitude=coord.get("lon")
+                )
+                
+                result.append(forecast_weather)
+        
+        return result

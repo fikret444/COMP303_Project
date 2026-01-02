@@ -1,0 +1,209 @@
+{
+  "generated_at": "2026-01-02 T23:02:31",
+  "total_events": 10,
+  "total_high_risk_events": 10,
+  "events": [
+    {
+      "type": "flood_risk",
+      "source": "Open-Meteo Flood",
+      "time": "2025-12-30 T00:00:00",
+      "location": "Montreal",
+      "latitude": 45.525,
+      "longitude": -73.57499,
+      "river_discharge": 7549.92,
+      "risk_level": "high"
+    },
+    {
+      "type": "flood_risk",
+      "source": "Open-Meteo Flood",
+      "time": "2025-12-31 T00:00:00",
+      "location": "Montreal",
+      "latitude": 45.525,
+      "longitude": -73.57499,
+      "river_discharge": 7532.56,
+      "risk_level": "high"
+    },
+    {
+      "type": "flood_risk",
+      "source": "Open-Meteo Flood",
+      "time": "2026-01-01 T00:00:00",
+      "location": "Montreal",
+      "latitude": 45.525,
+      "longitude": -73.57499,
+      "river_discharge": 7515.23,
+      "risk_level": "high"
+    },
+    {
+      "type": "flood_risk",
+      "source": "Open-Meteo Flood",
+      "time": "2026-01-02 T00:00:00",
+      "location": "Montreal",
+      "latitude": 45.525,
+      "longitude": -73.57499,
+      "river_discharge": 7497.94,
+      "risk_level": "high"
+    },
+    {
+      "type": "flood_risk",
+      "source": "Open-Meteo Flood",
+      "time": "2026-01-03 T00:00:00",
+      "location": "Montreal",
+      "latitude": 45.525,
+      "longitude": -73.57499,
+      "river_discharge": 7480.7,
+      "risk_level": "high"
+    },
+    {
+      "type": "flood_risk",
+      "source": "Open-Meteo Flood",
+      "time": "2026-01-04 T00:00:00",
+      "location": "Montreal",
+      "latitude": 45.525,
+      "longitude": -73.57499,
+      "river_discharge": 7463.49,
+      "risk_level": "high"
+    },
+    {
+      "type": "flood_risk",
+      "source": "Open-Meteo Flood",
+      "time": "2026-01-05 T00:00:00",
+      "location": "Montreal",
+      "latitude": 45.525,
+      "longitude": -73.57499,
+      "river_discharge": 7463.49,
+      "risk_level": "high"
+    },
+    {
+      "type": "flood_risk",
+      "source": "Open-Meteo Flood",
+      "time": "2026-01-06 T00:00:00",
+      "location": "Montreal",
+      "latitude": 45.525,
+      "longitude": -73.57499,
+      "river_discharge": 7446.32,
+      "risk_level": "high"
+    },
+    {
+      "type": "flood_risk",
+      "source": "Open-Meteo Flood",
+      "time": "2026-01-07 T00:00:00",
+      "location": "Montreal",
+      "latitude": 45.525,
+      "longitude": -73.57499,
+      "river_discharge": 7446.32,
+      "risk_level": "high"
+    },
+    {
+      "type": "flood_risk",
+      "source": "Open-Meteo Flood",
+      "time": "2026-01-08 T00:00:00",
+      "location": "Montreal",
+      "latitude": 45.525,
+      "longitude": -73.57499,
+      "river_discharge": 7429.19,
+      "risk_level": "high"
+    }
+  ],
+  "high_risk_events": [
+    {
+      "type": "flood_risk",
+      "source": "Open-Meteo Flood",
+      "time": "2025-12-30 T00:00:00",
+      "location": "Montreal",
+      "latitude": 45.525,
+      "longitude": -73.57499,
+      "river_discharge": 7549.92,
+      "risk_level": "high"
+    },
+    {
+      "type": "flood_risk",
+      "source": "Open-Meteo Flood",
+      "time": "2025-12-31 T00:00:00",
+      "location": "Montreal",
+      "latitude": 45.525,
+      "longitude": -73.57499,
+      "river_discharge": 7532.56,
+      "risk_level": "high"
+    },
+    {
+      "type": "flood_risk",
+      "source": "Open-Meteo Flood",
+      "time": "2026-01-01 T00:00:00",
+      "location": "Montreal",
+      "latitude": 45.525,
+      "longitude": -73.57499,
+      "river_discharge": 7515.23,
+      "risk_level": "high"
+    },
+    {
+      "type": "flood_risk",
+      "source": "Open-Meteo Flood",
+      "time": "2026-01-02 T00:00:00",
+      "location": "Montreal",
+      "latitude": 45.525,
+      "longitude": -73.57499,
+      "river_discharge": 7497.94,
+      "risk_level": "high"
+    },
+    {
+      "type": "flood_risk",
+      "source": "Open-Meteo Flood",
+      "time": "2026-01-03 T00:00:00",
+      "location": "Montreal",
+      "latitude": 45.525,
+      "longitude": -73.57499,
+      "river_discharge": 7480.7,
+      "risk_level": "high"
+    },
+    {
+      "type": "flood_risk",
+      "source": "Open-Meteo Flood",
+      "time": "2026-01-04 T00:00:00",
+      "location": "Montreal",
+      "latitude": 45.525,
+      "longitude": -73.57499,
+      "river_discharge": 7463.49,
+      "risk_level": "high"
+    },
+    {
+      "type": "flood_risk",
+      "source": "Open-Meteo Flood",
+      "time": "2026-01-05 T00:00:00",
+      "location": "Montreal",
+      "latitude": 45.525,
+      "longitude": -73.57499,
+      "river_discharge": 7463.49,
+      "risk_level": "high"
+    },
+    {
+      "type": "flood_risk",
+      "source": "Open-Meteo Flood",
+      "time": "2026-01-06 T00:00:00",
+      "location": "Montreal",
+      "latitude": 45.525,
+      "longitude": -73.57499,
+      "river_discharge": 7446.32,
+      "risk_level": "high"
+    },
+    {
+      "type": "flood_risk",
+      "source": "Open-Meteo Flood",
+      "time": "2026-01-07 T00:00:00",
+      "location": "Montreal",
+      "latitude": 45.525,
+      "longitude": -73.57499,
+      "river_discharge": 7446.32,
+      "risk_level": "high"
+    },
+    {
+      "type": "flood_risk",
+      "source": "Open-Meteo Flood",
+      "time": "2026-01-08 T00:00:00",
+      "location": "Montreal",
+      "latitude": 45.525,
+      "longitude": -73.57499,
+      "river_discharge": 7429.19,
+      "risk_level": "high"
+    }
+  ]
+}

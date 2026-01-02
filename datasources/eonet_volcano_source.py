@@ -26,7 +26,7 @@ class EONETVolcanoSource(DataSource):
 
     # Amerika kıtaları için bounding box (lon/lat):
     # min_lon, max_lat, max_lon, min_lat
-    DEFAULT_AMERICAS_BBOX = "-170,72,-34,-56"
+    DEFAULT_AMERICAS_BBOX = "-180,85,-30,-60"
 
     def __init__(
         self,
@@ -147,4 +147,5 @@ class EONETVolcanoSource(DataSource):
             })
 
         return result
+
 

@@ -56,6 +56,10 @@ class EventPipeline:
                 filename = f"earthquakes_{int(time.time())}.json"
                 save_events_to_json(cleaned_events, filename)
                 
+                # Eski dosyaları temizle
+                from processing.storage import cleanup_old_files
+                cleanup_old_files()
+                
                 # Convert objects to dictionaries for stats computation if needed
                 stats_events = [ev.toDictionary() if hasattr(ev, 'toDictionary') else ev for ev in cleaned_events]
                 stats = compute_basic_stats(stats_events)
@@ -143,6 +147,10 @@ class EventPipeline:
                 
                 # Güncellenmiş veriyi kaydet
                 save_events_to_json(all_weather, "weather_all.json")
+                
+                # Eski dosyaları temizle
+                from processing.storage import cleanup_old_files
+                cleanup_old_files()
             
             return {
                 'success': True,

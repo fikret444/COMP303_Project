@@ -91,3 +91,4 @@ class RawEarthquake:
         return self.magnitude > t
 
 
+

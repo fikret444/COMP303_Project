@@ -46,9 +46,14 @@ class DataSourceManager:
         Fetch data from a single source and put it in the queue.
         """
         source_name = source.__class__.__name__
+        start_time = time.time()
         try:
-            log_message(f"Fetching data from {source_name}...", "INFO")
+            # Log mesajını sadece yavaş kaynaklar için göster (performans için)
+            if 'OpenWeather' in source_name or 'Flood' in source_name:
+                log_message(f"Fetching data from {source_name}...", "INFO")
+            
             data = source.fetch_and_parse()
+            elapsed = time.time() - start_time
             
             if data:
                 self.event_queue.put({
@@ -56,12 +61,16 @@ class DataSourceManager:
                     'data': data,
                     'timestamp': time.time()
                 })
-                log_message(f"Successfully fetched {len(data) if isinstance(data, list) else 1} items from {source_name}", "INFO")
+                # Sadece önemli kaynaklar için detaylı log
+                if elapsed > 2.0 or len(data) > 50:
+                    log_message(f"✓ {source_name}: {len(data) if isinstance(data, list) else 1} items in {elapsed:.2f}s", "INFO")
             else:
-                log_message(f"No data returned from {source_name}", "WARNING")
+                if elapsed > 1.0:
+                    log_message(f"No data from {source_name} (took {elapsed:.2f}s)", "WARNING")
                 
         except Exception as e:
-            log_message(f"Error fetching from {source_name}: {str(e)}", "ERROR")
+            elapsed = time.time() - start_time
+            log_message(f"✗ {source_name} failed after {elapsed:.2f}s: {str(e)}", "ERROR")
     
     def fetch_all_sources(self):
         """Fetch data from all sources concurrently using threading."""
@@ -74,6 +83,7 @@ class DataSourceManager:
             log_message("No data sources configured", "WARNING")
             return
         
+        start_time = time.time()
         log_message(f"Starting concurrent fetch from {len(sources)} sources", "INFO")
         
         for source in sources:
@@ -86,12 +96,24 @@ class DataSourceManager:
             thread.start()
             threads.append(thread)
         
+        # Thread timeout'ları optimize et - hızlı API'ler için daha kısa timeout
+        # Yavaş API'ler için daha uzun timeout (OpenWeather, Flood gibi)
         for thread in threads:
-            thread.join(timeout=30)
+            # Thread ismine göre timeout belirle
+            thread_name = thread.name.lower()
+            if 'openweather' in thread_name or 'flood' in thread_name:
+                timeout = 20  # Yavaş API'ler için 20 saniye
+            elif 'eonet' in thread_name:
+                timeout = 15  # EONET için 15 saniye
+            else:
+                timeout = 10  # Diğerleri için 10 saniye
+            
+            thread.join(timeout=timeout)
             if thread.is_alive():
-                log_message(f"Thread {thread.name} timed out", "WARNING")
+                log_message(f"Thread {thread.name} timed out after {timeout}s", "WARNING")
         
-        log_message("All fetch operations completed", "INFO")
+        total_time = time.time() - start_time
+        log_message(f"All fetch operations completed in {total_time:.2f}s", "INFO")
     
     def get_events(self, timeout: float = 1.0) -> List[Dict[str, Any]]:
         """Get all events from the queue."""

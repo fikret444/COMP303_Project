@@ -1,0 +1,554 @@
+[
+  {
+    "type": "natural_event",
+    "source": "NASA EONET",
+    "event_id": "EONET_EONET_16718",
+    "title": "Addington Wildfire, Cherokee, Oklahoma",
+    "description": "2 Miles N from Paradise Hill, OK",
+    "time": "2025-12-23T09:43:00+00:00",
+    "event_time": "2025-12-23T09:43:00+00:00",
+    "latitude": 35.6455556,
+    "longitude": -95.0722222,
+    "categories": [
+      "Wildfires"
+    ],
+    "category_ids": [
+      "wildfires"
+    ],
+    "category_titles": [
+      "Wildfires"
+    ],
+    "closed": null,
+    "link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_16718",
+    "status": "open",
+    "geometry_type": "Point"
+  },
+  {
+    "type": "natural_event",
+    "source": "NASA EONET",
+    "event_id": "EONET_EONET_16614",
+    "title": "Sassafras Fire Wildfire, Latimer, Oklahoma",
+    "description": "8 Miles NW from Talihina, OK",
+    "time": "2025-12-21T19:05:00+00:00",
+    "event_time": "2025-12-21T19:05:00+00:00",
+    "latitude": 34.7875,
+    "longitude": -95.1911111,
+    "categories": [
+      "Wildfires"
+    ],
+    "category_ids": [
+      "wildfires"
+    ],
+    "category_titles": [
+      "Wildfires"
+    ],
+    "closed": null,
+    "link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_16614",
+    "status": "open",
+    "geometry_type": "Point"
+  },
+  {
+    "type": "natural_event",
+    "source": "NASA EONET",
+    "event_id": "EONET_EONET_16613",
+    "title": "Salt Creek Wildfire, Blaine, Oklahoma",
+    "description": "7 Miles SE from Okeene, OK",
+    "time": "2025-12-19T20:10:00+00:00",
+    "event_time": "2025-12-19T20:10:00+00:00",
+    "latitude": 36.0505556,
+    "longitude": -98.2419444,
+    "categories": [
+      "Wildfires"
+    ],
+    "category_ids": [
+      "wildfires"
+    ],
+    "category_titles": [
+      "Wildfires"
+    ],
+    "closed": null,
+    "link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_16613",
+    "status": "open",
+    "geometry_type": "Point"
+  },
+  {
+    "type": "natural_event",
+    "source": "NASA EONET",
+    "event_id": "EONET_EONET_16717",
+    "title": "Burning In The Blind Wildfire, Brooks, Texas",
+    "description": "10 Miles S from Falfurrias, TX",
+    "time": "2025-12-18T20:10:00+00:00",
+    "event_time": "2025-12-18T20:10:00+00:00",
+    "latitude": 27.10075144,
+    "longitude": -98.11316527,
+    "categories": [
+      "Wildfires"
+    ],
+    "category_ids": [
+      "wildfires"
+    ],
+    "category_titles": [
+      "Wildfires"
+    ],
+    "closed": null,
+    "link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_16717",
+    "status": "open",
+    "geometry_type": "Point"
+  },
+  {
+    "type": "natural_event",
+    "source": "NASA EONET",
+    "event_id": "EONET_EONET_16517",
+    "title": "CR L Wildfire, Yuma, Colorado",
+    "description": "5 Miles E from Joes, CO",
+    "time": "2025-12-18T13:46:00+00:00",
+    "event_time": "2025-12-18T13:46:00+00:00",
+    "latitude": 39.598158,
+    "longitude": -102.610878,
+    "categories": [
+      "Wildfires"
+    ],
+    "category_ids": [
+      "wildfires"
+    ],
+    "category_titles": [
+      "Wildfires"
+    ],
+    "closed": null,
+    "link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_16517",
+    "status": "open",
+    "geometry_type": "Point"
+  },
+  {
+    "type": "natural_event",
+    "source": "NASA EONET",
+    "event_id": "EONET_EONET_16518",
+    "title": "33 Wildfire, Yuma, Colorado",
+    "description": null,
+    "time": "2025-12-18T13:45:00+00:00",
+    "event_time": "2025-12-18T13:45:00+00:00",
+    "latitude": 40.046355,
+    "longitude": -102.605378,
+    "categories": [
+      "Wildfires"
+    ],
+    "category_ids": [
+      "wildfires"
+    ],
+    "category_titles": [
+      "Wildfires"
+    ],
+    "closed": null,
+    "link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_16518",
+    "status": "open",
+    "geometry_type": "Point"
+  },
+  {
+    "type": "natural_event",
+    "source": "NASA EONET",
+    "event_id": "EONET_EONET_16519",
+    "title": "Terry Ranch Wildfire, Laramie, Wyoming",
+    "description": "11 Miles S from Cheyenne, WY",
+    "time": "2025-12-18T12:50:00+00:00",
+    "event_time": "2025-12-18T12:50:00+00:00",
+    "latitude": 41.044446,
+    "longitude": -104.886358,
+    "categories": [
+      "Wildfires"
+    ],
+    "category_ids": [
+      "wildfires"
+    ],
+    "category_titles": [
+      "Wildfires"
+    ],
+    "closed": null,
+    "link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_16519",
+    "status": "open",
+    "geometry_type": "Point"
+  },
+  {
+    "type": "natural_event",
+    "source": "NASA EONET",
+    "event_id": "EONET_EONET_16520",
+    "title": "RX Cook Road Prescribed Fire, Baxter, Arkansas",
+    "description": null,
+    "time": "2025-12-16T09:51:00+00:00",
+    "event_time": "2025-12-16T09:51:00+00:00",
+    "latitude": 36.07955,
+    "longitude": -92.356667,
+    "categories": [
+      "Wildfires"
+    ],
+    "category_ids": [
+      "wildfires"
+    ],
+    "category_titles": [
+      "Wildfires"
+    ],
+    "closed": null,
+    "link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_16520",
+    "status": "open",
+    "geometry_type": "Point"
+  },
+  {
+    "type": "natural_event",
+    "source": "NASA EONET",
+    "event_id": "EONET_EONET_16404",
+    "title": "RX Optimus North Prescribed Fire, Stone, Arkansas",
+    "description": null,
+    "time": "2025-12-15T10:25:00+00:00",
+    "event_time": "2025-12-15T10:25:00+00:00",
+    "latitude": 36.043117,
+    "longitude": -92.07395,
+    "categories": [
+      "Wildfires"
+    ],
+    "category_ids": [
+      "wildfires"
+    ],
+    "category_titles": [
+      "Wildfires"
+    ],
+    "closed": null,
+    "link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_16404",
+    "status": "open",
+    "geometry_type": "Point"
+  },
+  {
+    "type": "natural_event",
+    "source": "NASA EONET",
+    "event_id": "EONET_EONET_16405",
+    "title": "Cave Mountain Wildfire, Bibb, Alabama",
+    "description": "9 Miles SW from Brent, AL",
+    "time": "2025-12-12T10:02:00+00:00",
+    "event_time": "2025-12-12T10:02:00+00:00",
+    "latitude": 32.885556,
+    "longitude": -87.303889,
+    "categories": [
+      "Wildfires"
+    ],
+    "category_ids": [
+      "wildfires"
+    ],
+    "category_titles": [
+      "Wildfires"
+    ],
+    "closed": null,
+    "link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_16405",
+    "status": "open",
+    "geometry_type": "Point"
+  },
+  {
+    "type": "natural_event",
+    "source": "NASA EONET",
+    "event_id": "EONET_EONET_16406",
+    "title": "RX  FY26 BUFF Buffalo Point Maintenance Prescribed Fire, Marion, Arkansas",
+    "description": null,
+    "time": "2025-12-12T09:01:00+00:00",
+    "event_time": "2025-12-12T09:01:00+00:00",
+    "latitude": 36.0796,
+    "longitude": -92.5125,
+    "categories": [
+      "Wildfires"
+    ],
+    "category_ids": [
+      "wildfires"
+    ],
+    "category_titles": [
+      "Wildfires"
+    ],
+    "closed": null,
+    "link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_16406",
+    "status": "open",
+    "geometry_type": "Point"
+  },
+  {
+    "type": "natural_event",
+    "source": "NASA EONET",
+    "event_id": "EONET_EONET_16300",
+    "title": "RX Llano 5625 Prescribed Fire, Llano, Texas",
+    "description": null,
+    "time": "2025-12-11T09:32:00+00:00",
+    "event_time": "2025-12-11T09:32:00+00:00",
+    "latitude": 30.52333333,
+    "longitude": -98.785,
+    "categories": [
+      "Wildfires"
+    ],
+    "category_ids": [
+      "wildfires"
+    ],
+    "category_titles": [
+      "Wildfires"
+    ],
+    "closed": null,
+    "link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_16300",
+    "status": "open",
+    "geometry_type": "Point"
+  },
+  {
+    "type": "natural_event",
+    "source": "NASA EONET",
+    "event_id": "EONET_EONET_16298",
+    "title": "RX WINN BU 64 Prescribed Fire, Winn, Louisiana",
+    "description": null,
+    "time": "2025-12-11T08:59:00+00:00",
+    "event_time": "2025-12-11T08:59:00+00:00",
+    "latitude": 31.899722,
+    "longitude": -92.813056,
+    "categories": [
+      "Wildfires"
+    ],
+    "category_ids": [
+      "wildfires"
+    ],
+    "category_titles": [
+      "Wildfires"
+    ],
+    "closed": null,
+    "link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_16298",
+    "status": "open",
+    "geometry_type": "Point"
+  },
+  {
+    "type": "natural_event",
+    "source": "NASA EONET",
+    "event_id": "EONET_EONET_16299",
+    "title": "APQ Area 12 Rx 1211 Prescribed Fire, Highlands, Florida",
+    "description": null,
+    "time": "2025-12-11T08:49:00+00:00",
+    "event_time": "2025-12-11T08:49:00+00:00",
+    "latitude": 27.578841,
+    "longitude": -81.312723,
+    "categories": [
+      "Wildfires"
+    ],
+    "category_ids": [
+      "wildfires"
+    ],
+    "category_titles": [
+      "Wildfires"
+    ],
+    "closed": null,
+    "link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_16299",
+    "status": "open",
+    "geometry_type": "Point"
+  },
+  {
+    "type": "natural_event",
+    "source": "NASA EONET",
+    "event_id": "EONET_EONET_16303",
+    "title": "RX CRCC South Prescribed Fire, Murray, Oklahoma",
+    "description": null,
+    "time": "2025-12-10T09:56:00+00:00",
+    "event_time": "2025-12-10T09:56:00+00:00",
+    "latitude": 34.4235,
+    "longitude": -97.0169,
+    "categories": [
+      "Wildfires"
+    ],
+    "category_ids": [
+      "wildfires"
+    ],
+    "category_titles": [
+      "Wildfires"
+    ],
+    "closed": null,
+    "link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_16303",
+    "status": "open",
+    "geometry_type": "Point"
+  },
+  {
+    "type": "natural_event",
+    "source": "NASA EONET",
+    "event_id": "EONET_EONET_16407",
+    "title": "APQ Recreation Area 12 Rx 1210 Prescribed Fire, Highlands, Florida",
+    "description": null,
+    "time": "2025-12-10T09:10:00+00:00",
+    "event_time": "2025-12-10T09:10:00+00:00",
+    "latitude": 27.568357,
+    "longitude": -81.326637,
+    "categories": [
+      "Wildfires"
+    ],
+    "category_ids": [
+      "wildfires"
+    ],
+    "category_titles": [
+      "Wildfires"
+    ],
+    "closed": null,
+    "link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_16407",
+    "status": "open",
+    "geometry_type": "Point"
+  },
+  {
+    "type": "natural_event",
+    "source": "NASA EONET",
+    "event_id": "EONET_EONET_16301",
+    "title": "RX CALV BU 129-130-131 Prescribed Fire, Vernon, Louisiana",
+    "description": null,
+    "time": "2025-12-10T08:57:00+00:00",
+    "event_time": "2025-12-10T08:57:00+00:00",
+    "latitude": 31.04205,
+    "longitude": -92.983583,
+    "categories": [
+      "Wildfires"
+    ],
+    "category_ids": [
+      "wildfires"
+    ],
+    "category_titles": [
+      "Wildfires"
+    ],
+    "closed": null,
+    "link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_16301",
+    "status": "open",
+    "geometry_type": "Point"
+  },
+  {
+    "type": "natural_event",
+    "source": "NASA EONET",
+    "event_id": "EONET_EONET_16304",
+    "title": "APQ Area 12 Rx 1209 Prescribed Fire, Highlands, Florida",
+    "description": null,
+    "time": "2025-12-09T09:20:00+00:00",
+    "event_time": "2025-12-09T09:20:00+00:00",
+    "latitude": 27.562976,
+    "longitude": -81.313239,
+    "categories": [
+      "Wildfires"
+    ],
+    "category_ids": [
+      "wildfires"
+    ],
+    "category_titles": [
+      "Wildfires"
+    ],
+    "closed": null,
+    "link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_16304",
+    "status": "open",
+    "geometry_type": "Point"
+  },
+  {
+    "type": "natural_event",
+    "source": "NASA EONET",
+    "event_id": "EONET_EONET_16302",
+    "title": "SNF Clarktown RX Blk C &amp; D Prescribed Fire, Sabine, Texas",
+    "description": null,
+    "time": "2025-12-09T09:01:00+00:00",
+    "event_time": "2025-12-09T09:01:00+00:00",
+    "latitude": 31.18175,
+    "longitude": -93.7993,
+    "categories": [
+      "Wildfires"
+    ],
+    "category_ids": [
+      "wildfires"
+    ],
+    "category_titles": [
+      "Wildfires"
+    ],
+    "closed": null,
+    "link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_16302",
+    "status": "open",
+    "geometry_type": "Point"
+  },
+  {
+    "type": "natural_event",
+    "source": "NASA EONET",
+    "event_id": "EONET_EONET_16259",
+    "title": "RX CALV BU 237-264 Prescribed Fire, Vernon, Louisiana",
+    "description": null,
+    "time": "2025-12-08T09:20:00+00:00",
+    "event_time": "2025-12-08T09:20:00+00:00",
+    "latitude": 31.031,
+    "longitude": -92.947,
+    "categories": [
+      "Wildfires"
+    ],
+    "category_ids": [
+      "wildfires"
+    ],
+    "category_titles": [
+      "Wildfires"
+    ],
+    "closed": null,
+    "link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_16259",
+    "status": "open",
+    "geometry_type": "Point"
+  },
+  {
+    "type": "natural_event",
+    "source": "NASA EONET",
+    "event_id": "EONET_EONET_16260",
+    "title": "APQ South Tactical Range Rx 1206 Prescribed Fire, Highlands, Florida",
+    "description": null,
+    "time": "2025-12-06T09:34:00+00:00",
+    "event_time": "2025-12-06T09:34:00+00:00",
+    "latitude": 27.548611,
+    "longitude": -81.240721,
+    "categories": [
+      "Wildfires"
+    ],
+    "category_ids": [
+      "wildfires"
+    ],
+    "category_titles": [
+      "Wildfires"
+    ],
+    "closed": null,
+    "link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_16260",
+    "status": "open",
+    "geometry_type": "Point"
+  },
+  {
+    "type": "natural_event",
+    "source": "NASA EONET",
+    "event_id": "EONET_EONET_16262",
+    "title": "APQ South Tactical Range Rx 1205 Prescribed Fire, Highlands, Florida",
+    "description": null,
+    "time": "2025-12-05T08:44:00+00:00",
+    "event_time": "2025-12-05T08:44:00+00:00",
+    "latitude": 27.549446,
+    "longitude": -81.240809,
+    "categories": [
+      "Wildfires"
+    ],
+    "category_ids": [
+      "wildfires"
+    ],
+    "category_titles": [
+      "Wildfires"
+    ],
+    "closed": null,
+    "link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_16262",
+    "status": "open",
+    "geometry_type": "Point"
+  },
+  {
+    "type": "natural_event",
+    "source": "NASA EONET",
+    "event_id": "EONET_EONET_16264",
+    "title": "UBC Upper Jacks RX Prescribed Fire, Coconino, Arizona",
+    "description": null,
+    "time": "2025-12-04T10:09:00+00:00",
+    "event_time": "2025-12-04T10:09:00+00:00",
+    "latitude": 34.738139,
+    "longitude": -111.447201,
+    "categories": [
+      "Wildfires"
+    ],
+    "category_ids": [
+      "wildfires"
+    ],
+    "category_titles": [
+      "Wildfires"
+    ],
+    "closed": null,
+    "link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_16264",
+    "status": "open",
+    "geometry_type": "Point"
+  }
+]

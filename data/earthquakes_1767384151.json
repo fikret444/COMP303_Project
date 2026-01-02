@@ -1,0 +1,281 @@
+[
+  {
+    "id": 1,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T22:08:46.058000",
+    "magnitude": 3.1,
+    "location": "23 km S of Westbrook, Texas",
+    "latitude": 32.142,
+    "longitude": -101.04
+  },
+  {
+    "id": 2,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T22:08:34.706000",
+    "magnitude": 2.9,
+    "location": "23 km S of Westbrook, Texas",
+    "latitude": 32.143,
+    "longitude": -101.06
+  },
+  {
+    "id": 3,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T20:14:22.940000",
+    "magnitude": 2.7,
+    "location": "6 km NW of Pāhala, Hawaii",
+    "latitude": 19.236,
+    "longitude": -155.527666666667
+  },
+  {
+    "id": 4,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T19:23:06.791000",
+    "magnitude": 2.5,
+    "location": "107 km NNW of Yakutat, Alaska",
+    "latitude": 60.4738,
+    "longitude": -140.2426
+  },
+  {
+    "id": 5,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T18:37:08.151000",
+    "magnitude": 4.5,
+    "location": "5 km NNW of Las Vigas, Mexico",
+    "latitude": 16.8068,
+    "longitude": -99.2453
+  },
+  {
+    "id": 6,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T18:34:18.513000",
+    "magnitude": 4.2,
+    "location": "3 km ESE of Huamuchapa, Mexico",
+    "latitude": 16.9285,
+    "longitude": -99.295
+  },
+  {
+    "id": 7,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T17:50:28.528000",
+    "magnitude": 2.5,
+    "location": "38 km SE of Nelchina, Alaska",
+    "latitude": 61.724,
+    "longitude": -146.311
+  },
+  {
+    "id": 8,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T16:58:39.907000",
+    "magnitude": 3.5,
+    "location": "107 km N of Yakutat, Alaska",
+    "latitude": 60.506,
+    "longitude": -139.901
+  },
+  {
+    "id": 9,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T16:58:18.346000",
+    "magnitude": 6.5,
+    "location": "4 km NNW of Rancho Viejo, Mexico",
+    "latitude": 16.9017,
+    "longitude": -99.3026
+  },
+  {
+    "id": 10,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T11:59:07.588000",
+    "magnitude": 2.5,
+    "location": "74 km ESE of Ugashik, Alaska",
+    "latitude": 57.286,
+    "longitude": -156.238
+  },
+  {
+    "id": 11,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T11:49:23.896000",
+    "magnitude": 2.9,
+    "location": "44 km NW of Ninilchik, Alaska",
+    "latitude": 60.313,
+    "longitude": -152.281
+  },
+  {
+    "id": 12,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T11:24:58.704000",
+    "magnitude": 3.1,
+    "location": "114 km N of Yakutat, Alaska",
+    "latitude": 60.5719,
+    "longitude": -139.9005
+  },
+  {
+    "id": 13,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T11:00:13.460000",
+    "magnitude": 3.4,
+    "location": "11 km E of Pāhala, Hawaii",
+    "latitude": 19.1928333333333,
+    "longitude": -155.373333333333
+  },
+  {
+    "id": 14,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T10:52:04.790000",
+    "magnitude": 5.0,
+    "location": "southern East Pacific Rise",
+    "latitude": -53.6401,
+    "longitude": -120.948
+  },
+  {
+    "id": 15,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T10:50:17.762000",
+    "magnitude": 3.1,
+    "location": "119 km N of Yakutat, Alaska",
+    "latitude": 60.6154,
+    "longitude": -139.8919
+  },
+  {
+    "id": 16,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T10:03:44.062000",
+    "magnitude": 3.4,
+    "location": "239 km SE of Chiniak, Alaska",
+    "latitude": 56.233,
+    "longitude": -149.262
+  },
+  {
+    "id": 17,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T09:36:13.300000",
+    "magnitude": 3.28,
+    "location": "32 km WNW of Rincón, Puerto Rico",
+    "latitude": 18.4891666666667,
+    "longitude": -67.5165
+  },
+  {
+    "id": 18,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T09:13:06.812000",
+    "magnitude": 2.7,
+    "location": "119 km N of Yakutat, Alaska",
+    "latitude": 60.612,
+    "longitude": -139.9409
+  },
+  {
+    "id": 19,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T08:52:12.148000",
+    "magnitude": 3.0,
+    "location": "109 km N of Yakutat, Alaska",
+    "latitude": 60.5205,
+    "longitude": -139.9256
+  },
+  {
+    "id": 20,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T06:13:24.302000",
+    "magnitude": 2.5,
+    "location": "75 km ENE of Ugashik, Alaska",
+    "latitude": 57.653,
+    "longitude": -156.155
+  },
+  {
+    "id": 21,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T05:31:41.290000",
+    "magnitude": 2.99,
+    "location": "6 km NW of Delta, B.C., MX",
+    "latitude": 32.3981666666667,
+    "longitude": -115.229666666667
+  },
+  {
+    "id": 22,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T04:35:59.323000",
+    "magnitude": 3.7,
+    "location": "108 km N of Yakutat, Alaska",
+    "latitude": 60.515,
+    "longitude": -139.847
+  },
+  {
+    "id": 23,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T03:58:59.940000",
+    "magnitude": 3.02,
+    "location": "2 km SE of San Ramon, CA",
+    "latitude": 37.7663333333333,
+    "longitude": -121.955666666667
+  },
+  {
+    "id": 24,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T03:53:46.075000",
+    "magnitude": 4.2,
+    "location": "44 km WSW of Chonchi, Chile",
+    "latitude": -42.7179,
+    "longitude": -74.3043
+  },
+  {
+    "id": 25,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T03:36:59.980000",
+    "magnitude": 2.5,
+    "location": "20 km N of Fishhook, Alaska",
+    "latitude": 61.924,
+    "longitude": -149.292
+  },
+  {
+    "id": 26,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T03:17:46.617000",
+    "magnitude": 3.6,
+    "location": "43 km S of Adak, Alaska",
+    "latitude": 51.4855,
+    "longitude": -176.5579
+  },
+  {
+    "id": 27,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T01:54:32.199000",
+    "magnitude": 3.2,
+    "location": "114 km N of Yakutat, Alaska",
+    "latitude": 60.5641,
+    "longitude": -140.0615
+  },
+  {
+    "id": 28,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T01:49:46.861000",
+    "magnitude": 4.7,
+    "location": "57 km SSW of Ollagüe, Chile",
+    "latitude": -21.6879,
+    "longitude": -68.5045
+  },
+  {
+    "id": 29,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T00:48:23.846000",
+    "magnitude": 2.9,
+    "location": "102 km N of Yakutat, Alaska",
+    "latitude": 60.451,
+    "longitude": -140.0177
+  },
+  {
+    "id": 30,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T00:22:34.960000",
+    "magnitude": 2.56,
+    "location": "26 km E of Honaunau-Napoopoo, Hawaii",
+    "latitude": 19.4340000152588,
+    "longitude": -155.610504150391
+  },
+  {
+    "id": 31,
+    "event_type": "earthquake",
+    "timestamp": "2026-01-02T00:07:24",
+    "magnitude": 2.6,
+    "location": "112 km N of Yakutat, Alaska",
+    "latitude": 60.5337,
+    "longitude": -140.1112
+  }
+]

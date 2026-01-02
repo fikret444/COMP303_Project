@@ -1,3 +1,5 @@
+# datasources/eonet_source.py
+
 from __future__ import annotations
 
 import requests
@@ -8,10 +10,17 @@ from datasources.base_source import DataSource, DataSourceError, Event
 
 
 class EONETSource(DataSource):
-    BASE_URL = "https://eonet.gsfc.nasa.gov/api/v3/events"
+    """
+    NASA EONET v3 API'den tüm doğal afet olaylarını çeker (genel source).
+    
+    Bu sınıf tüm kategorileri çeker (wildfires, storms, volcanoes, floods, vb.)
+    ve genel bir natural_event formatında döndürür.
+    
+    Doküman:
+      https://eonet.gsfc.nasa.gov/docs/v3
+    """
 
-    # Whole Americas bbox: [minLon, minLat, maxLon, maxLat]
-    DEFAULT_BBOX = [-170.0, -56.0, -34.0, 72.0]
+    BASE_URL = "https://eonet.gsfc.nasa.gov/api/v3/events"
 
     def __init__(
         self,
@@ -20,26 +29,43 @@ class EONETSource(DataSource):
         limit: int = 100,
         bbox: Optional[List[float]] = None,
     ):
+        """
+        status: 'open' | 'closed' | 'all'
+        days  : Kaç gün geriye dönük olaylar
+        limit : Maksimum olay sayısı
+        bbox  : [minLon, minLat, maxLon, maxLat] formatında bounding box (opsiyonel)
+                EONET API'si için "minLon,maxLat,maxLon,minLat" formatına dönüştürülür
+        """
         self.status = status
         self.days = days
         self.limit = limit
-        self.bbox = bbox if bbox is not None else self.DEFAULT_BBOX
+        self.bbox = bbox
 
     def _convert_bbox_to_string(self, bbox: List[float]) -> str:
+        """
+        Bbox'ı EONET API formatına çevirir.
+        Input: [minLon, minLat, maxLon, maxLat]
+        Output: "minLon,maxLat,maxLon,minLat"
+        """
         if len(bbox) != 4:
             raise ValueError("Bbox must have 4 elements: [minLon, minLat, maxLon, maxLat]")
         min_lon, min_lat, max_lon, max_lat = bbox
         return f"{min_lon},{max_lat},{max_lon},{min_lat}"
 
     def fetch_raw(self):
+        """
+        EONET'ten tüm kategorilerdeki olayları JSON olarak çeker.
+        """
         params = {
             "status": self.status,
             "days": self.days,
             "limit": self.limit,
         }
 
+        # Bbox varsa string formatına çevir ve ekle
         if self.bbox:
-            params["bbox"] = self._convert_bbox_to_string(self.bbox)
+            bbox_str = self._convert_bbox_to_string(self.bbox)
+            params["bbox"] = bbox_str
 
         try:
             r = requests.get(self.BASE_URL, params=params, timeout=15)
@@ -49,6 +75,29 @@ class EONETSource(DataSource):
             raise DataSourceError(f"EONET fetch failed: {e}")
 
     def parse(self, raw) -> List[Event]:
+        """
+        EONET Event nesnelerini şu sade formata çeviriyoruz:
+
+        {
+            "type": "natural_event",
+            "source": "NASA EONET",
+            "event_id": ...,
+            "title": ...,
+            "description": ...,
+            "time": datetime | None,
+            "event_time": datetime | None,
+            "latitude": float | None,
+            "longitude": float | None,
+            "categories": [...],
+            "category_ids": [...],
+            "category_titles": [...],
+            "closed": ...,
+            "link": ...,
+            "status": "open" | "closed",
+            "geometry_type": "Point" | "Polygon" | ...
+        }
+        """
+
         events_raw = raw.get("events", [])
         result: List[Event] = []
 
@@ -61,36 +110,42 @@ class EONETSource(DataSource):
             description = ev.get("description")
             link = ev.get("link", "")
 
+            # Geometrileri işle
             geometries = ev.get("geometry", [])
             if not geometries:
                 continue
 
+            # İlk geometri (başlangıç noktası)
             first_geom = geometries[0]
             first_date_str = first_geom.get("date")
             coordinates = first_geom.get("coordinates", [])
             geom_type = first_geom.get("type", "Point")
 
+            # Koordinatları çıkar
             lon = None
             lat = None
-
+            
             if geom_type == "Point" and len(coordinates) >= 2:
                 lon = coordinates[0]
                 lat = coordinates[1]
             elif geom_type in ["Polygon", "LineString"] and len(coordinates) > 0:
+                # İlk noktayı al
                 first_point = coordinates[0] if isinstance(coordinates[0], list) else coordinates
                 if len(first_point) >= 2:
                     lon = first_point[0]
                     lat = first_point[1]
 
+            # Tarihleri parse et
             event_time = None
             time_str = None
             if first_date_str:
                 try:
                     event_time = datetime.fromisoformat(first_date_str.replace("Z", "+00:00"))
                     time_str = event_time.isoformat()
-                except Exception:
+                except:
                     pass
 
+            # Son geometri (kapanış tarihi)
             closed_date = None
             if len(geometries) > 1:
                 last_geom = geometries[-1]
@@ -98,9 +153,10 @@ class EONETSource(DataSource):
                 if closed_date_str:
                     try:
                         closed_date = datetime.fromisoformat(closed_date_str.replace("Z", "+00:00"))
-                    except Exception:
+                    except:
                         pass
 
+            # Kategorileri çıkar
             categories = ev.get("categories", [])
             category_ids = []
             category_titles = []
@@ -113,6 +169,7 @@ class EONETSource(DataSource):
                     if ctitle:
                         category_titles.append(ctitle)
 
+            # Status belirle
             status = "closed" if closed_date else "open"
 
             event: Event = {
@@ -121,7 +178,7 @@ class EONETSource(DataSource):
                 "event_id": f"EONET_{ev_id}",
                 "title": title,
                 "description": description,
-                "time": datetime.now().isoformat(timespec="seconds"),
+                "time": time_str,
                 "event_time": time_str,
                 "latitude": lat,
                 "longitude": lon,

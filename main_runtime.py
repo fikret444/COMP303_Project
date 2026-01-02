@@ -97,6 +97,7 @@ def main():
     # 3. EONET Source - Sadece Kuzey ve Güney Amerika kıtaları (Hakan'in calismasi)
     # Amerika kıtaları için bbox: [minLon, minLat, maxLon, maxLat]
     # longitude -180 to -30, latitude -60 to 85
+    # Performans: days=30 ve limit=100 yeterli (daha hızlı)
     americas_bbox = [-180, -60, -30, 85]
     eonet_source = EONETSource(status="open", days=30, limit=100, bbox=americas_bbox)
     log_message("[OK] EONET Source hazir (Amerika kıtaları filtresi aktif)", "INFO")
@@ -104,16 +105,19 @@ def main():
     # 4. EONET Wildfire Source - Orman yangınları (Efe'nin calismasi)
     # EONETWildfireSource string formatında bbox bekliyor: "minLon,maxLat,maxLon,minLat"
     # Amerika kıtaları için: "-180,85,-30,-60"
+    # Performans: days=90 yeterli (365 yerine - daha hızlı)
     americas_bbox_str = "-180,85,-30,-60"
-    wildfire_source = EONETWildfireSource(days=365, status="all", bbox=americas_bbox_str)
+    wildfire_source = EONETWildfireSource(days=90, status="all", bbox=americas_bbox_str)
     log_message("[OK] EONET Wildfire Source hazir (Amerika kıtaları)", "INFO")
     
     # 5. EONET Storm Source - Fırtınalar (Efe'nin calismasi)
-    storm_source = EONETStormSource(days=365, status="all", bbox=americas_bbox_str)
+    # Performans: days=60 yeterli (365 yerine - daha hızlı)
+    storm_source = EONETStormSource(days=60, status="all", bbox=americas_bbox_str)
     log_message("[OK] EONET Storm Source hazir (Amerika kıtaları)", "INFO")
     
     # 6. EONET Volcano Source - Volkanlar (Yeni)
-    volcano_source = EONETVolcanoSource(days=365, status="all", bbox=americas_bbox_str)
+    # Performans: days=90 yeterli (365 yerine - daha hızlı)
+    volcano_source = EONETVolcanoSource(days=90, status="all", bbox=americas_bbox_str)
     log_message("[OK] EONET Volcano Source hazir (Amerika kıtaları)", "INFO")
     
     # 7. OpenMeteo Flood Sources - Sel riski (Efe'nin calismasi)
@@ -145,7 +149,7 @@ def main():
     runtime = RuntimeSystem(
         data_sources=all_sources,
         fetch_interval=120,  # Her 2 dakikada bir veri çek
-        num_consumers=3  # 3 paralel consumer thread
+        num_consumers=5  # 5 paralel consumer thread (daha hızlı işleme için artırıldı)
     )
     
     log_message("[OK] Runtime System hazir", "INFO")
