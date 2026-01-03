@@ -7,7 +7,7 @@ from flask import Flask, render_template, jsonify, request
 import json
 import os
 import glob
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from pathlib import Path
 from processing.storage import cleanup_old_files
 from processing.seismic_risk_analyzer import SeismicRiskAnalyzer, analyze_seismic_risk
@@ -230,41 +230,6 @@ def api_forecast():
         'timestamp': datetime.now().isoformat()
     })
 
-@app.route('/api/forecast/<city>')
-def api_forecast_city(city):
-    """Belirli bir şehir için forecast verilerini döndür"""
-    forecasts = load_forecast_data()
-    city_forecasts = forecasts.get(city, [])
-    
-    return jsonify({
-        'city': city,
-        'forecasts': city_forecasts,
-        'count': len(city_forecasts),
-        'timestamp': datetime.now().isoformat()
-    })
-
-@app.route('/api/all')
-def api_all():
-    """Tüm verileri (deprem + hava durumu + forecast) JSON olarak döndür"""
-    earthquakes = load_earthquake_data()
-    weather_data = get_current_weather_data()
-    forecasts = load_forecast_data()
-    stats = calculate_statistics(earthquakes)
-    
-    return jsonify({
-        'earthquakes': earthquakes,
-        'weather': weather_data,
-        'forecasts': forecasts,
-        'statistics': stats,
-        'timestamp': datetime.now().isoformat()
-    })
-
-@app.route('/api/statistics')
-def api_statistics():
-    """Sadece istatistikleri döndür"""
-    earthquakes = load_earthquake_data()
-    stats = calculate_statistics(earthquakes)
-    return jsonify(stats)
 
 @app.route('/api/news')
 def api_news():
@@ -447,9 +412,6 @@ def filter_last_one_week(events):
             # Son 1 hafta içindeyse ekle
             if event_time >= one_week_ago:
                 filtered.append(event)
-            # Debug: 3 Aralık tarihli kayıtları logla (filtrelenmiş olmalı)
-            elif '2025-12-03' in str(time_str):
-                print(f"DEBUG: 3 Aralık tarihli kayıt filtrelendi (geçerli) - Orijinal: {time_str}, Parsed: {event_time}, 1 hafta önce: {one_week_ago}, Fark: {(one_week_ago - event_time).days} gün")
         except Exception as e:
             # Parse edilemezse event'i atla
             print(f"Tarih parse hatası: {time_str}, {e}")
@@ -965,61 +927,6 @@ def load_wildfire_data():
     except Exception as e:
         print(f"Error loading wildfire data: {e}")
         return []
-
-def filter_events_from_latest(events, event_type=None):
-    """En yakın event tarihinden itibaren tüm event'leri filtrele"""
-    if not events:
-        return []
-    
-    # En yakın event tarihini bul
-    latest_date = get_latest_event_date(events, event_type)
-    
-    if latest_date is None:
-        # Eğer en yakın tarih bulunamazsa, son 1 hafta filtresi uygula
-        return filter_last_one_week(events)
-    
-    filtered = []
-    
-    for event in events:
-        # Event tipi kontrolü
-        if event_type:
-            if event_type == 'storm':
-                categories = event.get('categories', [])
-                cat_str = ' '.join([str(c) for c in categories]).lower() if isinstance(categories, list) else str(categories).lower()
-                if 'storm' not in cat_str and 'severe' not in cat_str:
-                    continue
-            elif event_type == 'volcano':
-                categories = event.get('categories', [])
-                cat_str = ' '.join([str(c) for c in categories]).lower() if isinstance(categories, list) else str(categories).lower()
-                if 'volcano' not in cat_str:
-                    continue
-        
-        time_str = event.get('event_time') or event.get('time') or event.get('timestamp')
-        if not time_str:
-            continue
-        
-        try:
-            if 'T' in str(time_str):
-                time_str_clean = str(time_str).replace('Z', '+00:00')
-                event_time = datetime.fromisoformat(time_str_clean)
-            elif ' ' in str(time_str) and 'T' not in str(time_str):
-                try:
-                    event_time = datetime.strptime(str(time_str), '%Y-%m-%d T%H:%M:%S')
-                except:
-                    event_time = datetime.strptime(str(time_str), '%Y-%m-%d %H:%M:%S')
-            else:
-                event_time = datetime.fromtimestamp(float(time_str))
-            
-            if event_time.tzinfo:
-                event_time = event_time.astimezone().replace(tzinfo=None)
-            
-            # En yakın tarihten itibaren tüm event'leri ekle
-            if event_time >= latest_date:
-                filtered.append(event)
-        except Exception as e:
-            continue
-    
-    return filtered
 
 def load_storm_data():
     """Storm verilerini yükle - En yakın fırtına tarihinden itibaren filtrele"""
