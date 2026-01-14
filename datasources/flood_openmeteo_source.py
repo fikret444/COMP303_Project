@@ -1,23 +1,12 @@
-# datasources/flood_openmeteo_source.py
-
 import requests
 from datetime import datetime
 from typing import List, Optional
 
 from datasources.base_source import DataSource, DataSourceError, Event
 
-
 class OpenMeteoFloodSource(DataSource):
-    """
-    Open-Meteo Global Flood API üzerinden, belirli bir koordinat için
-    nehir debisi (river_discharge) verisi alır ve basit bir 'flood_risk'
-    event listesi üretir.
 
-    ⚠ Bu model GERÇEK sel tahmini değildir; proje kapsamında, debi
-    değerine göre basit bir risk sınıflaması yapıyoruz.
-    """
-
-    BASE_URL = "https://flood-api.open-meteo.com/v1/flood"
+    API_ENDPOINT = "https://flood-api.open-meteo.com/v1/flood"
 
     def __init__(
         self,
@@ -27,12 +16,6 @@ class OpenMeteoFloodSource(DataSource):
         forecast_days: int = 7,
         location_name: Optional[str] = None,
     ):
-        """
-        latitude, longitude : Koordinatlar
-        past_days          : Kaç gün geriye dönük veri
-        forecast_days      : Kaç gün ileriye dönük tahmin
-        location_name      : (Opsiyonel) İnsan okuyabilir lokasyon adı, örn. "New York"
-        """
         self.latitude = latitude
         self.longitude = longitude
         self.past_days = past_days
@@ -40,7 +23,7 @@ class OpenMeteoFloodSource(DataSource):
         self.location_name = location_name
 
     def fetch_raw(self):
-        params = {
+        query_params = {
             "latitude": self.latitude,
             "longitude": self.longitude,
             "daily": "river_discharge",
@@ -50,87 +33,65 @@ class OpenMeteoFloodSource(DataSource):
         }
 
         try:
-            r = requests.get(self.BASE_URL, params=params, timeout=15)
-            r.raise_for_status()
-            return r.json()
-        except Exception as e:
-            raise DataSourceError(f"Open-Meteo Flood fetch failed: {e}")
+            response = requests.get(self.API_ENDPOINT, params=query_params, timeout=12)
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.RequestException as error:
+            raise DataSourceError(f"Network error during Open-Meteo flood fetch: {error}")
+        except Exception as general_error:
+            raise DataSourceError(f"Unexpected error in flood source: {general_error}")
 
     def parse(self, raw) -> List[Event]:
-        """
-        Open-Meteo flood çıktısını sadeleştirip şu formata çeviriyoruz:
+        daily_stats = raw.get("daily", {})
+        time_series = daily_stats.get("time", [])
+        discharge_values = daily_stats.get("river_discharge", [])
 
-        {
-            "type": "flood_risk",
-            "source": "Open-Meteo Flood",
-            "time": datetime,
-            "location": "New York" veya "41.0,-74.0",
-            "latitude": ...,
-            "longitude": ...,
-            "river_discharge": float,
-            "risk_level": "low" | "medium" | "high"
-        }
-        """
+        flood_events: List[Event] = []
 
-        daily = raw.get("daily", {})
-        times = daily.get("time", [])
-        discharges = daily.get("river_discharge", [])
+        if self.location_name:
+            label = self.location_name
+        else:
+            label = f"{self.latitude},{self.longitude}"
 
-        events: List[Event] = []
-
-        # İnsan okuyabilir lokasyon ismi, yoksa "lat,lon" stringi
-        location_str = (
-            self.location_name
-            if self.location_name
-            else f"{self.latitude:.3f},{self.longitude:.3f}"
-        )
-
-        for t_str, discharge in zip(times, discharges):
-            # Tarihi datetime'a çevir
+        for iso_date, flow_rate in zip(time_series, discharge_values):
             try:
-                t = datetime.fromisoformat(t_str)
-            except Exception:
-                t = None
+                event_date = datetime.fromisoformat(iso_date)
+            except (ValueError, TypeError):
+                event_date = None
 
-            # Basit, projelik risk sınıflaması (gerçek tahmin DEĞİL):
-            # 0–500 m³/s   -> low
-            # 500–2000     -> medium
-            # 2000+        -> high
-            if discharge is None:
-                risk = "unknown"
-            elif discharge < 200:
-                risk = "low"
-            elif discharge < 800:
-                risk = "medium"
+            if flow_rate is None:
+                current_risk = "unknown"
+            elif flow_rate < 200:
+                current_risk = "low"
+            elif flow_rate < 800:
+                current_risk = "medium"
             else:
-                risk = "high"
+                current_risk = "high"
 
-            events.append({
+            flood_events.append({
                 "type": "flood_risk",
                 "source": "Open-Meteo Flood",
-                "time": t,
-                "location": location_str,
+                "time": event_date,
+                "location": label,
                 "latitude": raw.get("latitude"),
                 "longitude": raw.get("longitude"),
-                "river_discharge": discharge,
-                "risk_level": risk,
+                "river_discharge": flow_rate,
+                "risk_level": current_risk,
             })
 
-        return events
+        return flood_events
 
-
-# Bu dosyayı tek başına test etmek için:
 if __name__ == "__main__":
-    # Örnek: New York civarı
-    src = OpenMeteoFloodSource(
-        latitude=40.7128,
-        longitude=-74.0060,
-        location_name="New York",
+    test_source = OpenMeteoFloodSource(
+        latitude=40.71,
+        longitude=-74.00,
+        location_name="New York Test"
     )
-    raw = src.fetch_raw()
-    events = src.parse(raw)
-    print(f"{len(events)} flood_risk event üretildi (New York).")
-    for ev in events[:5]:
-        print(ev)
-
-
+    try:
+        data = test_source.fetch_raw()
+        results = test_source.parse(data)
+        print(f"Success: {len(results)} events generated.")
+        for item in results[:3]:
+            print(f"[{item['time']}] Discharge: {item['river_discharge']} - Risk: {item['risk_level']}")
+    except DataSourceError as ds_err:
+        print(f"Test failed: {ds_err}")

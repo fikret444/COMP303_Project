@@ -7,9 +7,10 @@ from flask import Flask, render_template, jsonify, request
 import json
 import os
 import glob
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from pathlib import Path
-from processing.storage import cleanup_old_files
+from processing.storage import eski_dosyalari_temizle
+from processing.seismic_risk_analyzer import SeismicRiskAnalyzer, analyze_seismic_risk
 
 # Scraping modülü - artık BeautifulSoup4 ile de çalışır
 try:
@@ -31,11 +32,11 @@ app = Flask(__name__)
 
 # Dashboard'un çalıştığı dizini bul
 BASE_DIR = Path(__file__).resolve().parent
-DATA_DIR = BASE_DIR / "data"
+veri_klasoru = BASE_DIR / "data"
 
 def get_latest_earthquake_file():
     """En son oluşturulan deprem dosyasını bul"""
-    pattern = str(DATA_DIR / "earthquakes_*.json")
+    pattern = str(veri_klasoru / "earthquakes_*.json")
     files = glob.glob(pattern)
     if not files:
         return None
@@ -44,12 +45,12 @@ def get_latest_earthquake_file():
 def get_latest_weather_file():
     """En son oluşturulan hava durumu dosyasını bul"""
     # Önce weather_all.json'u kontrol et (tüm şehirler birleşik)
-    weather_all_file = DATA_DIR / "weather_all.json"
+    weather_all_file = veri_klasoru / "weather_all.json"
     if weather_all_file.exists():
         return str(weather_all_file)
     
     # Yoksa eski format dosyalarını ara
-    pattern = str(DATA_DIR / "weather_*.json")
+    pattern = str(veri_klasoru / "weather_*.json")
     files = glob.glob(pattern)
     if not files:
         return None
@@ -229,41 +230,6 @@ def api_forecast():
         'timestamp': datetime.now().isoformat()
     })
 
-@app.route('/api/forecast/<city>')
-def api_forecast_city(city):
-    """Belirli bir şehir için forecast verilerini döndür"""
-    forecasts = load_forecast_data()
-    city_forecasts = forecasts.get(city, [])
-    
-    return jsonify({
-        'city': city,
-        'forecasts': city_forecasts,
-        'count': len(city_forecasts),
-        'timestamp': datetime.now().isoformat()
-    })
-
-@app.route('/api/all')
-def api_all():
-    """Tüm verileri (deprem + hava durumu + forecast) JSON olarak döndür"""
-    earthquakes = load_earthquake_data()
-    weather_data = get_current_weather_data()
-    forecasts = load_forecast_data()
-    stats = calculate_statistics(earthquakes)
-    
-    return jsonify({
-        'earthquakes': earthquakes,
-        'weather': weather_data,
-        'forecasts': forecasts,
-        'statistics': stats,
-        'timestamp': datetime.now().isoformat()
-    })
-
-@app.route('/api/statistics')
-def api_statistics():
-    """Sadece istatistikleri döndür"""
-    earthquakes = load_earthquake_data()
-    stats = calculate_statistics(earthquakes)
-    return jsonify(stats)
 
 @app.route('/api/news')
 def api_news():
@@ -446,9 +412,6 @@ def filter_last_one_week(events):
             # Son 1 hafta içindeyse ekle
             if event_time >= one_week_ago:
                 filtered.append(event)
-            # Debug: 3 Aralık tarihli kayıtları logla (filtrelenmiş olmalı)
-            elif '2025-12-03' in str(time_str):
-                print(f"DEBUG: 3 Aralık tarihli kayıt filtrelendi (geçerli) - Orijinal: {time_str}, Parsed: {event_time}, 1 hafta önce: {one_week_ago}, Fark: {(one_week_ago - event_time).days} gün")
         except Exception as e:
             # Parse edilemezse event'i atla
             print(f"Tarih parse hatası: {time_str}, {e}")
@@ -462,7 +425,7 @@ def load_eonet_data():
         return []
     
     # Önce pipeline'dan oluşturulan JSON dosyasını kontrol et
-    eonet_file = DATA_DIR / "eonet_events.json"
+    eonet_file = veri_klasoru / "eonet_events.json"
     if eonet_file.exists():
         try:
             with open(eonet_file, 'r', encoding='utf-8') as f:
@@ -948,7 +911,7 @@ def api_alerts_forecast():
 
 def load_wildfire_data():
     """Wildfire verilerini yükle - Son 1 hafta filtresi uygula"""
-    wildfire_file = DATA_DIR / "wildfires.json"
+    wildfire_file = veri_klasoru / "wildfires.json"
     if not wildfire_file.exists():
         return []
     
@@ -965,64 +928,9 @@ def load_wildfire_data():
         print(f"Error loading wildfire data: {e}")
         return []
 
-def filter_events_from_latest(events, event_type=None):
-    """En yakın event tarihinden itibaren tüm event'leri filtrele"""
-    if not events:
-        return []
-    
-    # En yakın event tarihini bul
-    latest_date = get_latest_event_date(events, event_type)
-    
-    if latest_date is None:
-        # Eğer en yakın tarih bulunamazsa, son 1 hafta filtresi uygula
-        return filter_last_one_week(events)
-    
-    filtered = []
-    
-    for event in events:
-        # Event tipi kontrolü
-        if event_type:
-            if event_type == 'storm':
-                categories = event.get('categories', [])
-                cat_str = ' '.join([str(c) for c in categories]).lower() if isinstance(categories, list) else str(categories).lower()
-                if 'storm' not in cat_str and 'severe' not in cat_str:
-                    continue
-            elif event_type == 'volcano':
-                categories = event.get('categories', [])
-                cat_str = ' '.join([str(c) for c in categories]).lower() if isinstance(categories, list) else str(categories).lower()
-                if 'volcano' not in cat_str:
-                    continue
-        
-        time_str = event.get('event_time') or event.get('time') or event.get('timestamp')
-        if not time_str:
-            continue
-        
-        try:
-            if 'T' in str(time_str):
-                time_str_clean = str(time_str).replace('Z', '+00:00')
-                event_time = datetime.fromisoformat(time_str_clean)
-            elif ' ' in str(time_str) and 'T' not in str(time_str):
-                try:
-                    event_time = datetime.strptime(str(time_str), '%Y-%m-%d T%H:%M:%S')
-                except:
-                    event_time = datetime.strptime(str(time_str), '%Y-%m-%d %H:%M:%S')
-            else:
-                event_time = datetime.fromtimestamp(float(time_str))
-            
-            if event_time.tzinfo:
-                event_time = event_time.astimezone().replace(tzinfo=None)
-            
-            # En yakın tarihten itibaren tüm event'leri ekle
-            if event_time >= latest_date:
-                filtered.append(event)
-        except Exception as e:
-            continue
-    
-    return filtered
-
 def load_storm_data():
     """Storm verilerini yükle - En yakın fırtına tarihinden itibaren filtrele"""
-    storm_file = DATA_DIR / "storms.json"
+    storm_file = veri_klasoru / "storms.json"
     if not storm_file.exists():
         return []
     
@@ -1041,7 +949,7 @@ def load_storm_data():
 
 def load_volcano_data():
     """Volcano verilerini yükle - En yakın volkan tarihinden itibaren filtrele"""
-    volcano_file = DATA_DIR / "volcanoes.json"
+    volcano_file = veri_klasoru / "volcanoes.json"
     if not volcano_file.exists():
         return []
     
@@ -1059,53 +967,51 @@ def load_volcano_data():
         return []
 
 def load_flood_data():
-    """Flood risk verilerini yükle - Son 1 hafta filtresi uygula (tüm risk seviyeleri dahil)"""
-    flood_file = DATA_DIR / "flood_risk.json"
-    if not flood_file.exists():
+    """Flood risk verilerini yükle - Son 1 hafta filtresi uygula (tüm risk seviyeleri dahil)
+    Efe'nin flood_regional_analysis modülünü kullanarak veri yükleme"""
+    from processing.flood_regional_analysis import load_flood_data as load_flood_data_analysis
+    
+    # Efe'nin modülünü kullanarak veriyi yükle
+    payload = load_flood_data_analysis()
+    if payload is None:
         return []
     
-    try:
-        with open(flood_file, 'r', encoding='utf-8') as f:
-            data = json.load(f)
-            # Flood risk JSON'u object formatında, events array'ini döndür
-            if isinstance(data, dict):
-                events = data.get("events", [])
+    # Flood risk JSON'u object formatında, events array'ini döndür
+    if isinstance(payload, dict):
+        events = payload.get("events", [])
+    else:
+        events = payload if isinstance(payload, list) else []
+    
+    # Flood verilerindeki tarih formatı: "2025-12-30 T00:00:00" - özel parse gerekli
+    # Son 1 hafta filtresi uygula (tüm risk seviyeleri dahil)
+    one_week_ago = datetime.now() - timedelta(days=7)
+    filtered = []
+    
+    for event in events:
+        time_str = event.get('time')
+        if not time_str:
+            continue
+        
+        try:
+            # Flood verilerindeki özel format: "2025-12-30 T00:00:00"
+            if ' T' in str(time_str):
+                event_time = datetime.strptime(str(time_str), '%Y-%m-%d T%H:%M:%S')
+            elif 'T' in str(time_str):
+                time_str_clean = str(time_str).replace('Z', '+00:00')
+                event_time = datetime.fromisoformat(time_str_clean)
             else:
-                events = data if isinstance(data, list) else []
+                event_time = datetime.strptime(str(time_str), '%Y-%m-%d %H:%M:%S')
             
-            # Flood verilerindeki tarih formatı: "2025-12-30 T00:00:00" - özel parse gerekli
-            # Son 1 hafta filtresi uygula (tüm risk seviyeleri dahil)
-            one_week_ago = datetime.now() - timedelta(days=7)
-            filtered = []
+            if event_time.tzinfo:
+                event_time = event_time.astimezone().replace(tzinfo=None)
             
-            for event in events:
-                time_str = event.get('time')
-                if not time_str:
-                    continue
-                
-                try:
-                    # Flood verilerindeki özel format: "2025-12-30 T00:00:00"
-                    if ' T' in str(time_str):
-                        event_time = datetime.strptime(str(time_str), '%Y-%m-%d T%H:%M:%S')
-                    elif 'T' in str(time_str):
-                        time_str_clean = str(time_str).replace('Z', '+00:00')
-                        event_time = datetime.fromisoformat(time_str_clean)
-                    else:
-                        event_time = datetime.strptime(str(time_str), '%Y-%m-%d %H:%M:%S')
-                    
-                    if event_time.tzinfo:
-                        event_time = event_time.astimezone().replace(tzinfo=None)
-                    
-                    if event_time >= one_week_ago:
-                        filtered.append(event)
-                except Exception as e:
-                    print(f"Flood tarih parse hatası: {time_str}, {e}")
-                    continue
-            
-            return filtered
-    except Exception as e:
-        print(f"Error loading flood data: {e}")
-        return []
+            if event_time >= one_week_ago:
+                filtered.append(event)
+        except Exception as e:
+            print(f"Flood tarih parse hatası: {time_str}, {e}")
+            continue
+    
+    return filtered
 
 @app.route('/api/wildfires')
 def api_wildfires():
@@ -1152,6 +1058,119 @@ def api_floods():
         'timestamp': datetime.now().isoformat()
     })
 
+@app.route('/api/seismic-risk/faults')
+def api_seismic_risk_faults():
+    """Tüm fay hatlarının listesini döndür"""
+    try:
+        analyzer = SeismicRiskAnalyzer()
+        fault_lines = analyzer.get_all_fault_lines()
+        # Bbox bilgisini de ekle
+        for fault in fault_lines:
+            fault_id = fault['fault_id']
+            if fault_id in analyzer.fault_lines:
+                fault['bbox'] = analyzer.fault_lines[fault_id]['bbox']
+        return jsonify({
+            'fault_lines': fault_lines,
+            'count': len(fault_lines),
+            'timestamp': datetime.now().isoformat()
+        })
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/seismic-risk/fault/<fault_id>')
+def api_seismic_risk_fault(fault_id):
+    """Belirli bir fay hattı için sismik risk analizi"""
+    try:
+        result = analyze_seismic_risk(fault_id=fault_id)
+        return jsonify(result)
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/seismic-risk/region')
+def api_seismic_risk_region():
+    """Belirli bir bölge için sismik risk analizi"""
+    try:
+        lat = request.args.get('lat', type=float)
+        lon = request.args.get('lon', type=float)
+        radius = request.args.get('radius', default=100, type=float)
+        
+        if lat is None or lon is None:
+            return jsonify({
+                "error": "lat ve lon parametreleri gerekli",
+                "example": "/api/seismic-risk/region?lat=37.7749&lon=-122.4194&radius=100"
+            }), 400
+        
+        result = analyze_seismic_risk(latitude=lat, longitude=lon, radius_km=radius)
+        return jsonify(result)
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/seismic-risk/swarms')
+def api_seismic_risk_swarms():
+    """Deprem sürülerini (swarm) tespit et - birbirine yakın küçük depremler
+    Sadece haritada gösterilen (dashboard'dan gelen) deprem verilerini kullanır
+    Son 1 gün içindeki depremleri analiz eder (USGS'ten çekilen verilerle uyumlu)"""
+    try:
+        min_count = request.args.get('min_count', default=3, type=int)
+        max_magnitude = request.args.get('max_magnitude', default=5.0, type=float)
+        cluster_radius = request.args.get('cluster_radius', default=100, type=float)
+        min_days = request.args.get('min_days', default=0, type=int)
+        max_days = request.args.get('max_days', default=1, type=int)
+        
+        # Haritada gösterilen deprem verilerini al (dashboard'dan)
+        earthquakes = load_earthquake_data()
+        
+        # Eğer deprem verisi yoksa boş liste döndür
+        if not earthquakes:
+            return jsonify({
+                'swarms': [],
+                'count': 0,
+                'parameters': {
+                    'min_count': min_count,
+                    'max_magnitude': max_magnitude,
+                    'cluster_radius_km': cluster_radius,
+                    'min_days': min_days,
+                    'max_days': max_days
+                },
+                'timestamp': datetime.now().isoformat(),
+                'message': 'Haritada gösterilen deprem verisi bulunamadı'
+            })
+        
+        analyzer = SeismicRiskAnalyzer()
+        # Haritada gösterilen deprem verilerini kullanarak swarm tespiti yap
+        swarms = analyzer.detect_earthquake_swarms_from_data(
+            earthquakes=earthquakes,
+            min_count=min_count,
+            max_magnitude=max_magnitude,
+            cluster_radius_km=cluster_radius,
+            min_days=min_days,
+            max_days=max_days
+        )
+        
+        return jsonify({
+            'swarms': swarms,
+            'count': len(swarms),
+            'parameters': {
+                'min_count': min_count,
+                'max_magnitude': max_magnitude,
+                'cluster_radius_km': cluster_radius,
+                'min_days': min_days,
+                'max_days': max_days
+            },
+            'earthquakes_analyzed': len(earthquakes),
+            'timestamp': datetime.now().isoformat()
+        })
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/api/eonet')
 def api_eonet():
     """NASA EONET doğal afet verilerini döndür - Pipeline'dan oluşturulan JSON dosyasından veya API'den"""
@@ -1159,7 +1178,7 @@ def api_eonet():
         return jsonify({"error": "EONET module not available"}), 500
     
     # Önce pipeline'dan oluşturulan JSON dosyasını kontrol et
-    eonet_file = DATA_DIR / "eonet_events.json"
+    eonet_file = veri_klasoru / "eonet_events.json"
     if eonet_file.exists():
         try:
             with open(eonet_file, 'r', encoding='utf-8') as f:
@@ -1213,10 +1232,37 @@ def api_eonet():
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
+@app.route('/api/seismic-simulation/trigger', methods=['POST'])
+def api_seismic_simulation_trigger():
+    """Sismik Acil Durum Operatörü - Deprem simülasyonu başlat
+    Kullanıcı tarafından seçilen veya rastgele üretilen deprem için erken uyarı hesaplamaları yapar"""
+    from processing.seismic_simulation import simulate_earthquake
+    
+    try:
+        data = request.get_json() or {}
+        user_lat = data.get('user_latitude')
+        user_lon = data.get('user_longitude')
+        epicenter_lat = data.get('epicenter_latitude')
+        epicenter_lon = data.get('epicenter_longitude')
+        
+        # Simülasyonu çalıştır
+        result = simulate_earthquake(
+            user_lat=user_lat,
+            user_lon=user_lon,
+            epicenter_lat=epicenter_lat,
+            epicenter_lon=epicenter_lon
+        )
+        
+        return jsonify(result)
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
 if __name__ == '__main__':
     # Başlangıçta eski dosyaları temizle
     try:
-        cleanup_old_files()
+        eski_dosyalari_temizle()
     except Exception as e:
         print(f"Temizleme hatası (devam ediliyor): {e}")
     

@@ -10,21 +10,9 @@ from datasources.base_source import DataSource, DataSourceError, Event
 
 
 class EONETStormSource(DataSource):
-    """
-    NASA EONET v3 API'den 'severeStorms' kategorisindeki fırtına olaylarını çeker.
-
-    Notlar:
-    - API dokümantasyonu: https://eonet.gsfc.nasa.gov/docs/v3
-    - Burada sadece severeStorms (şiddetli fırtınalar) kategorisini alıyoruz.
-    - Varsayılan olarak ABD + Kanada'yı kapsayan yaklaşık bir bounding box kullanıyoruz.
-    """
 
     BASE_URL = "https://eonet.gsfc.nasa.gov/api/v3/events"
 
-    # ABD + Kanada için yaklaşık bounding box (lon/lat):
-    # min_lon, max_lat, max_lon, min_lat
-    # Not: Efe branch'inde sadece Kuzey Amerika için "-129.02,50.73,-58.71,12.89" kullanılıyordu
-    # Şimdi tüm Amerika kıtaları için genişletildi: "-180,85,-30,-60"
     DEFAULT_NA_BBOX = "-180,85,-30,-60"
 
     def __init__(
@@ -33,11 +21,6 @@ class EONETStormSource(DataSource):
         status: str = "open",
         bbox: str | None = DEFAULT_NA_BBOX,
     ):
-        """
-        days  : Kaç gün geriye dönük olaylar (EONET 'days' parametresi)
-        status: 'open' | 'closed' | 'all'
-        bbox  : 'minLon,maxLat,maxLon,minLat' formatında bounding box (opsiyonel)
-        """
         self.days = days
         self.status = status
         self.bbox = bbox

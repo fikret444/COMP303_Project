@@ -8,12 +8,6 @@ class USGSEarthquakeSource(DataSource):
     URL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson"
 
     def __init__(self, bbox=None):
-        """
-        Initialize USGS Earthquake Source.
-        
-        Args:
-            bbox: Optional bounding box [minLon, minLat, maxLon, maxLat] to filter earthquakes
-        """
         self.bbox = bbox  # [minLon, minLat, maxLon, maxLat]
 
     def fetch_raw(self):

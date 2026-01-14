@@ -10,15 +10,6 @@ from datasources.base_source import DataSource, DataSourceError, Event
 
 
 class EONETSource(DataSource):
-    """
-    NASA EONET v3 API'den tüm doğal afet olaylarını çeker (genel source).
-    
-    Bu sınıf tüm kategorileri çeker (wildfires, storms, volcanoes, floods, vb.)
-    ve genel bir natural_event formatında döndürür.
-    
-    Doküman:
-      https://eonet.gsfc.nasa.gov/docs/v3
-    """
 
     BASE_URL = "https://eonet.gsfc.nasa.gov/api/v3/events"
 
@@ -29,33 +20,18 @@ class EONETSource(DataSource):
         limit: int = 100,
         bbox: Optional[List[float]] = None,
     ):
-        """
-        status: 'open' | 'closed' | 'all'
-        days  : Kaç gün geriye dönük olaylar
-        limit : Maksimum olay sayısı
-        bbox  : [minLon, minLat, maxLon, maxLat] formatında bounding box (opsiyonel)
-                EONET API'si için "minLon,maxLat,maxLon,minLat" formatına dönüştürülür
-        """
         self.status = status
         self.days = days
         self.limit = limit
         self.bbox = bbox
 
     def _convert_bbox_to_string(self, bbox: List[float]) -> str:
-        """
-        Bbox'ı EONET API formatına çevirir.
-        Input: [minLon, minLat, maxLon, maxLat]
-        Output: "minLon,maxLat,maxLon,minLat"
-        """
         if len(bbox) != 4:
             raise ValueError("Bbox must have 4 elements: [minLon, minLat, maxLon, maxLat]")
         min_lon, min_lat, max_lon, max_lat = bbox
         return f"{min_lon},{max_lat},{max_lon},{min_lat}"
 
     def fetch_raw(self):
-        """
-        EONET'ten tüm kategorilerdeki olayları JSON olarak çeker.
-        """
         params = {
             "status": self.status,
             "days": self.days,

@@ -5,11 +5,19 @@ import os
 from datasources.base_source import DataSource, DataSourceError
 from models import Weather
 
-# config.py'den API key'i al, yoksa environment variable'dan dene
 try:
     from config import OPENWEATHER_API_KEY as CONFIG_API_KEY
 except ImportError:
     CONFIG_API_KEY = None
+
+AMERICAS_CITY_COUNTRY_MAP = {
+    "New York": "US", "Los Angeles": "US", "Chicago": "US", "Houston": "US",
+    "Miami": "US", "San Francisco": "US", "Seattle": "US", "Denver": "US",
+    "Washington": "US", "Boston": "US", "Atlanta": "US", "Phoenix": "US",
+    "Dallas": "US", "Toronto": "CA", "Mexico City": "MX",
+    "São Paulo": "BR", "Buenos Aires": "AR", "Rio de Janeiro": "BR",
+    "Lima": "PE", "Bogotá": "CO", "Santiago": "CL"
+}
 
 
 class OpenWeatherSource(DataSource):
@@ -17,15 +25,6 @@ class OpenWeatherSource(DataSource):
     FORECAST_URL = "https://api.openweathermap.org/data/2.5/forecast"  # 5 günlük, 3 saatlik tahmin
 
     def __init__(self, city="Istanbul", country_code=None, include_forecast=False):
-        """
-        Initialize OpenWeather Source.
-        
-        Args:
-            city: City name
-            country_code: Optional 2-letter country code (e.g., "US", "BR", "AR")
-                         If None, will try to infer from city name or use default
-            include_forecast: Whether to fetch 5-day forecast data
-        """
         self.city = city
         self.country_code = country_code
         self.include_forecast = include_forecast
@@ -38,17 +37,8 @@ class OpenWeatherSource(DataSource):
 
         # Ülke kodu belirlenmemişse, şehir adına göre tahmin et
         if not self.country_code:
-            # Amerika kıtalarındaki şehirler için varsayılan ülke kodları
-            city_country_map = {
-                "New York": "US", "Los Angeles": "US", "Chicago": "US", "Houston": "US",
-                "Miami": "US", "San Francisco": "US", "Seattle": "US", "Denver": "US",
-                "Washington": "US", "Boston": "US", "Atlanta": "US", "Phoenix": "US",
-                "Dallas": "US", "Toronto": "CA", "Mexico City": "MX",
-                "São Paulo": "BR", "Buenos Aires": "AR", "Rio de Janeiro": "BR",
-                "Lima": "PE", "Bogotá": "CO", "Santiago": "CL"
-            }
-            self.country_code = city_country_map.get(self.city, "US")
-        
+            self.country_code = AMERICAS_CITY_COUNTRY_MAP.get(self.city, "US")
+
         params = {
             "q": f"{self.city},{self.country_code}",
             "appid": self.api_key,

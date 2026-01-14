@@ -10,22 +10,9 @@ from datasources.base_source import DataSource, DataSourceError, Event
 
 
 class EONETVolcanoSource(DataSource):
-    """
-    NASA EONET v3 'volcanoes' kategorisindeki volkan olaylarını çeker.
-
-    Doküman:
-      https://eonet.gsfc.nasa.gov/docs/v3
-
-    Burada:
-      - category = volcanoes
-      - Amerika kıtaları için bbox kullanıyoruz
-      - days ile kaç gün geriye bakacağımızı kontrol ediyoruz.
-    """
-
+    
     BASE_URL = "https://eonet.gsfc.nasa.gov/api/v3/events"
 
-    # Amerika kıtaları için bounding box (lon/lat):
-    # min_lon, max_lat, max_lon, min_lat
     DEFAULT_AMERICAS_BBOX = "-180,85,-30,-60"
 
     def __init__(

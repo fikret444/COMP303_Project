@@ -1,17 +1,28 @@
 import csv
 import json
 from pathlib import Path
+from datetime import datetime
 
-# Proje kök klasörü (SDEWS)
-ROOT_DIR = Path(__file__).resolve().parent.parent
-DATA_DIR = ROOT_DIR / "data"
+project_path = Path(__file__).resolve().parent.parent
+veri_klasoru = project_path / "data"
 
+def _veri_tipini_duzelt(event_dict):
+    try:
+        if "id" in event_dict:
+            event_dict["id"] = int(event_dict["id"])
+    except:
+        pass
+
+    try:
+        if "magnitude" in event_dict:
+            event_dict["magnitude"] = float(event_dict["magnitude"])
+    except:
+        pass
+    
+    return event_dict
 
 def load_events_from_csv(filename="earthquakes.csv"):
-    """
-    Eski CSV pipeline'ı için; USGS hattında şu an kullanılmıyor.
-    """
-    file_path = DATA_DIR / filename
+    file_path = veri_klasoru / filename
     events = []
 
     if not file_path.exists():
@@ -20,120 +31,72 @@ def load_events_from_csv(filename="earthquakes.csv"):
     with file_path.open("r", newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
-            try:
-                if "id" in row:
-                    row["id"] = int(row["id"])
-            except (ValueError, TypeError):
-                pass
-
-            try:
-                if "magnitude" in row:
-                    row["magnitude"] = float(row["magnitude"])
-            except (ValueError, TypeError):
-                pass
-
-            events.append(row)
+            events.append(_veri_tipini_duzelt(row))
 
     return events
 
-
 def load_events_from_json(filename="earthquakes_tr.json"):
-    """
-    USGS pipeline'ı için: Türkiye içindeki depremleri JSON'dan okur.
-    """
-    file_path = DATA_DIR / filename
-    events = []
-
+    file_path = veri_klasoru / filename
     if not file_path.exists():
-        return events
+        return []
 
     with file_path.open("r", encoding="utf-8") as f:
         data = json.load(f)
 
-    for row in data:
-        try:
-            if "id" in row:
-                row["id"] = int(row["id"])
-        except (ValueError, TypeError):
-            pass
-
-        try:
-            if "magnitude" in row:
-                row["magnitude"] = float(row["magnitude"])
-        except (ValueError, TypeError):
-            pass
-
-        events.append(row)
-
+    events = []
+    for item in data:
+        events.append(_veri_tipini_duzelt(item))
+        
     return events
 
-
 def compute_basic_stats(events):
-    """
-    Event listesi için basit istatistikler döndürür:
-    kaç event, max/min/ortalama magnitude gibi.
-    
-    Accepts both objects (with magnitude attribute) and dictionaries.
-    """
     if not events:
         return None
 
     magnitudes = []
     for e in events:
-        # Handle objects with magnitude attribute
-        if hasattr(e, 'magnitude'):
-            mag = e.magnitude
-        # Handle dictionaries
-        elif isinstance(e, dict):
-            mag = e.get("magnitude")
-        else:
-            continue
-            
+        mag = getattr(e, 'magnitude', None) if not isinstance(e, dict) else e.get("magnitude")
+        
         if isinstance(mag, (int, float)):
             magnitudes.append(mag)
 
     if not magnitudes:
-        return None
+        return {"total_events": len(events), "status": "No magnitude data found"}
 
-    total_events = len(events)
-    max_mag = max(magnitudes)
-    min_mag = min(magnitudes)
-    avg_mag = sum(magnitudes) / len(magnitudes)
-
-    return {
-        "total_events": total_events,
-        "max_magnitude": max_mag,
-        "min_magnitude": min_mag,
-        "avg_magnitude": avg_mag,
+    stats = {
+        "total_events": len(events),
+        "max_magnitude": max(magnitudes),
+        "min_magnitude": min(magnitudes),
+        "avg_magnitude": round(sum(magnitudes) / len(magnitudes), 2),
+        "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     }
 
-
+    return stats
+# 2.5 ve üzeri depremleri göndermemizi sağlayan fonsiyon
 def count_strong_earthquakes(events, threshold=2.5):
-    """
-    Belirli bir eşik değerinin (threshold) üzerindeki
-    deprem sayısını döndürür.
-    Örn: threshold=5.0 -> 5.0 ve üzeri depremleri say.
-    """
     count = 0
     for e in events:
-        mag = e.get("magnitude")
+        # dict/obje umursamadan direkt magnitude değerini çeker
+        mag = e.get("magnitude") if isinstance(e, dict) else getattr(e, "magnitude", 0)
+        
         if isinstance(mag, (int, float)) and mag >= threshold:
             count += 1
     return count
 
-
 def filter_events_in_bbox(events, min_lat, max_lat, min_lon, max_lon):
     """
-    Verilen enlem/boylam dikdörtgeni (bounding box) içindeki event'leri döndürür.
-    Örn: Türkiye veya belirli bir şehir için filtreleme.
+    Belirli koordinatlar arasındaki depremleri filtreler.
     """
     filtered = []
 
     for e in events:
-        lat = e.get("latitude")
-        lon = e.get("longitude")
+        if isinstance(e, dict):
+            lat, lon = e.get("latitude"), e.get("longitude")
+        else:
+            lat, lon = getattr(e, "latitude", None), getattr(e, "longitude", None)
 
-        if not isinstance(lat, (int, float)) or not isinstance(lon, (int, float)):
+        # Koordinat olması şart yoksa atlayacak hatta sayı yoksa da atlamalı
+        if not all(isinstance(x, (int, float)) for x in [lat, lon]):
             continue
 
         if (min_lat <= lat <= max_lat) and (min_lon <= lon <= max_lon):
