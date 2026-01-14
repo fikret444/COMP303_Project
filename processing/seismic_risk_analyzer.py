@@ -71,8 +71,8 @@ FAULT_LINE_DATA = {
 
 class SeismicRiskAnalyzer:
     
-    def __init__(self, veri_klasoru: Optional[Path] = None):
-        self.veri_klasoru = veri_klasoru or veri_klasoru
+    def __init__(self, data_dir: Optional[Path] = None):
+        self.veri_klasoru = data_dir or veri_klasoru
         self.fault_lines = FAULT_LINE_DATA
         
     def get_historical_earthquakes(self, bbox: Dict[str, float], min_magnitude: float = 7.0, years_back: int = 200) -> List[Dict]:
